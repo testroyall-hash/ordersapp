@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Local web app for managing orders",
   "main": "server.js",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "start": "node server.js",
     "import:access": "node scripts/import-access-data.js"

@@ -11,9 +11,22 @@ const productMetricsRouter = require('./routes/product-metrics');
 const inventoryRouter = require('./routes/inventory');
 
 const app = express();
-const port = 3000;
-const dbPath = path.join(__dirname, 'db.sqlite3');
+const port = process.env.PORT || 3000;
+const bundledDbPath = path.join(__dirname, 'db.sqlite3');
+const dbPath = process.env.DB_PATH || bundledDbPath;
 const initSqlPath = path.join(__dirname, 'db', 'init.sql');
+
+function prepareDatabaseFile() {
+  const dbDir = path.dirname(dbPath);
+  fs.mkdirSync(dbDir, { recursive: true });
+
+  if (dbPath !== bundledDbPath && !fs.existsSync(dbPath) && fs.existsSync(bundledDbPath)) {
+    fs.copyFileSync(bundledDbPath, dbPath);
+    console.log(`Copied bundled SQLite database to ${dbPath}`);
+  }
+}
+
+prepareDatabaseFile();
 
 const db = new sqlite3.Database(dbPath, (error) => {
   if (error) {

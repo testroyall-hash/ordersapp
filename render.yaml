@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: orders-app-demo
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # If you attach a Render persistent disk, set this to /var/data/db.sqlite3.
+      # Without a disk, leave DB_PATH unset and the bundled demo db.sqlite3 is used.
+      # - key: DB_PATH
+      #   value: /var/data/db.sqlite3

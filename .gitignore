@@ -1,0 +1,11 @@
+node_modules/
+npm-debug.log*
+
+.inspect-orderscontrol/
+*.log
+
+db.sqlite3.backup-*
+*.sqlite3.backup
+
+.env
+.env.*
