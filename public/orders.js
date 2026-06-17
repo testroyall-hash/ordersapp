@@ -1605,7 +1605,7 @@ openStockProductButton.addEventListener('click', () => {
   selectProduct(selectedStockProductId);
 });
 
-Promise.all([loadDictionaries(), loadCustomers(), loadProducts(), loadMetrics(), loadOrders(1)])
+Promise.all([loadDictionaries(), loadCustomers(), loadProducts(), loadOrders(1)])
   .then(() => {
     fillSelects();
     fillStatusFilters();
