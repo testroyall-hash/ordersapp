@@ -1,0 +1,4709 @@
+﻿[
+    {
+        "Num":  1,
+        "Product":  "РКМА-0,1-1",
+        "ProductID":  1000,
+        "Detail":  "Мембрана 23х25х0,365",
+        "DetailID":  6000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  2,
+        "Product":  "РКМА-0,1-1",
+        "ProductID":  1000,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  3,
+        "Product":  "РКМА-0,1-1",
+        "ProductID":  1000,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  4,
+        "Product":  "РКМА-0,1-1",
+        "ProductID":  1000,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  5,
+        "Product":  "РКМА-0,12-1",
+        "ProductID":  1003,
+        "Detail":  "Мембрана 23х25х0,405",
+        "DetailID":  6001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  6,
+        "Product":  "РКМА-0,12-1",
+        "ProductID":  1003,
+        "Detail":  "Прокладка 23х25x0,6 d 19",
+        "DetailID":  7010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  7,
+        "Product":  "РКМА-0,12-1",
+        "ProductID":  1003,
+        "Detail":  "Крышка 23х25х2,5",
+        "DetailID":  8003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  8,
+        "Product":  "РКМА-0,12-1",
+        "ProductID":  1003,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  9,
+        "Product":  "РКМА-0,14-1",
+        "ProductID":  1005,
+        "Detail":  "Мембрана 23х25х0,425",
+        "DetailID":  6002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  10,
+        "Product":  "РКМА-0,14-1",
+        "ProductID":  1005,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  11,
+        "Product":  "РКМА-0,14-1",
+        "ProductID":  1005,
+        "Detail":  "Крышка 23х25х1,27",
+        "DetailID":  8000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  12,
+        "Product":  "РКМА-0,14-1",
+        "ProductID":  1005,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  13,
+        "Product":  "РКМА-0,2-1",
+        "ProductID":  1006,
+        "Detail":  "Мембрана 23х25х0,485",
+        "DetailID":  6004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  14,
+        "Product":  "РКМА-0,2-1",
+        "ProductID":  1006,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  15,
+        "Product":  "РКМА-0,2-1",
+        "ProductID":  1006,
+        "Detail":  "Крышка 23х25х1,27",
+        "DetailID":  8000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  16,
+        "Product":  "РКМА-0,2-1",
+        "ProductID":  1006,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  17,
+        "Product":  "РКМА-0,25-1",
+        "ProductID":  1007,
+        "Detail":  "Мембрана 23х25х0,58",
+        "DetailID":  6006,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  18,
+        "Product":  "РКМА-0,25-1",
+        "ProductID":  1007,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  19,
+        "Product":  "РКМА-0,25-1",
+        "ProductID":  1007,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  20,
+        "Product":  "РКМА-0,25-1",
+        "ProductID":  1007,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  21,
+        "Product":  "РКМА-0,4-1",
+        "ProductID":  1012,
+        "Detail":  "Мембрана 23х25х0,64",
+        "DetailID":  6007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  22,
+        "Product":  "РКМА-0,4-1",
+        "ProductID":  1012,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  23,
+        "Product":  "РКМА-0,4-1",
+        "ProductID":  1012,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  24,
+        "Product":  "РКМА-0,4-1",
+        "ProductID":  1012,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  25,
+        "Product":  "РКМА-0,6-1",
+        "ProductID":  1015,
+        "Detail":  "Мембрана 23х25х1,02",
+        "DetailID":  6009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  26,
+        "Product":  "РКМА-0,6-1",
+        "ProductID":  1015,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  27,
+        "Product":  "РКМА-0,6-1",
+        "ProductID":  1015,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  28,
+        "Product":  "РКМА-0,6-1",
+        "ProductID":  1015,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  29,
+        "Product":  "РКМА-1,0-1",
+        "ProductID":  1018,
+        "Detail":  "Мембрана 23х25х0,83",
+        "DetailID":  6008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  30,
+        "Product":  "РКМА-1,0-1",
+        "ProductID":  1018,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  31,
+        "Product":  "РКМА-1,0-1",
+        "ProductID":  1018,
+        "Detail":  "Крышка 23х25х1,9",
+        "DetailID":  8001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  32,
+        "Product":  "РКМА-1,0-1",
+        "ProductID":  1018,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  33,
+        "Product":  "РКМА-1,6-1",
+        "ProductID":  1020,
+        "Detail":  "Мембрана 23х25х1,02",
+        "DetailID":  6009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  34,
+        "Product":  "РКМА-1,6-1",
+        "ProductID":  1020,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  35,
+        "Product":  "РКМА-1,6-1",
+        "ProductID":  1020,
+        "Detail":  "Крышка 23х25х1,27",
+        "DetailID":  8000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  36,
+        "Product":  "РКМА-1,6-1",
+        "ProductID":  1020,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  37,
+        "Product":  "РКМА-2,0-1",
+        "ProductID":  1022,
+        "Detail":  "Мембрана 23х25х1,17",
+        "DetailID":  6010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  38,
+        "Product":  "РКМА-2,0-1",
+        "ProductID":  1022,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  39,
+        "Product":  "РКМА-2,0-1",
+        "ProductID":  1022,
+        "Detail":  "Крышка 23х25х1,9",
+        "DetailID":  8001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  40,
+        "Product":  "РКМА-2,0-1",
+        "ProductID":  1022,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  41,
+        "Product":  "РКМА-2,5-1",
+        "ProductID":  1023,
+        "Detail":  "Мембрана 23х25х1,27",
+        "DetailID":  6011,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  42,
+        "Product":  "РКМА-2,5-1",
+        "ProductID":  1023,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  43,
+        "Product":  "РКМА-2,5-1",
+        "ProductID":  1023,
+        "Detail":  "Крышка 23х25х1,9",
+        "DetailID":  8001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  44,
+        "Product":  "РКМА-2,5-1",
+        "ProductID":  1023,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  45,
+        "Product":  "РКМА-3,0-1",
+        "ProductID":  1025,
+        "Detail":  "Мембрана 23х25х1,48",
+        "DetailID":  6012,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  46,
+        "Product":  "РКМА-3,0-1",
+        "ProductID":  1025,
+        "Detail":  "Прокладка 23х25x0,6 d 15",
+        "DetailID":  7012,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  47,
+        "Product":  "РКМА-3,0-1",
+        "ProductID":  1025,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  48,
+        "Product":  "РКМА-3,0-1",
+        "ProductID":  1025,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  49,
+        "Product":  "РКМА-4,0-1",
+        "ProductID":  1027,
+        "Detail":  "Мембрана 23х25х1,57",
+        "DetailID":  6013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  50,
+        "Product":  "РКМА-4,0-1",
+        "ProductID":  1027,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  51,
+        "Product":  "РКМА-4,0-1",
+        "ProductID":  1027,
+        "Detail":  "Крышка 23х25х1,9",
+        "DetailID":  8001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  52,
+        "Product":  "РКМА-4,0-1",
+        "ProductID":  1027,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  53,
+        "Product":  "РКМА-5,0-1",
+        "ProductID":  1029,
+        "Detail":  "Мембрана 23х25х1,82",
+        "DetailID":  6015,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  54,
+        "Product":  "РКМА-5,0-1",
+        "ProductID":  1029,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  55,
+        "Product":  "РКМА-5,0-1",
+        "ProductID":  1029,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  56,
+        "Product":  "РКМА-5,0-1",
+        "ProductID":  1029,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  57,
+        "Product":  "РКМА-6,0-1",
+        "ProductID":  1030,
+        "Detail":  "Мембрана 23х25х2,22",
+        "DetailID":  6018,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  58,
+        "Product":  "РКМА-6,0-1",
+        "ProductID":  1030,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  59,
+        "Product":  "РКМА-6,0-1",
+        "ProductID":  1030,
+        "Detail":  "Крышка 23х25х2,5",
+        "DetailID":  8003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  288,
+        "Product":  "ПЭ БПИ-25-82",
+        "ProductID":  10003,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.25,
+        "Discription":  null
+    },
+    {
+        "Num":  289,
+        "Product":  "ПЭ БПИ-28",
+        "ProductID":  10004,
+        "Detail":  "Пластина 0,355х25х48",
+        "DetailID":  5004,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  290,
+        "Product":  "ПЭ БПИ-29-48",
+        "ProductID":  10005,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  291,
+        "Product":  "ПЭ БПИ-29-53",
+        "ProductID":  10006,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  292,
+        "Product":  "ПЭ БПИ-30",
+        "ProductID":  10007,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  293,
+        "Product":  "ПЭ БПИ-32-38",
+        "ProductID":  10008,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.02,
+        "Discription":  null
+    },
+    {
+        "Num":  294,
+        "Product":  "ПЭ БПИ-32-42",
+        "ProductID":  10009,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.02,
+        "Discription":  null
+    },
+    {
+        "Num":  295,
+        "Product":  "ПЭ БПИ-34-49",
+        "ProductID":  10010,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.35,
+        "Discription":  null
+    },
+    {
+        "Num":  296,
+        "Product":  "ПЭ БПИ-34-51",
+        "ProductID":  10011,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.35,
+        "Discription":  null
+    },
+    {
+        "Num":  297,
+        "Product":  "ПЭ БПИ-35",
+        "ProductID":  10012,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  298,
+        "Product":  "ПС-13\\125",
+        "ProductID":  10013,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.045,
+        "Discription":  null
+    },
+    {
+        "Num":  299,
+        "Product":  "ПС-13\\200",
+        "ProductID":  10014,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.045,
+        "Discription":  null
+    },
+    {
+        "Num":  300,
+        "Product":  "ПС-13\\125М",
+        "ProductID":  10015,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.045,
+        "Discription":  null
+    },
+    {
+        "Num":  301,
+        "Product":  "ПС-13\\200М",
+        "ProductID":  10016,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.045,
+        "Discription":  null
+    },
+    {
+        "Num":  302,
+        "Product":  "ПС-14\\125",
+        "ProductID":  10018,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.045,
+        "Discription":  null
+    },
+    {
+        "Num":  303,
+        "Product":  "ПС-14М",
+        "ProductID":  10019,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.045,
+        "Discription":  null
+    },
+    {
+        "Num":  304,
+        "Product":  "ПСР-15",
+        "ProductID":  10020,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.125,
+        "Discription":  null
+    },
+    {
+        "Num":  305,
+        "Product":  "ПСР-16х0,355",
+        "ProductID":  10021,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.125,
+        "Discription":  null
+    },
+    {
+        "Num":  306,
+        "Product":  "ПСР-17",
+        "ProductID":  10022,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.125,
+        "Discription":  null
+    },
+    {
+        "Num":  307,
+        "Product":  "ПС-18",
+        "ProductID":  10023,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.045,
+        "Discription":  null
+    },
+    {
+        "Num":  308,
+        "Product":  "ПС-29",
+        "ProductID":  10024,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.045,
+        "Discription":  null
+    },
+    {
+        "Num":  309,
+        "Product":  "ПЭ РК206 Зл",
+        "ProductID":  10025,
+        "Detail":  "КЭ РК206",
+        "DetailID":  9001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  310,
+        "Product":  "ПЭ РК206 Ср",
+        "ProductID":  10026,
+        "Detail":  "КЭ РК206",
+        "DetailID":  9001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  311,
+        "Product":  "ПЭ РКТ206 Зл",
+        "ProductID":  10027,
+        "Detail":  "КЭ РКТ206",
+        "DetailID":  9002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  312,
+        "Product":  "ПЭ РКТ206 Ср",
+        "ProductID":  10028,
+        "Detail":  "КЭ РКТ206",
+        "DetailID":  9002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  313,
+        "Product":  "ПЭ РКР153-256",
+        "ProductID":  10029,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  314,
+        "Product":  "Подложка ЛАКС4.093",
+        "ProductID":  11014,
+        "Detail":  "Пластина ЛАКС4",
+        "DetailID":  5009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  315,
+        "Product":  "Подложка ЛАКС9.082",
+        "ProductID":  11015,
+        "Detail":  "Пластина ЛАКС9 13х15х3,4",
+        "DetailID":  5014,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  316,
+        "Product":  "Крышка БПИ-24",
+        "ProductID":  8011,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  317,
+        "Product":  "Крышка БПИ-25",
+        "ProductID":  8012,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.25,
+        "Discription":  null
+    },
+    {
+        "Num":  318,
+        "Product":  "В.Крышка БПИ-28",
+        "ProductID":  8013,
+        "Detail":  "Пластина 0,405х25х48",
+        "DetailID":  5005,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  319,
+        "Product":  "Н.Крышка БПИ-28",
+        "ProductID":  8014,
+        "Detail":  "Пластина 0,405х25х48",
+        "DetailID":  5005,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  320,
+        "Product":  "В.Крышка БПИ-29",
+        "ProductID":  8015,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  321,
+        "Product":  "Н.Крышка БПИ-29",
+        "ProductID":  8016,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  322,
+        "Product":  "В.Крышка БПИ-30",
+        "ProductID":  8017,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  323,
+        "Product":  "Н.Крышка БПИ-30",
+        "ProductID":  8018,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  324,
+        "Product":  "В.Крышка БПИ-32",
+        "ProductID":  8019,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  325,
+        "Product":  "Н.Крышка БПИ-32",
+        "ProductID":  8020,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  326,
+        "Product":  "В.Крышка БПИ-33",
+        "ProductID":  8021,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  327,
+        "Product":  "Н.Крышка БПИ-33",
+        "ProductID":  8022,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  328,
+        "Product":  "В.Крышка БПИ-34",
+        "ProductID":  8023,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  329,
+        "Product":  "Н.Крышка БПИ-34",
+        "ProductID":  8024,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  330,
+        "Product":  "В.Крышка РКР153",
+        "ProductID":  8028,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  331,
+        "Product":  "Н.Крышка РКР153",
+        "ProductID":  8029,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  332,
+        "Product":  "В.Крышка БПИ-35",
+        "ProductID":  8026,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  333,
+        "Product":  "Н.Крышка БПИ-35",
+        "ProductID":  8027,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  334,
+        "Product":  "Пружина БПИ-24",
+        "ProductID":  7004,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  335,
+        "Product":  "Маятник БПИ-32",
+        "ProductID":  7005,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  336,
+        "Product":  "Маятник БПИ-33",
+        "ProductID":  7006,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  337,
+        "Product":  "Маятник БПИ-34",
+        "ProductID":  7007,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  370,
+        "Product":  "РКМА-0,1-12",
+        "ProductID":  1037,
+        "Detail":  "Крышка 2,68х9,12х0,13",
+        "DetailID":  8038,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  371,
+        "Product":  "РКМА-0,1-12",
+        "ProductID":  1037,
+        "Detail":  "Мембрана 23х25х0,36-12 отв d1,35",
+        "DetailID":  6029,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  372,
+        "Product":  "РКМА-0,1-12",
+        "ProductID":  1037,
+        "Detail":  "ПСР-19",
+        "DetailID":  10038,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  367,
+        "Product":  "РКМА-0,1-13",
+        "ProductID":  1038,
+        "Detail":  "Большая крышка 23х25х1,9 с отв. d3,1",
+        "DetailID":  8036,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  369,
+        "Product":  "РКМА-0,1-13",
+        "ProductID":  1038,
+        "Detail":  "Крышка 2,68х9,12х0,13 с пуклевкой",
+        "DetailID":  8037,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  370,
+        "Product":  "РКМА-0,1-13",
+        "ProductID":  1038,
+        "Detail":  "Крышка 2,68х9,12х0,13",
+        "DetailID":  8038,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  371,
+        "Product":  "РКМА-0,1-13",
+        "ProductID":  1038,
+        "Detail":  "Мембрана 23х25х0,36-13 отв d1,35",
+        "DetailID":  6030,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  372,
+        "Product":  "РКМА-0,1-13",
+        "ProductID":  1038,
+        "Detail":  "ПСР-19",
+        "DetailID":  10038,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  373,
+        "Product":  "РКМА-16-ОС41",
+        "ProductID":  3008,
+        "Detail":  "Крышка верхняя 9,1х2,65х1,2",
+        "DetailID":  8040,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  374,
+        "Product":  "РКМА-16-ОС41",
+        "ProductID":  3008,
+        "Detail":  "Крышка нижняя 12,1х2,65х1,2",
+        "DetailID":  8041,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  375,
+        "Product":  "РКМА-16-ОС41",
+        "ProductID":  3008,
+        "Detail":  "ПСР-19",
+        "DetailID":  10038,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  376,
+        "Product":  "ПЭ d10x2",
+        "ProductID":  10039,
+        "Detail":  "Пластина d10х2",
+        "DetailID":  5018,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  377,
+        "Product":  "ПСР-19",
+        "ProductID":  10038,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.125,
+        "Discription":  null
+    },
+    {
+        "Num":  378,
+        "Product":  "РКМА-1,0-21",
+        "ProductID":  2013,
+        "Detail":  "Мембрана d14,5х0,425",
+        "DetailID":  6024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  379,
+        "Product":  "РКМА-1,0-21",
+        "ProductID":  2013,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  380,
+        "Product":  "РКМА-1,0-21",
+        "ProductID":  2013,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  381,
+        "Product":  "РКМА-1,0-21",
+        "ProductID":  2013,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  383,
+        "Product":  "РКМА-0,7-24",
+        "ProductID":  2104,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  384,
+        "Product":  "РКМА-0,7-24",
+        "ProductID":  2104,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  386,
+        "Product":  "РКМА-0,7-24",
+        "ProductID":  2104,
+        "Detail":  "Балка d14,5x0,81",
+        "DetailID":  11016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  382,
+        "Product":  "РКМА-0,7-24",
+        "ProductID":  2104,
+        "Detail":  "Мембрана d14,5х0,325",
+        "DetailID":  6022,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  387,
+        "Product":  "РКМА-0,7-21",
+        "ProductID":  2010,
+        "Detail":  "Мембрана d14,5х0,365",
+        "DetailID":  6023,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  389,
+        "Product":  "РКМА-0,7-21",
+        "ProductID":  2010,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  388,
+        "Product":  "РКМА-0,7-21",
+        "ProductID":  2010,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  390,
+        "Product":  "РКМА-0,7-21",
+        "ProductID":  2010,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  385,
+        "Product":  "РКМА-0,7-24",
+        "ProductID":  2104,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  391,
+        "Product":  "РКМА-0,3-1",
+        "ProductID":  1010,
+        "Detail":  "Мембрана 23х25х0,58",
+        "DetailID":  6006,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  392,
+        "Product":  "РКМА-0,3-1",
+        "ProductID":  1010,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  393,
+        "Product":  "РКМА-0,3-1",
+        "ProductID":  1010,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  394,
+        "Product":  "РКМА-0,3-1",
+        "ProductID":  1010,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  188,
+        "Product":  "РКМА-0,4-4",
+        "ProductID":  1014,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  189,
+        "Product":  "РКМА-0,4-4",
+        "ProductID":  1014,
+        "Detail":  "Крышка 23х25 с отверстием d3,1",
+        "DetailID":  8025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  190,
+        "Product":  "РКМА-0,4-4",
+        "ProductID":  1014,
+        "Detail":  "Штуцер d6",
+        "DetailID":  18001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  191,
+        "Product":  "РКМА-20-ОС",
+        "ProductID":  3000,
+        "Detail":  "Мембрана 20х7х4",
+        "DetailID":  6025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  192,
+        "Product":  "РКМА-20-ОС",
+        "ProductID":  3000,
+        "Detail":  "Крышка 20х7х4",
+        "DetailID":  8008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  193,
+        "Product":  "РКМА-20-ОС",
+        "ProductID":  3000,
+        "Detail":  "ПС-14\\125",
+        "DetailID":  10018,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  194,
+        "Product":  "РКМА-60-ОС",
+        "ProductID":  3001,
+        "Detail":  "Мембрана 20х7х4",
+        "DetailID":  6025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  195,
+        "Product":  "РКМА-60-ОС",
+        "ProductID":  3001,
+        "Detail":  "Крышка 20х7х4",
+        "DetailID":  8008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  196,
+        "Product":  "РКМА-60-ОС",
+        "ProductID":  3001,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  197,
+        "Product":  "РКМА-80-ОС",
+        "ProductID":  3002,
+        "Detail":  "Мембрана 20х7х4",
+        "DetailID":  6025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  198,
+        "Product":  "РКМА-80-ОС",
+        "ProductID":  3002,
+        "Detail":  "Крышка 20х7х4",
+        "DetailID":  8008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  199,
+        "Product":  "РКМА-80-ОС",
+        "ProductID":  3002,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  200,
+        "Product":  "РКМА-100-ОС",
+        "ProductID":  3004,
+        "Detail":  "Мембрана 20х7х4",
+        "DetailID":  6025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  201,
+        "Product":  "РКМА-100-ОС",
+        "ProductID":  3004,
+        "Detail":  "Крышка 20х7х4",
+        "DetailID":  8008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  202,
+        "Product":  "РКМА-100-ОС",
+        "ProductID":  3004,
+        "Detail":  "ПС-13\\200",
+        "DetailID":  10014,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  203,
+        "Product":  "РКМА-25-ОС21",
+        "ProductID":  3005,
+        "Detail":  "Крышка 10,1х4х1,85",
+        "DetailID":  8009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  204,
+        "Product":  "РКМА-25-ОС21",
+        "ProductID":  3005,
+        "Detail":  "Крышка нижняя 14,5х4х1,85",
+        "DetailID":  8010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  205,
+        "Product":  "РКМА-25-ОС21",
+        "ProductID":  3005,
+        "Detail":  "ПСР-17",
+        "DetailID":  10022,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  206,
+        "Product":  "РКМА-25-ОС21",
+        "ProductID":  3005,
+        "Detail":  "Вывод 11,4хd0,22",
+        "DetailID":  18002,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  207,
+        "Product":  "РКМА-40-ОС21",
+        "ProductID":  3006,
+        "Detail":  "Крышка 10,1х4х1,85",
+        "DetailID":  8009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  208,
+        "Product":  "РКМА-40-ОС21",
+        "ProductID":  3006,
+        "Detail":  "Крышка нижняя 14,5х4х1,85",
+        "DetailID":  8010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  209,
+        "Product":  "РКМА-40-ОС21",
+        "ProductID":  3006,
+        "Detail":  "ПСР-15",
+        "DetailID":  10020,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  210,
+        "Product":  "РКМА-40-ОС21",
+        "ProductID":  3006,
+        "Detail":  "Вывод 11,4хd0,22",
+        "DetailID":  18002,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  211,
+        "Product":  "РКМА-100-ОС21",
+        "ProductID":  3007,
+        "Detail":  "Крышка 10,1х4х1,85",
+        "DetailID":  8009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  212,
+        "Product":  "РКМА-100-ОС21",
+        "ProductID":  3007,
+        "Detail":  "Крышка нижняя 14,5х4х1,85",
+        "DetailID":  8010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  213,
+        "Product":  "РКМА-100-ОС21",
+        "ProductID":  3007,
+        "Detail":  "ПСР-16х0,355",
+        "DetailID":  10021,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  214,
+        "Product":  "РКМА-100-ОС21",
+        "ProductID":  3007,
+        "Detail":  "Вывод 11,4хd0,22",
+        "DetailID":  18002,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  215,
+        "Product":  "БПИ-24",
+        "ProductID":  1,
+        "Detail":  "Крышка БПИ-24",
+        "DetailID":  8011,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  216,
+        "Product":  "БПИ-24",
+        "ProductID":  1,
+        "Detail":  "Пружина БПИ-24",
+        "DetailID":  7004,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  217,
+        "Product":  "БПИ-24",
+        "ProductID":  1,
+        "Detail":  "ПЭ БПИ-24",
+        "DetailID":  10001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  218,
+        "Product":  "БПИ-25-76",
+        "ProductID":  2,
+        "Detail":  "Крышка БПИ-25",
+        "DetailID":  8012,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  219,
+        "Product":  "БПИ-25-76",
+        "ProductID":  2,
+        "Detail":  "ПЭ БПИ-25-76",
+        "DetailID":  10002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  220,
+        "Product":  "БПИ-25-82",
+        "ProductID":  3,
+        "Detail":  "Крышка БПИ-25",
+        "DetailID":  8012,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  221,
+        "Product":  "БПИ-25-82",
+        "ProductID":  3,
+        "Detail":  "ПЭ БПИ-25-82",
+        "DetailID":  10003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  222,
+        "Product":  "БПИ-28",
+        "ProductID":  4,
+        "Detail":  "В.Крышка БПИ-28",
+        "DetailID":  8013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  223,
+        "Product":  "БПИ-28",
+        "ProductID":  4,
+        "Detail":  "Н.Крышка БПИ-28",
+        "DetailID":  8014,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  224,
+        "Product":  "БПИ-28",
+        "ProductID":  4,
+        "Detail":  "ПЭ БПИ-28",
+        "DetailID":  10004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  225,
+        "Product":  "БПИ-29-48",
+        "ProductID":  5,
+        "Detail":  "В.Крышка БПИ-29",
+        "DetailID":  8015,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  226,
+        "Product":  "БПИ-29-48",
+        "ProductID":  5,
+        "Detail":  "Н.Крышка БПИ-29",
+        "DetailID":  8016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  227,
+        "Product":  "БПИ-29-48",
+        "ProductID":  5,
+        "Detail":  "ПЭ БПИ-29-48",
+        "DetailID":  10005,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  228,
+        "Product":  "БПИ-29-53",
+        "ProductID":  6,
+        "Detail":  "В.Крышка БПИ-29",
+        "DetailID":  8015,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  229,
+        "Product":  "БПИ-29-53",
+        "ProductID":  6,
+        "Detail":  "Н.Крышка БПИ-29",
+        "DetailID":  8016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  230,
+        "Product":  "БПИ-29-53",
+        "ProductID":  6,
+        "Detail":  "ПЭ БПИ-29-53",
+        "DetailID":  10006,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  231,
+        "Product":  "БПИ-30",
+        "ProductID":  7,
+        "Detail":  "В.Крышка БПИ-30",
+        "DetailID":  8017,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  232,
+        "Product":  "БПИ-30",
+        "ProductID":  7,
+        "Detail":  "Н.Крышка БПИ-30",
+        "DetailID":  8018,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  233,
+        "Product":  "БПИ-30",
+        "ProductID":  7,
+        "Detail":  "ПЭ БПИ-30",
+        "DetailID":  10007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  234,
+        "Product":  "БПИ-32-38",
+        "ProductID":  8,
+        "Detail":  "В.Крышка БПИ-32",
+        "DetailID":  8019,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  235,
+        "Product":  "БПИ-32-38",
+        "ProductID":  8,
+        "Detail":  "Н.Крышка БПИ-32",
+        "DetailID":  8020,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  237,
+        "Product":  "БПИ-32-38",
+        "ProductID":  8,
+        "Detail":  "ПЭ БПИ-32-38",
+        "DetailID":  10008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  238,
+        "Product":  "БПИ-32-42",
+        "ProductID":  9,
+        "Detail":  "В.Крышка БПИ-32",
+        "DetailID":  8019,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  239,
+        "Product":  "БПИ-32-42",
+        "ProductID":  9,
+        "Detail":  "Н.Крышка БПИ-32",
+        "DetailID":  8020,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  241,
+        "Product":  "БПИ-32-42",
+        "ProductID":  9,
+        "Detail":  "ПЭ БПИ-32-42",
+        "DetailID":  10009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  247,
+        "Product":  "БПИ-34-49",
+        "ProductID":  11,
+        "Detail":  "В.Крышка БПИ-34",
+        "DetailID":  8023,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  248,
+        "Product":  "БПИ-34-49",
+        "ProductID":  11,
+        "Detail":  "Н.Крышка БПИ-34",
+        "DetailID":  8024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  250,
+        "Product":  "БПИ-34-49",
+        "ProductID":  11,
+        "Detail":  "ПЭ БПИ-34-49",
+        "DetailID":  10010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  251,
+        "Product":  "БПИ-34-51",
+        "ProductID":  12,
+        "Detail":  "В.Крышка БПИ-34",
+        "DetailID":  8023,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  252,
+        "Product":  "БПИ-34-51",
+        "ProductID":  12,
+        "Detail":  "Н.Крышка БПИ-34",
+        "DetailID":  8024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  254,
+        "Product":  "БПИ-34-51",
+        "ProductID":  12,
+        "Detail":  "ПЭ БПИ-34-51",
+        "DetailID":  10011,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  236,
+        "Product":  "БПИ-32-38",
+        "ProductID":  8,
+        "Detail":  "Маятник БПИ-32",
+        "DetailID":  7005,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  240,
+        "Product":  "БПИ-32-42",
+        "ProductID":  9,
+        "Detail":  "Маятник БПИ-32",
+        "DetailID":  7005,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  242,
+        "Product":  "БПИ-33",
+        "ProductID":  10,
+        "Detail":  "В.Крышка БПИ-33",
+        "DetailID":  8021,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  243,
+        "Product":  "БПИ-33",
+        "ProductID":  10,
+        "Detail":  "Н.Крышка БПИ-33",
+        "DetailID":  8022,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  244,
+        "Product":  "БПИ-33",
+        "ProductID":  10,
+        "Detail":  "Маятник БПИ-33",
+        "DetailID":  7006,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  245,
+        "Product":  "БПИ-33",
+        "ProductID":  10,
+        "Detail":  "ПЭ БПИ-32-38",
+        "DetailID":  10008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  246,
+        "Product":  "БПИ-33",
+        "ProductID":  10,
+        "Detail":  "ПЭ БПИ-32-42",
+        "DetailID":  10009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  249,
+        "Product":  "БПИ-34-49",
+        "ProductID":  11,
+        "Detail":  "Маятник БПИ-34",
+        "DetailID":  7007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  253,
+        "Product":  "БПИ-34-51",
+        "ProductID":  12,
+        "Detail":  "Маятник БПИ-34",
+        "DetailID":  7007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  255,
+        "Product":  "БПИ-35",
+        "ProductID":  13,
+        "Detail":  "В.Крышка БПИ-34",
+        "DetailID":  8023,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  256,
+        "Product":  "БПИ-35",
+        "ProductID":  13,
+        "Detail":  "Н.Крышка БПИ-34",
+        "DetailID":  8024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  257,
+        "Product":  "БПИ-35",
+        "ProductID":  13,
+        "Detail":  "ПЭ БПИ-35",
+        "DetailID":  10012,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  258,
+        "Product":  "РК206",
+        "ProductID":  4000,
+        "Detail":  "Кожух d2x6",
+        "DetailID":  17004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  259,
+        "Product":  "РК206",
+        "ProductID":  4000,
+        "Detail":  "Основание корпуса d2",
+        "DetailID":  17001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  260,
+        "Product":  "РК206",
+        "ProductID":  4000,
+        "Detail":  "ПЭ РК206 Ср",
+        "DetailID":  10026,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  261,
+        "Product":  "РКОВ206А",
+        "ProductID":  4002,
+        "Detail":  "Кожух d2x6",
+        "DetailID":  17004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  262,
+        "Product":  "РКОВ206А",
+        "ProductID":  4002,
+        "Detail":  "Основание корпуса d2",
+        "DetailID":  17001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  263,
+        "Product":  "РКОВ206А",
+        "ProductID":  4002,
+        "Detail":  "ПЭ РК206 Ср",
+        "DetailID":  10026,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  264,
+        "Product":  "РКОВ206Б",
+        "ProductID":  4004,
+        "Detail":  "Кожух d2x6",
+        "DetailID":  17004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  265,
+        "Product":  "РКОВ206Б",
+        "ProductID":  4004,
+        "Detail":  "Основание корпуса d2",
+        "DetailID":  17001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  266,
+        "Product":  "РКОВ206Б",
+        "ProductID":  4004,
+        "Detail":  "ПЭ РК206 Зл",
+        "DetailID":  10025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  267,
+        "Product":  "РКОВ206В",
+        "ProductID":  4006,
+        "Detail":  "Кожух d2x6",
+        "DetailID":  17004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  268,
+        "Product":  "РКОВ206В",
+        "ProductID":  4006,
+        "Detail":  "Основание корпуса d2",
+        "DetailID":  17001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  269,
+        "Product":  "РКОВ206В",
+        "ProductID":  4006,
+        "Detail":  "ПЭ РК206 Зл",
+        "DetailID":  10025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  270,
+        "Product":  "РКТВ206А",
+        "ProductID":  4003,
+        "Detail":  "Кожух d2x6",
+        "DetailID":  17004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  271,
+        "Product":  "РКТВ206А",
+        "ProductID":  4003,
+        "Detail":  "Основание корпуса d2",
+        "DetailID":  17001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  272,
+        "Product":  "РКТВ206А",
+        "ProductID":  4003,
+        "Detail":  "ПЭ РКТ206 Ср",
+        "DetailID":  10028,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  273,
+        "Product":  "РКТВ206Б",
+        "ProductID":  4005,
+        "Detail":  "Кожух d2x6",
+        "DetailID":  17004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  274,
+        "Product":  "РКТВ206Б",
+        "ProductID":  4005,
+        "Detail":  "Основание корпуса d2",
+        "DetailID":  17001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  275,
+        "Product":  "РКТВ206Б",
+        "ProductID":  4005,
+        "Detail":  "ПЭ РКТ206 Зл",
+        "DetailID":  10027,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  276,
+        "Product":  "РКТВ206В",
+        "ProductID":  4007,
+        "Detail":  "Кожух d2x6",
+        "DetailID":  17004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  277,
+        "Product":  "РКТВ206В",
+        "ProductID":  4007,
+        "Detail":  "Основание корпуса d2",
+        "DetailID":  17001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  278,
+        "Product":  "РКТВ206В",
+        "ProductID":  4007,
+        "Detail":  "ПЭ РКТ206 Зл",
+        "DetailID":  10027,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  338,
+        "Product":  "Тело опорное d4х30",
+        "ProductID":  11000,
+        "Detail":  "Заготовка кварцевая d4х30",
+        "DetailID":  11019,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  339,
+        "Product":  "Тело опорное d4х20",
+        "ProductID":  11001,
+        "Detail":  "Заготовка кварцевая d4х20",
+        "DetailID":  11020,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  340,
+        "Product":  "ПЭ d4x1",
+        "ProductID":  10033,
+        "Detail":  "Пластина d4х1",
+        "DetailID":  5016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  341,
+        "Product":  "ПЭ d4x0,5",
+        "ProductID":  10034,
+        "Detail":  "Пластина d4x0,5",
+        "DetailID":  5017,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  342,
+        "Product":  "ПСР-16х0,200",
+        "ProductID":  10030,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.125,
+        "Discription":  null
+    },
+    {
+        "Num":  343,
+        "Product":  "ПЭ РКР 2х6",
+        "ProductID":  10031,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.047,
+        "Discription":  null
+    },
+    {
+        "Num":  344,
+        "Product":  "ПЭ РКТР 2х6",
+        "ProductID":  10032,
+        "Detail":  "Пластина 0,205х23х25 ZYb/-41",
+        "DetailID":  5015,
+        "Amount":  0.047,
+        "Discription":  null
+    },
+    {
+        "Num":  345,
+        "Product":  "В. Крышка РКР 2х6",
+        "ProductID":  8031,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.047,
+        "Discription":  null
+    },
+    {
+        "Num":  346,
+        "Product":  "Н. Крышка РКР 2х6",
+        "ProductID":  8032,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.047,
+        "Discription":  null
+    },
+    {
+        "Num":  347,
+        "Product":  "В. Крышка РКТР 2х6",
+        "ProductID":  8033,
+        "Detail":  "Пластина 0,205х23х25 ZYb/-41",
+        "DetailID":  5015,
+        "Amount":  0.047,
+        "Discription":  null
+    },
+    {
+        "Num":  348,
+        "Product":  "Н. Крышка РКТР 2х6",
+        "ProductID":  8034,
+        "Detail":  "Пластина 0,205х23х25 ZYb/-41",
+        "DetailID":  5015,
+        "Amount":  0.047,
+        "Discription":  null
+    },
+    {
+        "Num":  349,
+        "Product":  "РКР 2х6",
+        "ProductID":  4010,
+        "Detail":  "ПЭ РКР 2х6",
+        "DetailID":  10031,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  350,
+        "Product":  "РКР 2х6",
+        "ProductID":  4010,
+        "Detail":  "В. Крышка РКР 2х6",
+        "DetailID":  8031,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  351,
+        "Product":  "РКР 2х6",
+        "ProductID":  4010,
+        "Detail":  "Н. Крышка РКР 2х6",
+        "DetailID":  8032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  352,
+        "Product":  "РКТР 2х6",
+        "ProductID":  4011,
+        "Detail":  "ПЭ РКТР 2х6",
+        "DetailID":  10032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  353,
+        "Product":  "РКТР 2х6",
+        "ProductID":  4011,
+        "Detail":  "В. Крышка РКТР 2х6",
+        "DetailID":  8033,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  354,
+        "Product":  "РКТР 2х6",
+        "ProductID":  4011,
+        "Detail":  "Н. Крышка РКТР 2х6",
+        "DetailID":  8034,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  355,
+        "Product":  "РКМА-0,4-24-32",
+        "ProductID":  2102,
+        "Detail":  "Мембрана d14,5х0,245",
+        "DetailID":  6020,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  356,
+        "Product":  "РКМА-0,4-24-32",
+        "ProductID":  2102,
+        "Detail":  "Прокладка d14,5x7,5x0,47",
+        "DetailID":  7008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  357,
+        "Product":  "РКМА-0,4-24-32",
+        "ProductID":  2102,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  358,
+        "Product":  "РКМА-0,4-24-32",
+        "ProductID":  2102,
+        "Detail":  "ПЭ БПИ-32-42",
+        "DetailID":  10009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  359,
+        "Product":  "РКМА-0,1-1э",
+        "ProductID":  1035,
+        "Detail":  "Мембрана 23х25х0,365",
+        "DetailID":  6000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  60,
+        "Product":  "РКМА-6,0-1",
+        "ProductID":  1030,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  61,
+        "Product":  "РКМА-10,0-1",
+        "ProductID":  1032,
+        "Detail":  "Мембрана 23х25х1,67",
+        "DetailID":  6014,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  62,
+        "Product":  "РКМА-10,0-1",
+        "ProductID":  1032,
+        "Detail":  "Прокладка 23х25 d 11",
+        "DetailID":  7002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  63,
+        "Product":  "РКМА-10,0-1",
+        "ProductID":  1032,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  64,
+        "Product":  "РКМА-10,0-1",
+        "ProductID":  1032,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  65,
+        "Product":  "РКМА-16,0-1",
+        "ProductID":  1034,
+        "Detail":  "Мембрана 23х25х2,02",
+        "DetailID":  6017,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  66,
+        "Product":  "РКМА-16,0-1",
+        "ProductID":  1034,
+        "Detail":  "Прокладка 23х25 d 11",
+        "DetailID":  7002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  67,
+        "Product":  "РКМА-16,0-1",
+        "ProductID":  1034,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  68,
+        "Product":  "РКМА-16,0-1",
+        "ProductID":  1034,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  69,
+        "Product":  "РКМА-0,16-21",
+        "ProductID":  2001,
+        "Detail":  "Мембрана d14,5х0,205",
+        "DetailID":  6019,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  70,
+        "Product":  "РКМА-0,16-21",
+        "ProductID":  2001,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  71,
+        "Product":  "РКМА-0,16-21",
+        "ProductID":  2001,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  72,
+        "Product":  "РКМА-0,16-21",
+        "ProductID":  2001,
+        "Detail":  "ПС-14\\125",
+        "DetailID":  10018,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  73,
+        "Product":  "РКМА-0,25-21",
+        "ProductID":  2003,
+        "Detail":  "Мембрана d14,5х0,245",
+        "DetailID":  6020,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  74,
+        "Product":  "РКМА-0,25-21",
+        "ProductID":  2003,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  75,
+        "Product":  "РКМА-0,25-21",
+        "ProductID":  2003,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  76,
+        "Product":  "РКМА-0,25-21",
+        "ProductID":  2003,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  77,
+        "Product":  "РКМА-0,4-21",
+        "ProductID":  2005,
+        "Detail":  "Мембрана d14,5х0,305",
+        "DetailID":  6021,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  78,
+        "Product":  "РКМА-0,4-21",
+        "ProductID":  2005,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  79,
+        "Product":  "РКМА-0,4-21",
+        "ProductID":  2005,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  80,
+        "Product":  "РКМА-0,4-21",
+        "ProductID":  2005,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  81,
+        "Product":  "РКМА-0,6-21",
+        "ProductID":  2008,
+        "Detail":  "Мембрана d14,5х0,325",
+        "DetailID":  6022,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  82,
+        "Product":  "РКМА-0,6-21",
+        "ProductID":  2008,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  83,
+        "Product":  "РКМА-0,6-21",
+        "ProductID":  2008,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  84,
+        "Product":  "РКМА-0,6-21",
+        "ProductID":  2008,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  85,
+        "Product":  "РКМА-0,9-21",
+        "ProductID":  2011,
+        "Detail":  "Мембрана d14,5х0,365",
+        "DetailID":  6023,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  86,
+        "Product":  "РКМА-0,9-21",
+        "ProductID":  2011,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  87,
+        "Product":  "РКМА-0,9-21",
+        "ProductID":  2011,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  88,
+        "Product":  "РКМА-0,9-21",
+        "ProductID":  2011,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  89,
+        "Product":  "РКМА-1,2-21",
+        "ProductID":  2014,
+        "Detail":  "Мембрана d14,5х0,425",
+        "DetailID":  6024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  90,
+        "Product":  "РКМА-1,2-21",
+        "ProductID":  2014,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  91,
+        "Product":  "РКМА-1,2-21",
+        "ProductID":  2014,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  92,
+        "Product":  "РКМА-1,2-21",
+        "ProductID":  2014,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  93,
+        "Product":  "РКМА-0,16-24",
+        "ProductID":  2002,
+        "Detail":  "Мембрана d14,5х0,205",
+        "DetailID":  6019,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  94,
+        "Product":  "РКМА-0,16-24",
+        "ProductID":  2002,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  95,
+        "Product":  "РКМА-0,16-24",
+        "ProductID":  2002,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  96,
+        "Product":  "РКМА-0,16-24",
+        "ProductID":  2002,
+        "Detail":  "ПС-14\\125",
+        "DetailID":  10018,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  97,
+        "Product":  "РКМА-0,16-24",
+        "ProductID":  2002,
+        "Detail":  "Балка d14,5x0,81",
+        "DetailID":  11016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  98,
+        "Product":  "РКМА-0,25-24",
+        "ProductID":  2004,
+        "Detail":  "Мембрана d14,5х0,245",
+        "DetailID":  6020,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  99,
+        "Product":  "РКМА-0,25-24",
+        "ProductID":  2004,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  100,
+        "Product":  "РКМА-0,25-24",
+        "ProductID":  2004,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  101,
+        "Product":  "РКМА-0,25-24",
+        "ProductID":  2004,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  102,
+        "Product":  "РКМА-0,25-24",
+        "ProductID":  2004,
+        "Detail":  "Балка d14,5x0,81",
+        "DetailID":  11016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  103,
+        "Product":  "РКМА-0,4-24",
+        "ProductID":  2007,
+        "Detail":  "Мембрана d14,5х0,305",
+        "DetailID":  6021,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  104,
+        "Product":  "РКМА-0,4-24",
+        "ProductID":  2007,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  105,
+        "Product":  "РКМА-0,4-24",
+        "ProductID":  2007,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  106,
+        "Product":  "РКМА-0,4-24",
+        "ProductID":  2007,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  107,
+        "Product":  "РКМА-0,4-24",
+        "ProductID":  2007,
+        "Detail":  "Балка d14,5x0,81",
+        "DetailID":  11016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  108,
+        "Product":  "РКМА-0,6-24",
+        "ProductID":  2009,
+        "Detail":  "Мембрана d14,5х0,325",
+        "DetailID":  6022,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  109,
+        "Product":  "РКМА-0,6-24",
+        "ProductID":  2009,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  110,
+        "Product":  "РКМА-0,6-24",
+        "ProductID":  2009,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  111,
+        "Product":  "РКМА-0,6-24",
+        "ProductID":  2009,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  112,
+        "Product":  "РКМА-0,6-24",
+        "ProductID":  2009,
+        "Detail":  "Балка d14,5x0,81",
+        "DetailID":  11016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  113,
+        "Product":  "РКМА-0,9-24",
+        "ProductID":  2012,
+        "Detail":  "Мембрана d14,5х0,365",
+        "DetailID":  6023,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  114,
+        "Product":  "РКМА-0,9-24",
+        "ProductID":  2012,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  115,
+        "Product":  "РКМА-0,9-24",
+        "ProductID":  2012,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  116,
+        "Product":  "РКМА-0,9-24",
+        "ProductID":  2012,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  117,
+        "Product":  "РКМА-0,9-24",
+        "ProductID":  2012,
+        "Detail":  "Балка d14,5x0,81",
+        "DetailID":  11016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  118,
+        "Product":  "РКМА-1,2-24",
+        "ProductID":  2015,
+        "Detail":  "Мембрана d14,5х0,425",
+        "DetailID":  6024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  119,
+        "Product":  "РКМА-1,2-24",
+        "ProductID":  2015,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  120,
+        "Product":  "РКМА-1,2-24",
+        "ProductID":  2015,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  121,
+        "Product":  "РКМА-1,2-24",
+        "ProductID":  2015,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  122,
+        "Product":  "РКМА-1,2-24",
+        "ProductID":  2015,
+        "Detail":  "Балка d14,5x0,81",
+        "DetailID":  11016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  123,
+        "Product":  "РКМА-2,5-24",
+        "ProductID":  2018,
+        "Detail":  "Мембрана d14,5х0,425",
+        "DetailID":  6024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  124,
+        "Product":  "РКМА-2,5-24",
+        "ProductID":  2018,
+        "Detail":  "Прокладка d14,5x7,5x0,47",
+        "DetailID":  7008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  125,
+        "Product":  "РКМА-2,5-24",
+        "ProductID":  2018,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  126,
+        "Product":  "РКМА-2,5-24",
+        "ProductID":  2018,
+        "Detail":  "БПИ-32-42",
+        "DetailID":  9,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  127,
+        "Product":  "РКМА-2,5-24",
+        "ProductID":  2018,
+        "Detail":  "Балка d14,5x0,81",
+        "DetailID":  11016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  128,
+        "Product":  "РКМА-0,1-3",
+        "ProductID":  1001,
+        "Detail":  "Мембрана 23х25х0,365",
+        "DetailID":  6000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  129,
+        "Product":  "РКМА-0,1-3",
+        "ProductID":  1001,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  130,
+        "Product":  "РКМА-0,1-3",
+        "ProductID":  1001,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  131,
+        "Product":  "РКМА-0,1-3",
+        "ProductID":  1001,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  132,
+        "Product":  "РКМА-0,1-3",
+        "ProductID":  1001,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  133,
+        "Product":  "РКМА-0,25-3",
+        "ProductID":  1008,
+        "Detail":  "Мембрана 23х25х0,58",
+        "DetailID":  6006,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  134,
+        "Product":  "РКМА-0,25-3",
+        "ProductID":  1008,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  135,
+        "Product":  "РКМА-0,25-3",
+        "ProductID":  1008,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  136,
+        "Product":  "РКМА-0,25-3",
+        "ProductID":  1008,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  137,
+        "Product":  "РКМА-0,25-3",
+        "ProductID":  1008,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  138,
+        "Product":  "РКМА-0,4-3",
+        "ProductID":  1013,
+        "Detail":  "Мембрана 23х25х0,64",
+        "DetailID":  6007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  139,
+        "Product":  "РКМА-0,4-3",
+        "ProductID":  1013,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  140,
+        "Product":  "РКМА-0,4-3",
+        "ProductID":  1013,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  141,
+        "Product":  "РКМА-0,4-3",
+        "ProductID":  1013,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  142,
+        "Product":  "РКМА-0,4-3",
+        "ProductID":  1013,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  143,
+        "Product":  "РКМА-0,6-3",
+        "ProductID":  1016,
+        "Detail":  "Мембрана 23х25х1,02",
+        "DetailID":  6009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  144,
+        "Product":  "РКМА-0,6-3",
+        "ProductID":  1016,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  145,
+        "Product":  "РКМА-0,6-3",
+        "ProductID":  1016,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  146,
+        "Product":  "РКМА-0,6-3",
+        "ProductID":  1016,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  147,
+        "Product":  "РКМА-0,6-3",
+        "ProductID":  1016,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  148,
+        "Product":  "РКМА-1,0-3",
+        "ProductID":  1019,
+        "Detail":  "Мембрана 23х25х0,83",
+        "DetailID":  6008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  149,
+        "Product":  "РКМА-1,0-3",
+        "ProductID":  1019,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  150,
+        "Product":  "РКМА-1,0-3",
+        "ProductID":  1019,
+        "Detail":  "Крышка 23х25х1,9",
+        "DetailID":  8001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  151,
+        "Product":  "РКМА-1,0-3",
+        "ProductID":  1019,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  152,
+        "Product":  "РКМА-1,0-3",
+        "ProductID":  1019,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  153,
+        "Product":  "РКМА-1,6-3",
+        "ProductID":  1021,
+        "Detail":  "Мембрана 23х25х1,02",
+        "DetailID":  6009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  154,
+        "Product":  "РКМА-1,6-3",
+        "ProductID":  1021,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  155,
+        "Product":  "РКМА-1,6-3",
+        "ProductID":  1021,
+        "Detail":  "Крышка 23х25х1,27",
+        "DetailID":  8000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  156,
+        "Product":  "РКМА-1,6-3",
+        "ProductID":  1021,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  157,
+        "Product":  "РКМА-1,6-3",
+        "ProductID":  1021,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  158,
+        "Product":  "РКМА-2,5-3",
+        "ProductID":  1024,
+        "Detail":  "Мембрана 23х25х1,27",
+        "DetailID":  6011,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  159,
+        "Product":  "РКМА-2,5-3",
+        "ProductID":  1024,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  160,
+        "Product":  "РКМА-2,5-3",
+        "ProductID":  1024,
+        "Detail":  "Крышка 23х25х1,9",
+        "DetailID":  8001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  161,
+        "Product":  "РКМА-2,5-3",
+        "ProductID":  1024,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  162,
+        "Product":  "РКМА-2,5-3",
+        "ProductID":  1024,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  163,
+        "Product":  "РКМА-4,0-3",
+        "ProductID":  1028,
+        "Detail":  "Мембрана 23х25х1,57",
+        "DetailID":  6013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  164,
+        "Product":  "РКМА-4,0-3",
+        "ProductID":  1028,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  165,
+        "Product":  "РКМА-4,0-3",
+        "ProductID":  1028,
+        "Detail":  "Крышка 23х25х1,9",
+        "DetailID":  8001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  166,
+        "Product":  "РКМА-4,0-3",
+        "ProductID":  1028,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  167,
+        "Product":  "РКМА-4,0-3",
+        "ProductID":  1028,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  168,
+        "Product":  "РКМА-6,0-3",
+        "ProductID":  1031,
+        "Detail":  "Мембрана 23х25х2,22",
+        "DetailID":  6018,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  169,
+        "Product":  "РКМА-6,0-3",
+        "ProductID":  1031,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  170,
+        "Product":  "РКМА-6,0-3",
+        "ProductID":  1031,
+        "Detail":  "Крышка 23х25х2,5",
+        "DetailID":  8003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  171,
+        "Product":  "РКМА-6,0-3",
+        "ProductID":  1031,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  172,
+        "Product":  "РКМА-6,0-3",
+        "ProductID":  1031,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  173,
+        "Product":  "РКМА-0,1-4",
+        "ProductID":  1002,
+        "Detail":  "Мембрана 23х25х0,365",
+        "DetailID":  6000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  174,
+        "Product":  "РКМА-0,1-4",
+        "ProductID":  1002,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  175,
+        "Product":  "РКМА-0,1-4",
+        "ProductID":  1002,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  176,
+        "Product":  "РКМА-0,1-4",
+        "ProductID":  1002,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  177,
+        "Product":  "РКМА-0,1-4",
+        "ProductID":  1002,
+        "Detail":  "Крышка 23х25 с отверстием d3,1",
+        "DetailID":  8025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  178,
+        "Product":  "РКМА-0,1-4",
+        "ProductID":  1002,
+        "Detail":  "Штуцер d6",
+        "DetailID":  18001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  179,
+        "Product":  "РКМА-0,25-4",
+        "ProductID":  1009,
+        "Detail":  "Мембрана 23х25х0,58",
+        "DetailID":  6006,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  180,
+        "Product":  "РКМА-0,25-4",
+        "ProductID":  1009,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  181,
+        "Product":  "РКМА-0,25-4",
+        "ProductID":  1009,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  182,
+        "Product":  "РКМА-0,25-4",
+        "ProductID":  1009,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  183,
+        "Product":  "РКМА-0,25-4",
+        "ProductID":  1009,
+        "Detail":  "Крышка 23х25 с отверстием d3,1",
+        "DetailID":  8025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  184,
+        "Product":  "РКМА-0,25-4",
+        "ProductID":  1009,
+        "Detail":  "Штуцер d6",
+        "DetailID":  18001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  185,
+        "Product":  "РКМА-0,4-4",
+        "ProductID":  1014,
+        "Detail":  "Мембрана 23х25х0,64",
+        "DetailID":  6007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  186,
+        "Product":  "РКМА-0,4-4",
+        "ProductID":  1014,
+        "Detail":  "Прокладка 23х25x0,6 d 19",
+        "DetailID":  7010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  187,
+        "Product":  "РКМА-0,4-4",
+        "ProductID":  1014,
+        "Detail":  "Крышка 23х25х2,5",
+        "DetailID":  8003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  279,
+        "Product":  "РКР153",
+        "ProductID":  4008,
+        "Detail":  "В.Крышка РКР153",
+        "DetailID":  8028,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  280,
+        "Product":  "РКР153",
+        "ProductID":  4008,
+        "Detail":  "Н.Крышка РКР153",
+        "DetailID":  8029,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  281,
+        "Product":  "РКР153",
+        "ProductID":  4008,
+        "Detail":  "ПЭ РКР153",
+        "DetailID":  10029,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  282,
+        "Product":  "РК321",
+        "ProductID":  4009,
+        "Detail":  "Кожух d1,5x5",
+        "DetailID":  17003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  283,
+        "Product":  "РК321",
+        "ProductID":  4009,
+        "Detail":  "Основание корпуса d1,5",
+        "DetailID":  17000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  284,
+        "Product":  "РК321",
+        "ProductID":  4009,
+        "Detail":  "ПЭ РК321",
+        "DetailID":  10046,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  285,
+        "Product":  "ПЭ ЭПКВ-10М",
+        "ProductID":  10000,
+        "Detail":  "КЭ ЭПКВ-10М",
+        "DetailID":  9000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  286,
+        "Product":  "ПЭ БПИ-24",
+        "ProductID":  10001,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  287,
+        "Product":  "ПЭ БПИ-25-76",
+        "ProductID":  10002,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.25,
+        "Discription":  null
+    },
+    {
+        "Num":  360,
+        "Product":  "РКМА-0,1-1э",
+        "ProductID":  1035,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  361,
+        "Product":  "РКМА-0,1-1э",
+        "ProductID":  1035,
+        "Detail":  "Крышка 23х25х2,2 фаска 2",
+        "DetailID":  8030,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  362,
+        "Product":  "РКМА-0,1-1э",
+        "ProductID":  1035,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  363,
+        "Product":  "ПЭ ЭПКВ-10М-Зл",
+        "ProductID":  10036,
+        "Detail":  "КЭ ЭПКВ-10М",
+        "DetailID":  9000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  364,
+        "Product":  "РКТ206",
+        "ProductID":  4001,
+        "Detail":  "Кожух d2x6",
+        "DetailID":  17004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  365,
+        "Product":  "РКТ206",
+        "ProductID":  4001,
+        "Detail":  "Основание корпуса d2",
+        "DetailID":  17001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  366,
+        "Product":  "РКТ206",
+        "ProductID":  4001,
+        "Detail":  "ПЭ РКТ206 Ср",
+        "DetailID":  10028,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  366,
+        "Product":  "ПЭ d30x150",
+        "ProductID":  10037,
+        "Detail":  "Заготовка кварцевая d30x150",
+        "DetailID":  11010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  367,
+        "Product":  "РКМА-0,1-12",
+        "ProductID":  1037,
+        "Detail":  "Большая крышка 23х25х1,9 с отв. d3,1",
+        "DetailID":  8036,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  369,
+        "Product":  "РКМА-0,1-12",
+        "ProductID":  1037,
+        "Detail":  "Крышка 2,68х9,12х0,13 с пуклевкой",
+        "DetailID":  8037,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  395,
+        "Product":  "РКМА-1,0-4",
+        "ProductID":  1014,
+        "Detail":  "Мембрана 23х25х0,83",
+        "DetailID":  6008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  396,
+        "Product":  "РКМА-1,0-4",
+        "ProductID":  1014,
+        "Detail":  "Прокладка 23х25 d 15",
+        "DetailID":  7001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  397,
+        "Product":  "РКМА-1,0-4",
+        "ProductID":  1014,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  398,
+        "Product":  "РКМА-1,0-4",
+        "ProductID":  1014,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  399,
+        "Product":  "РКМА-1,0-4",
+        "ProductID":  1014,
+        "Detail":  "Крышка 23х25 с отверстием d3,1",
+        "DetailID":  8025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  400,
+        "Product":  "РКМА-1,0-4",
+        "ProductID":  1014,
+        "Detail":  "Штуцер d6",
+        "DetailID":  18001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  401,
+        "Product":  "РКМА-140-ОС21",
+        "ProductID":  3009,
+        "Detail":  "Крышка 10,1х4х1,85",
+        "DetailID":  8009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  402,
+        "Product":  "РКМА-140-ОС21",
+        "ProductID":  3009,
+        "Detail":  "Крышка нижняя 14,5х4х1,85",
+        "DetailID":  8010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  403,
+        "Product":  "РКМА-140-ОС21",
+        "ProductID":  3009,
+        "Detail":  "ПСР-21",
+        "DetailID":  10041,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  404,
+        "Product":  "РКМА-140-ОС21",
+        "ProductID":  3009,
+        "Detail":  "Вывод 11,4хd0,22",
+        "DetailID":  18002,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  405,
+        "Product":  "ПСР-20",
+        "ProductID":  10040,
+        "Detail":  "Пластина 0,205х23х25",
+        "DetailID":  5001,
+        "Amount":  0.125,
+        "Discription":  null
+    },
+    {
+        "Num":  406,
+        "Product":  "ПСР-21",
+        "ProductID":  10041,
+        "Detail":  "Пластина 0,355х23х25",
+        "DetailID":  5002,
+        "Amount":  0.125,
+        "Discription":  null
+    },
+    {
+        "Num":  407,
+        "Product":  "РКМА-0,1-31",
+        "ProductID":  2105,
+        "Detail":  "Мембрана d12х0,15",
+        "DetailID":  6031,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  408,
+        "Product":  "РКМА-0,1-31",
+        "ProductID":  2105,
+        "Detail":  "Прокладка d12x8,45x0,4",
+        "DetailID":  7009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  409,
+        "Product":  "РКМА-0,1-31",
+        "ProductID":  2105,
+        "Detail":  "Крышка d12х1,0",
+        "DetailID":  8042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  410,
+        "Product":  "РКМА-0,1-31",
+        "ProductID":  2105,
+        "Detail":  "ПС-33",
+        "DetailID":  10042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  411,
+        "Product":  "Мембрана d12х0,15",
+        "ProductID":  6031,
+        "Detail":  "Пластина 0,155х23х25",
+        "DetailID":  5019,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  412,
+        "Product":  "Прокладка d12x8,45x0,4",
+        "ProductID":  7009,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  413,
+        "Product":  "РКМА-40-ОС41",
+        "ProductID":  3010,
+        "Detail":  "Крышка верхняя 9,1х2,65х1,2",
+        "DetailID":  8040,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  414,
+        "Product":  "РКМА-40-ОС41",
+        "ProductID":  3010,
+        "Detail":  "Крышка нижняя 12,1х2,65х1,2",
+        "DetailID":  8041,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  415,
+        "Product":  "РКМА-40-ОС41",
+        "ProductID":  3010,
+        "Detail":  "ПСР-20",
+        "DetailID":  10040,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  416,
+        "Product":  "ПС-33",
+        "ProductID":  10042,
+        "Detail":  "Пластина 0,130х23х25",
+        "DetailID":  5000,
+        "Amount":  0.03,
+        "Discription":  null
+    },
+    {
+        "Num":  417,
+        "Product":  "РКМА-60-ОС41",
+        "ProductID":  3011,
+        "Detail":  "Крышка верхняя 9,1х2,65х1,2",
+        "DetailID":  8040,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  418,
+        "Product":  "РКМА-60-ОС41",
+        "ProductID":  3011,
+        "Detail":  "Крышка нижняя 12,1х2,65х1,2",
+        "DetailID":  8041,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  419,
+        "Product":  "РКМА-60-ОС41",
+        "ProductID":  3011,
+        "Detail":  "ПСР-20",
+        "DetailID":  10040,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  420,
+        "Product":  "ПЭ d7x0.8",
+        "ProductID":  10043,
+        "Detail":  "Пластина d7x0.8",
+        "DetailID":  5020,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  421,
+        "Product":  "РКМА-0,1-31",
+        "ProductID":  0,
+        "Detail":  "ПЭ РКТР 2х6",
+        "DetailID":  10032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  422,
+        "Product":  "РКМА-0,12-4",
+        "ProductID":  1004,
+        "Detail":  "Мембрана 23х25х0,405",
+        "DetailID":  6001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  423,
+        "Product":  "РКМА-0,12-4",
+        "ProductID":  1004,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  424,
+        "Product":  "РКМА-0,12-4",
+        "ProductID":  1004,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  425,
+        "Product":  "РКМА-0,12-4",
+        "ProductID":  1004,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  426,
+        "Product":  "РКМА-0,12-4",
+        "ProductID":  1004,
+        "Detail":  "Крышка 23х25 с отверстием d3,1",
+        "DetailID":  8025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  427,
+        "Product":  "РКМА-0,12-4",
+        "ProductID":  1004,
+        "Detail":  "Штуцер d6",
+        "DetailID":  18001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  428,
+        "Product":  "ПЭ d7xd3x0,635",
+        "ProductID":  10044,
+        "Detail":  "Пластина d7xd3x0,635",
+        "DetailID":  5023,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  429,
+        "Product":  "ПЭ d5xd2,5x0,635",
+        "ProductID":  10045,
+        "Detail":  "Пластина d5xd2,5x0,635",
+        "DetailID":  5024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  430,
+        "Product":  "РКМА-2,5-21",
+        "ProductID":  2016,
+        "Detail":  "Мембрана d14,5х0,425",
+        "DetailID":  6024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  431,
+        "Product":  "РКМА-2,5-21",
+        "ProductID":  2016,
+        "Detail":  "Прокладка d14,5x7,5x0,47",
+        "DetailID":  7008,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  432,
+        "Product":  "РКМА-2,5-21",
+        "ProductID":  2016,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  433,
+        "Product":  "РКМА-2,5-21",
+        "ProductID":  2016,
+        "Detail":  "ПС-33",
+        "DetailID":  10042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  434,
+        "Product":  "РКМА-1,0-31",
+        "ProductID":  2106,
+        "Detail":  "Мембрана d12х0,35",
+        "DetailID":  6033,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  435,
+        "Product":  "РКМА-1,0-31",
+        "ProductID":  2106,
+        "Detail":  "Прокладка d12x8,45x0,4",
+        "DetailID":  7009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  436,
+        "Product":  "РКМА-1,0-31",
+        "ProductID":  2106,
+        "Detail":  "Крышка d12х1,0",
+        "DetailID":  8042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  437,
+        "Product":  "РКМА-1,0-31",
+        "ProductID":  2106,
+        "Detail":  "ПС-33",
+        "DetailID":  10042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  438,
+        "Product":  "РКМА-1,0-31",
+        "ProductID":  2106,
+        "Detail":  "ПЭ РКТР 2х6",
+        "DetailID":  10032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  439,
+        "Product":  "РКМА-0,12-3",
+        "ProductID":  1041,
+        "Detail":  "Мембрана 23х25х0,405",
+        "DetailID":  6001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  440,
+        "Product":  "РКМА-0,12-3",
+        "ProductID":  1041,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  441,
+        "Product":  "РКМА-0,12-3",
+        "ProductID":  1041,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  442,
+        "Product":  "РКМА-0,12-3",
+        "ProductID":  1041,
+        "Detail":  "ПС-29",
+        "DetailID":  10024,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  443,
+        "Product":  "РКМА-0,12-3",
+        "ProductID":  1041,
+        "Detail":  "Крышка с пазом t=1,9",
+        "DetailID":  8004,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  444,
+        "Product":  "БПИ-29",
+        "ProductID":  14,
+        "Detail":  "В.Крышка БПИ-29",
+        "DetailID":  8015,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  445,
+        "Product":  "БПИ-29",
+        "ProductID":  14,
+        "Detail":  "Н.Крышка БПИ-29",
+        "DetailID":  8016,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  446,
+        "Product":  "БПИ-29",
+        "ProductID":  14,
+        "Detail":  "ПЭ БПИ-29",
+        "DetailID":  10047,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  447,
+        "Product":  "ПЭ БПИ-29",
+        "ProductID":  10047,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.17,
+        "Discription":  null
+    },
+    {
+        "Num":  449,
+        "Product":  "РКМА-2,0-31",
+        "ProductID":  2106,
+        "Detail":  "Прокладка d12x8,45x0,4",
+        "DetailID":  7009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  450,
+        "Product":  "РКМА-2,0-31",
+        "ProductID":  2106,
+        "Detail":  "Крышка d12х1,0",
+        "DetailID":  8042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  451,
+        "Product":  "РКМА-2,0-31",
+        "ProductID":  2106,
+        "Detail":  "ПС-33",
+        "DetailID":  10042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  452,
+        "Product":  "РКМА-2,0-31",
+        "ProductID":  2106,
+        "Detail":  "ПЭ РКТР 2х6",
+        "DetailID":  10032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  448,
+        "Product":  "РКМА-2,0-31",
+        "ProductID":  2106,
+        "Detail":  "Мембрана d12х0,5",
+        "DetailID":  6032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  453,
+        "Product":  "РКМА-0,1-32",
+        "ProductID":  2108,
+        "Detail":  "Мембрана d12х0,1",
+        "DetailID":  6031,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  454,
+        "Product":  "РКМА-0,1-32",
+        "ProductID":  2108,
+        "Detail":  "Прокладка d12x8,45x0,4",
+        "DetailID":  7009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  455,
+        "Product":  "РКМА-0,1-32",
+        "ProductID":  2108,
+        "Detail":  "Крышка РКМА-32 12,5х11,4х1",
+        "DetailID":  8043,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  456,
+        "Product":  "РКМА-0,1-32",
+        "ProductID":  2108,
+        "Detail":  "ПС-33",
+        "DetailID":  10042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  457,
+        "Product":  "РКМА-0,1-32",
+        "ProductID":  2108,
+        "Detail":  "ПЭ РКТР 2х6",
+        "DetailID":  10032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  458,
+        "Product":  "РКМА-1,0-32",
+        "ProductID":  2109,
+        "Detail":  "Мембрана d12х0,35",
+        "DetailID":  6033,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  459,
+        "Product":  "РКМА-1,0-32",
+        "ProductID":  2109,
+        "Detail":  "Прокладка d12x8,45x0,4",
+        "DetailID":  7009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  460,
+        "Product":  "РКМА-1,0-32",
+        "ProductID":  2109,
+        "Detail":  "Крышка РКМА-32 12,5х11,4х1",
+        "DetailID":  8043,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  461,
+        "Product":  "РКМА-1,0-32",
+        "ProductID":  2109,
+        "Detail":  "ПС-33",
+        "DetailID":  10042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  462,
+        "Product":  "РКМА-1,0-32",
+        "ProductID":  2109,
+        "Detail":  "ПЭ РКТР 2х6",
+        "DetailID":  10032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  463,
+        "Product":  "РКМА-2,0-32",
+        "ProductID":  2109,
+        "Detail":  "Мембрана d12х0,5",
+        "DetailID":  6032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  464,
+        "Product":  "РКМА-2,0-32",
+        "ProductID":  2109,
+        "Detail":  "Прокладка d12x8,45x0,4",
+        "DetailID":  7009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  465,
+        "Product":  "РКМА-2,0-32",
+        "ProductID":  2109,
+        "Detail":  "Крышка РКМА-32 12,5х11,4х1",
+        "DetailID":  8043,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  466,
+        "Product":  "РКМА-2,0-32",
+        "ProductID":  2109,
+        "Detail":  "ПС-33",
+        "DetailID":  10042,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  467,
+        "Product":  "РКМА-2,0-32",
+        "ProductID":  2109,
+        "Detail":  "ПЭ РКТР 2х6",
+        "DetailID":  10032,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  468,
+        "Product":  "РКМА-0,7-1",
+        "ProductID":  1017,
+        "Detail":  "Мембрана 23х25х1,02",
+        "DetailID":  6009,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  469,
+        "Product":  "РКМА-0,7-1",
+        "ProductID":  1017,
+        "Detail":  "Прокладка 23х25 d 19",
+        "DetailID":  7000,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  470,
+        "Product":  "РКМА-0,7-1",
+        "ProductID":  1017,
+        "Detail":  "Крышка 23х25х2,2",
+        "DetailID":  8002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  471,
+        "Product":  "РКМА-0,7-1",
+        "ProductID":  1017,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  472,
+        "Product":  "ПЭ d5xd2,7x0,5",
+        "ProductID":  10048,
+        "Detail":  "Пластина d5xd2,7x0,5",
+        "DetailID":  5029,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  473,
+        "Product":  "ПЭ d8xd4,2x0,4",
+        "ProductID":  10049,
+        "Detail":  "Пластина d8xd4,2x0,4",
+        "DetailID":  5030,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  474,
+        "Product":  "РКМА-0,14-5",
+        "ProductID":  1005,
+        "Detail":  "Мембрана 23х25х0,425",
+        "DetailID":  6002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  475,
+        "Product":  "РКМА-0,14-5",
+        "ProductID":  1005,
+        "Detail":  "Прокладка 23х25x0,6 d 19",
+        "DetailID":  7010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  476,
+        "Product":  "РКМА-0,14-5",
+        "ProductID":  1005,
+        "Detail":  "Крышка 23х25х1,9",
+        "DetailID":  8001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  477,
+        "Product":  "РКМА-0,14-5",
+        "ProductID":  1005,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  367,
+        "Product":  "РКДД-0,1-1",
+        "ProductID":  1043,
+        "Detail":  "Большая крышка 23х25х1,9 с отв. d3,1",
+        "DetailID":  8036,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  369,
+        "Product":  "РКДД-0,1-1",
+        "ProductID":  1043,
+        "Detail":  "Крышка 2,68х9,12х0,13 с пуклевкой",
+        "DetailID":  8037,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  370,
+        "Product":  "РКДД-0,1-1",
+        "ProductID":  1043,
+        "Detail":  "Крышка 2,68х9,12х0,13",
+        "DetailID":  8038,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  371,
+        "Product":  "РКДД-0,1-1",
+        "ProductID":  1043,
+        "Detail":  "Мембрана 23х25х0,36-12 отв d1,35",
+        "DetailID":  6029,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  372,
+        "Product":  "РКДД-0,1-1",
+        "ProductID":  1043,
+        "Detail":  "ПСР-19",
+        "DetailID":  10038,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  479,
+        "Product":  "БПИ-25-76_1",
+        "ProductID":  15,
+        "Detail":  "Верхняя крышка БПИ-25",
+        "DetailID":  8044,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  480,
+        "Product":  "БПИ-25-76_1",
+        "ProductID":  15,
+        "Detail":  "ПЭ БПИ-25-76",
+        "DetailID":  10002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  482,
+        "Product":  "БПИ-25-82_1",
+        "ProductID":  16,
+        "Detail":  "Верхняя крышка БПИ-25",
+        "DetailID":  8044,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  483,
+        "Product":  "БПИ-25-82_1",
+        "ProductID":  16,
+        "Detail":  "ПЭ БПИ-25-82",
+        "DetailID":  10003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  478,
+        "Product":  "БПИ-25-76_1",
+        "ProductID":  15,
+        "Detail":  "Нижняя крышка БПИ-25",
+        "DetailID":  8045,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  481,
+        "Product":  "БПИ-25-82_1",
+        "ProductID":  16,
+        "Detail":  "Нижняя крышка БПИ-25",
+        "DetailID":  8045,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  484,
+        "Product":  "Верхняя крышка БПИ-25",
+        "ProductID":  8043,
+        "Detail":  "Пластина 0,405х23х25",
+        "DetailID":  5003,
+        "Amount":  0.25,
+        "Discription":  null
+    },
+    {
+        "Num":  485,
+        "Product":  "Нижняя крышка БПИ-25",
+        "ProductID":  8044,
+        "Detail":  "Пластина 0,805х23х25",
+        "DetailID":  5033,
+        "Amount":  0.25,
+        "Discription":  null
+    },
+    {
+        "Num":  486,
+        "Product":  "РКМА(11,5M)-0,1-21",
+        "ProductID":  2100,
+        "Detail":  "Мембрана d14,5х0,155",
+        "DetailID":  6034,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  487,
+        "Product":  "РКМА(11,5M)-0,1-21",
+        "ProductID":  2100,
+        "Detail":  "Прокладка d14,5x9x0,47",
+        "DetailID":  7003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  488,
+        "Product":  "РКМА(11,5M)-0,1-21",
+        "ProductID":  2100,
+        "Detail":  "Крышка d14,5х1,0",
+        "DetailID":  8007,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  489,
+        "Product":  "РКМА(11,5M)-0,1-21",
+        "ProductID":  2100,
+        "Detail":  "ПЭ ЭПКВ2-11,5М-Зл",
+        "DetailID":  10051,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  417,
+        "Product":  "РКМА-100-ОС41",
+        "ProductID":  3012,
+        "Detail":  "Крышка верхняя 9,1х2,65х1,2",
+        "DetailID":  8040,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  418,
+        "Product":  "РКМА-100-ОС41",
+        "ProductID":  3012,
+        "Detail":  "Крышка нижняя 12,1х2,65х1,2",
+        "DetailID":  8041,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  419,
+        "Product":  "РКМА-100-ОС41",
+        "ProductID":  3012,
+        "Detail":  "ПСР-20",
+        "DetailID":  10040,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  341,
+        "Product":  "ПЭ d3x0,5",
+        "ProductID":  10052,
+        "Detail":  "Пластина d3x0,5",
+        "DetailID":  5037,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  490,
+        "Product":  "Подложка ЛАКС9.082 11x15x2,6",
+        "ProductID":  11026,
+        "Detail":  "Пластина ЛАКС9.082 11х15х2,6",
+        "DetailID":  5038,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  491,
+        "Product":  "ПЭ d14хd4x0,125",
+        "ProductID":  10053,
+        "Detail":  "Пластина d14x0,125",
+        "DetailID":  5043,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  492,
+        "Product":  "ПЭ d14xd8x0,125",
+        "ProductID":  10054,
+        "Detail":  "Пластина d14x0,125",
+        "DetailID":  5043,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  493,
+        "Product":  "ПЭ d14xd4x0,175",
+        "ProductID":  10055,
+        "Detail":  "Пластина d14x0,175",
+        "DetailID":  5044,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  494,
+        "Product":  "Прокладка 23х25x0,6 d 19",
+        "ProductID":  7010,
+        "Detail":  "Пластина шлифованная 0,625х23х25",
+        "DetailID":  5046,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  495,
+        "Product":  "Прокладка 23х25x0,35 d 19",
+        "ProductID":  7011,
+        "Detail":  "Пластина шлифованная 0,37х23х25",
+        "DetailID":  5047,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  496,
+        "Product":  "Подложка ЛАКС8.081 31,5х12х3",
+        "ProductID":  11027,
+        "Detail":  "Пластина ЛАКС8.081 31,5х12х3",
+        "DetailID":  5028,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  497,
+        "Product":  "РКМА-0,14-4",
+        "ProductID":  1044,
+        "Detail":  "Мембрана 23х25х0,425",
+        "DetailID":  6002,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  498,
+        "Product":  "РКМА-0,14-4",
+        "ProductID":  1044,
+        "Detail":  "Прокладка 23х25x0,6 d 19",
+        "DetailID":  7010,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  499,
+        "Product":  "РКМА-0,14-4",
+        "ProductID":  1044,
+        "Detail":  "Крышка 23х25х2,5",
+        "DetailID":  8003,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  500,
+        "Product":  "РКМА-0,14-4",
+        "ProductID":  1044,
+        "Detail":  "ПС-13\\125",
+        "DetailID":  10013,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  501,
+        "Product":  "РКМА-0,14-4",
+        "ProductID":  1044,
+        "Detail":  "Крышка 23х25 с отверстием d3,1",
+        "DetailID":  8025,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  502,
+        "Product":  "РКМА-0,14-4",
+        "ProductID":  1044,
+        "Detail":  "Штуцер d6",
+        "DetailID":  18001,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  503,
+        "Product":  "БПИ-25-150g-74",
+        "ProductID":  17,
+        "Detail":  "Верхняя крышка БПИ-25",
+        "DetailID":  8044,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  504,
+        "Product":  "БПИ-25-150g-74",
+        "ProductID":  17,
+        "Detail":  "ПЭ БПИ-25-150g-74",
+        "DetailID":  10056,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  505,
+        "Product":  "БПИ-25-150g-79",
+        "ProductID":  18,
+        "Detail":  "Верхняя крышка БПИ-25",
+        "DetailID":  8044,
+        "Amount":  2,
+        "Discription":  null
+    },
+    {
+        "Num":  506,
+        "Product":  "БПИ-25-150g-79",
+        "ProductID":  18,
+        "Detail":  "ПЭ БПИ-25-150g-79",
+        "DetailID":  10057,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  507,
+        "Product":  "ПЭ d46хd10,5x2",
+        "ProductID":  10058,
+        "Detail":  "Пластина d46xd10,5x2",
+        "DetailID":  5050,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  508,
+        "Product":  "Подложка ЛАКС9.082 11x16x2,6",
+        "ProductID":  11028,
+        "Detail":  "Пластина ЛАКС9.082 11х16х2,6",
+        "DetailID":  5054,
+        "Amount":  1,
+        "Discription":  null
+    },
+    {
+        "Num":  509,
+        "Product":  "ПЭ d10xd4,2x0,8",
+        "ProductID":  10059,
+        "Detail":  "Пластина d10xd4,2x0,7",
+        "DetailID":  5040,
+        "Amount":  1,
+        "Discription":  null
+    }
+]

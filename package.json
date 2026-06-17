@@ -1,0 +1,16 @@
+{
+  "name": "orders-app",
+  "version": "1.0.0",
+  "description": "Local web app for managing orders",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "import:access": "node scripts/import-access-data.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "sqlite3": "^6.0.1"
+  }
+}

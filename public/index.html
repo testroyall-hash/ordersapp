@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Производственный портал | Заказы</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Основная навигация">
+        <a class="brand" href="/">
+          <span class="brand-mark">ЗП</span>
+          <span>
+            <strong>Заводской портал</strong>
+            <small>учет заказов, отделов и планирования</small>
+          </span>
+        </a>
+
+        <nav class="module-nav">
+          <button class="module-link active" type="button" data-module-link data-tab="orders">
+            <span>01</span>
+            <strong>Заказы</strong>
+          </button>
+          <button class="module-link" type="button" data-module-link data-tab="plan">
+            <span>02</span>
+            <strong>План по заказам</strong>
+          </button>
+          <button class="module-link" type="button" data-module-link data-tab="archive">
+            <span>03</span>
+            <strong>Архив</strong>
+          </button>
+          <button class="module-link" type="button" data-module-link data-tab="customers">
+            <span>04</span>
+            <strong>Заказчики</strong>
+          </button>
+          <button class="module-link" type="button" data-module-link data-tab="products">
+            <span>05</span>
+            <strong>Изделия</strong>
+          </button>
+          <button class="module-link" type="button" data-module-link data-tab="stock">
+            <span>06</span>
+            <strong>Склад</strong>
+          </button>
+        </nav>
+
+        <div class="sidebar-note">
+          <span class="pulse"></span>
+          <p>План формируется по заказам, а склад и остатки остаются привязаны к изделиям.</p>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Модуль 01</p>
+            <h1>Заказы и выполнение</h1>
+          </div>
+          <div class="topbar-actions">
+            <span class="system-badge">База данных подключена</span>
+            <button id="showFormButton" class="primary-button" type="button">Создать заказ</button>
+          </div>
+        </header>
+
+        <section class="hero-panel">
+          <div>
+            <p class="section-kicker">Оперативная сводка</p>
+            <h2>Заказ рассматривается как отдельная производственная единица</h2>
+            <p>
+              В журнале видны номер заказа, изделие, сроки, текущий отдел, передача между отделами, план по заказу
+              и фактическое выполнение. Из этого списка можно собрать приоритетный план и вывести его на печать.
+            </p>
+          </div>
+          <div class="hero-metrics" aria-label="Сводка по системе">
+            <div>
+              <span id="ordersCount">0</span>
+              <small>всего заказов</small>
+            </div>
+            <div>
+              <span id="activeOrdersCount">0</span>
+              <small>активных заказов</small>
+            </div>
+            <div>
+              <span id="customersCount">0</span>
+              <small>заказчиков</small>
+            </div>
+            <div>
+              <span id="productsCount">0</span>
+              <small>изделий</small>
+            </div>
+            <div>
+              <span id="plannedTotalCount">0</span>
+              <small>объем заказов, шт</small>
+            </div>
+            <div>
+              <span id="freeStockTotalCount">0</span>
+              <small>свободный остаток</small>
+            </div>
+          </div>
+        </section>
+
+        <section id="ordersTabPanel" class="tab-panel">
+          <section id="orderFormSection" class="card form-card hidden">
+            <div class="card-heading">
+              <div>
+                <p class="section-kicker">Создание</p>
+                <h2>Новый заказ</h2>
+              </div>
+              <button id="closeFormButton" class="ghost-button" type="button">Закрыть</button>
+            </div>
+
+            <form id="orderForm" class="form">
+              <label>
+                <span>Изделие из справочника</span>
+                <select name="product_id" data-products-select></select>
+              </label>
+              <label>
+                <span>Или ввести изделие вручную</span>
+                <input name="product_name_manual" type="text" placeholder="Если изделия еще нет в классификации">
+              </label>
+              <label>
+                <span>Количество, шт</span>
+                <input name="amount" type="number" min="1" value="1" required>
+              </label>
+              <label>
+                <span>Сделано по заказу, шт</span>
+                <input name="done_qty" type="number" min="0" value="0">
+              </label>
+              <label>
+                <span>Дата начала</span>
+                <input name="start_date" type="date">
+              </label>
+              <label>
+                <span>Дата выполнения</span>
+                <input name="finish_date" type="date">
+              </label>
+              <label>
+                <span>Заказчик</span>
+                <select name="customer_id" data-customers-select required></select>
+              </label>
+              <label>
+                <span>Текущий отдел</span>
+                <div class="inline-field">
+                  <select name="department_id" data-departments-select></select>
+                  <button id="addDepartmentButton" class="ghost-button icon-button" type="button">+</button>
+                </div>
+              </label>
+              <label>
+                <span>Передача в отдел</span>
+                <select name="target_department_id" data-departments-select></select>
+              </label>
+              <label>
+                <span>Тип заказа</span>
+                <div class="inline-field">
+                  <select name="type_id" data-types-select></select>
+                  <button id="addTypeButton" class="ghost-button icon-button" type="button">+</button>
+                </div>
+              </label>
+              <label>
+                <span>Статус</span>
+                <select name="status_id" data-statuses-select></select>
+              </label>
+              <label class="wide-field">
+                <span>Примечание</span>
+                <textarea name="comments" rows="3" placeholder="Требования, особенности, приоритет, упаковка"></textarea>
+              </label>
+              <div class="form-actions">
+                <button class="primary-button" type="submit">Сохранить заказ</button>
+                <button id="resetFormButton" class="secondary-button" type="button">Очистить</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="work-grid orders-work-grid">
+            <section class="card orders-card">
+              <div class="card-heading">
+                <div>
+                  <p class="section-kicker">Журнал</p>
+                  <h2>Текущие заказы</h2>
+                </div>
+                <button id="refreshButton" class="secondary-button" type="button">Обновить</button>
+              </div>
+
+              <div class="orders-toolbar">
+                <div class="filters-grid filters-grid-wide">
+                  <label class="compact-field">
+                    <span>Поиск</span>
+                    <input id="orderSearchInput" type="search" placeholder="Номер, изделие, заказчик, комментарий">
+                  </label>
+                  <label class="compact-field">
+                    <span>Дата от</span>
+                    <input id="orderDateFromInput" type="date">
+                  </label>
+                  <label class="compact-field">
+                    <span>Дата до</span>
+                    <input id="orderDateToInput" type="date">
+                  </label>
+                  <label class="compact-field">
+                    <span>Заказчик</span>
+                    <select id="orderCustomerFilter">
+                      <option value="">Все заказчики</option>
+                    </select>
+                  </label>
+                  <label class="compact-field">
+                    <span>Изделие</span>
+                    <select id="orderProductFilter">
+                      <option value="">Все изделия</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="status-filter-panel">
+                  <div>
+                    <p class="section-kicker">Статусы в выдаче</p>
+                    <div id="orderStatusFilterList" class="status-filter-list"></div>
+                  </div>
+                </div>
+
+                <div class="toolbar-actions">
+                  <span id="ordersResultCount" class="result-badge">0 записей</span>
+                  <button id="clearOrderFiltersButton" class="ghost-button" type="button">Сбросить фильтры</button>
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>№</th>
+                      <th>Изделие</th>
+                      <th>Заказчик</th>
+                      <th>План</th>
+                      <th>Сделано</th>
+                      <th>Осталось</th>
+                      <th>Срок</th>
+                      <th>Отдел</th>
+                      <th>Статус</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ordersTableBody">
+                    <tr>
+                      <td colspan="9">Загрузка заказов...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div id="ordersPagination" class="list-pagination hidden"></div>
+            </section>
+          </section>
+        </section>
+
+        <div id="orderDetailsBackdrop" class="details-backdrop hidden"></div>
+        <aside id="orderDetailsCard" class="details-drawer hidden" aria-label="Карточка заказа">
+          <div class="card detail-drawer-card">
+            <div class="drawer-header">
+              <div>
+                <p class="section-kicker">Карточка заказа</p>
+                <h2 id="detailsTitle">Заказ</h2>
+              </div>
+              <div class="drawer-header-actions">
+                <span id="saveState" class="save-state">Без изменений</span>
+                <button id="closeDetailsButton" class="ghost-button icon-button" type="button">×</button>
+              </div>
+            </div>
+
+            <form id="detailsForm" class="details-form hidden">
+              <input name="id" type="hidden">
+
+              <div class="field-section">
+                <h3>Номер и изделие</h3>
+                <label>
+                  <span>Номер заказа</span>
+                  <input id="detailOrderNumber" type="text" readonly>
+                </label>
+                <label>
+                  <span>Изделие из справочника</span>
+                  <select name="product_id" data-products-select></select>
+                </label>
+                <label>
+                  <span>Или ввести изделие вручную</span>
+                  <input name="product_name_manual" type="text" placeholder="Для неклассифицированного изделия">
+                </label>
+              </div>
+
+              <div class="field-section">
+                <h3>План и выполнение</h3>
+                <label>
+                  <span>План по заказу, шт</span>
+                  <input name="amount" type="number" min="1" required>
+                </label>
+                <label>
+                  <span>Сделано по заказу, шт</span>
+                  <input name="done_qty" type="number" min="0">
+                </label>
+                <label>
+                  <span>Осталось выполнить, шт</span>
+                  <input id="detailRemainingQty" type="text" readonly>
+                </label>
+                <label>
+                  <span>Основной заказ</span>
+                  <input name="main_order" type="number" min="1" placeholder="Номер связанного заказа">
+                </label>
+              </div>
+
+              <div class="field-section">
+                <h3>Сроки и маршрут</h3>
+                <label>
+                  <span>Дата начала</span>
+                  <input name="start_date" type="date">
+                </label>
+                <label>
+                  <span>Дата выполнения</span>
+                  <input name="finish_date" type="date">
+                </label>
+                <label>
+                  <span>Фактическая дата</span>
+                  <input name="fact_date" type="date">
+                </label>
+                <label>
+                  <span>Текущий отдел</span>
+                  <div class="inline-field">
+                    <select name="department_id" data-departments-select></select>
+                    <button id="addDepartmentDetailsButton" class="ghost-button icon-button" type="button">+</button>
+                  </div>
+                </label>
+                <label>
+                  <span>Передача в отдел</span>
+                  <select name="target_department_id" data-departments-select></select>
+                </label>
+                <label>
+                  <span>Статус заказа</span>
+                  <select name="status_id" data-statuses-select></select>
+                </label>
+                <label>
+                  <span>Тип заказа</span>
+                  <div class="inline-field">
+                    <select name="type_id" data-types-select></select>
+                    <button id="addTypeDetailsButton" class="ghost-button icon-button" type="button">+</button>
+                  </div>
+                </label>
+              </div>
+
+              <div class="field-section">
+                <h3>Заказчик и примечания</h3>
+                <label>
+                  <span>Заказчик</span>
+                  <select name="customer_id" data-customers-select></select>
+                </label>
+                <label class="wide-field">
+                  <span>Примечание</span>
+                  <textarea name="comments" rows="5"></textarea>
+                </label>
+              </div>
+
+              <div class="sticky-actions">
+                <button class="primary-button" type="submit">Сохранить изменения</button>
+                <button id="duplicateOrderButton" class="secondary-button" type="button">Сохранить как новый</button>
+                <button id="reloadDetailsButton" class="secondary-button" type="button">Отменить правки</button>
+                <button id="deleteOrderButton" class="ghost-button danger-button" type="button">Удалить</button>
+              </div>
+            </form>
+          </div>
+        </aside>
+
+        <section id="planTabPanel" class="tab-panel hidden">
+          <div class="section-title">
+            <div>
+              <p class="section-kicker">Приоритетный план</p>
+              <h2>План по заказам</h2>
+            </div>
+            <div class="topbar-actions">
+              <button id="printPlanButton" class="primary-button" type="button">Скачать план Word</button>
+              <button id="syncPlanFiltersButton" class="secondary-button" type="button">Взять фильтры из журнала</button>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="orders-toolbar">
+              <div class="filters-grid filters-grid-wide">
+                <label class="compact-field">
+                  <span>Дата от</span>
+                  <input id="planDateFromInput" type="date">
+                </label>
+                <label class="compact-field">
+                  <span>Дата до</span>
+                  <input id="planDateToInput" type="date">
+                </label>
+                <label class="compact-field">
+                  <span>Заказчик</span>
+                  <select id="planCustomerFilter">
+                    <option value="">Все заказчики</option>
+                  </select>
+                </label>
+                <label class="compact-field">
+                  <span>Изделие</span>
+                  <select id="planProductFilter">
+                    <option value="">Все изделия</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="status-filter-panel">
+                <div>
+                  <p class="section-kicker">Статусы для плана</p>
+                  <div id="planStatusFilterList" class="status-filter-list"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="toolbar-actions">
+              <span id="planSelectionCount" class="result-badge">Если ничего не отмечено, в Word уйдут все строки по фильтру</span>
+              <button id="clearPlanSelectionButton" class="ghost-button" type="button">Снять отметки</button>
+            </div>
+
+            <div class="table-wrap plan-print-area" id="planPrintArea">
+              <table>
+                <thead>
+                  <tr>
+                    <th><input id="togglePlanSelectionCheckbox" type="checkbox" aria-label="Отметить строки плана на странице"></th>
+                    <th>№</th>
+                    <th>Изделие</th>
+                    <th>Заказчик</th>
+                    <th>План</th>
+                    <th>Сделано</th>
+                    <th>Осталось</th>
+                    <th>Срок</th>
+                    <th>Отдел</th>
+                    <th>Статус</th>
+                  </tr>
+                </thead>
+                <tbody id="planOrdersTableBody">
+                  <tr>
+                    <td colspan="10">Загрузка плана...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="planPagination" class="list-pagination hidden"></div>
+          </section>
+        </section>
+
+        <section id="archiveTabPanel" class="tab-panel hidden">
+          <div class="section-title">
+            <div>
+              <p class="section-kicker">Архив</p>
+              <h2>Удаленные заказы</h2>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>Изделие</th>
+                    <th>Заказчик</th>
+                    <th>План</th>
+                    <th>Сделано</th>
+                    <th>Срок</th>
+                    <th>Удален</th>
+                    <th>Действие</th>
+                  </tr>
+                </thead>
+                <tbody id="archiveTableBody">
+                  <tr>
+                    <td colspan="8">Загрузка архива...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="archivePagination" class="list-pagination hidden"></div>
+          </section>
+        </section>
+
+        <section id="customersTabPanel" class="tab-panel hidden">
+          <div class="section-title">
+            <div>
+              <p class="section-kicker">Справочник</p>
+              <h2>Заказчики</h2>
+            </div>
+            <button id="newCustomerButton" class="primary-button" type="button">Новый заказчик</button>
+          </div>
+
+          <div class="entity-grid">
+            <section class="card entity-list-card">
+              <div class="card-heading">
+                <div>
+                  <p class="section-kicker">Список</p>
+                  <h2>Все заказчики</h2>
+                </div>
+                <input id="customerSearchInput" class="search-input" type="search" placeholder="Поиск по названию, городу, контактам">
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Наименование</th>
+                      <th>Тип</th>
+                      <th>Город</th>
+                      <th>Заказы</th>
+                      <th>Статус</th>
+                    </tr>
+                  </thead>
+                  <tbody id="customersTableBody">
+                    <tr>
+                      <td colspan="5">Загрузка заказчиков...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside class="card entity-detail-card">
+              <div class="card-heading">
+                <div>
+                  <p class="section-kicker">Карточка</p>
+                  <h2 id="customerFormTitle">Новый заказчик</h2>
+                </div>
+                <span id="customerSaveState" class="save-state">Готово к вводу</span>
+              </div>
+
+              <form id="customerForm" class="details-form">
+                <input name="id" type="hidden">
+                <div class="field-section">
+                  <h3>Основные данные</h3>
+                  <label>
+                    <span>Полное наименование</span>
+                    <input name="name" type="text" required>
+                  </label>
+                  <label>
+                    <span>Краткое наименование</span>
+                    <input name="short_name" type="text">
+                  </label>
+                  <label>
+                    <span>Город</span>
+                    <input name="city" type="text">
+                  </label>
+                </div>
+
+                <div class="field-section">
+                  <h3>Контакты</h3>
+                  <label>
+                    <span>Контактное лицо</span>
+                    <input name="contact_person" type="text">
+                  </label>
+                  <label>
+                    <span>Телефон</span>
+                    <input name="phone" type="text">
+                  </label>
+                  <label>
+                    <span>Email</span>
+                    <input name="email" type="email">
+                  </label>
+                </div>
+
+                <div class="field-section">
+                  <h3>Статус и примечания</h3>
+                  <label class="checkbox-field">
+                    <input name="is_internal" type="checkbox">
+                    <span>Внутренний заказчик</span>
+                  </label>
+                  <label class="checkbox-field">
+                    <input name="is_active" type="checkbox" checked>
+                    <span>Активная запись</span>
+                  </label>
+                  <label class="wide-field">
+                    <span>Примечание</span>
+                    <textarea name="comments" rows="5"></textarea>
+                  </label>
+                </div>
+
+                <div class="sticky-actions">
+                  <button class="primary-button" type="submit">Сохранить заказчика</button>
+                  <button id="resetCustomerFormButton" class="secondary-button" type="button">Новая карточка</button>
+                </div>
+              </form>
+            </aside>
+          </div>
+        </section>
+
+        <section id="productsTabPanel" class="tab-panel hidden">
+          <div class="section-title">
+            <div>
+              <p class="section-kicker">Справочник</p>
+              <h2>Изделия</h2>
+            </div>
+            <button id="newProductButton" class="primary-button" type="button">Новое изделие</button>
+          </div>
+
+          <div class="entity-grid">
+            <section class="card entity-list-card">
+              <div class="card-heading">
+                <div>
+                  <p class="section-kicker">Список</p>
+                  <h2>Все изделия</h2>
+                </div>
+                <input id="productSearchInput" class="search-input" type="search" placeholder="Поиск по названию, коду, типу, производителю">
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Наименование</th>
+                      <th>Код</th>
+                      <th>Тип</th>
+                      <th>Заказы</th>
+                      <th>Статус</th>
+                    </tr>
+                  </thead>
+                  <tbody id="productsTableBody">
+                    <tr>
+                      <td colspan="5">Загрузка изделий...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside class="card entity-detail-card">
+              <div class="card-heading">
+                <div>
+                  <p class="section-kicker">Карточка</p>
+                  <h2 id="productFormTitle">Новое изделие</h2>
+                </div>
+                <span id="productSaveState" class="save-state">Готово к вводу</span>
+              </div>
+
+              <form id="productForm" class="details-form">
+                <input name="id" type="hidden">
+
+                <div class="field-section">
+                  <h3>Основные данные</h3>
+                  <label>
+                    <span>Наименование изделия</span>
+                    <input name="name" type="text" required placeholder="Например: РКМА-20-С">
+                  </label>
+                  <label>
+                    <span>Код / обозначение</span>
+                    <input name="code" type="text">
+                  </label>
+                  <label>
+                    <span>Тип изделия</span>
+                    <input name="type" type="text" list="productTypeSuggestions" placeholder="Например: Сенсоры / Температурные">
+                  </label>
+                  <datalist id="productTypeSuggestions"></datalist>
+                </div>
+
+                <div class="field-section">
+                  <h3>Производственные данные</h3>
+                  <label>
+                    <span>Единица измерения</span>
+                    <input name="unit" type="text" placeholder="шт">
+                  </label>
+                  <label>
+                    <span>Производитель</span>
+                    <input name="manufacturer" type="text">
+                  </label>
+                  <label class="checkbox-field checkbox-span-two">
+                    <input name="is_active" type="checkbox" checked>
+                    <span>Активная запись</span>
+                  </label>
+                </div>
+
+                <div class="field-section">
+                  <h3>Примечания</h3>
+                  <label class="wide-field">
+                    <span>Примечание</span>
+                    <textarea name="comments" rows="5"></textarea>
+                  </label>
+                </div>
+
+                <div class="sticky-actions">
+                  <button class="primary-button" type="submit">Сохранить изделие</button>
+                  <button id="resetProductFormButton" class="secondary-button" type="button">Новая карточка</button>
+                </div>
+              </form>
+            </aside>
+          </div>
+        </section>
+
+        <section id="stockTabPanel" class="tab-panel hidden">
+          <div class="section-title">
+            <div>
+              <p class="section-kicker">Склад</p>
+              <h2>Остатки по изделиям</h2>
+            </div>
+            <div class="topbar-actions">
+              <button id="newMovementButton" class="secondary-button" type="button">Новое перемещение</button>
+              <button id="openStockProductButton" class="primary-button" type="button">Открыть изделие</button>
+            </div>
+          </div>
+
+          <div class="entity-grid">
+            <section class="card entity-list-card">
+              <div class="card-heading">
+                <div>
+                  <p class="section-kicker">Остатки</p>
+                  <h2>Доступно, в заказах и свободно</h2>
+                </div>
+                <input id="stockSearchInput" class="search-input" type="search" placeholder="Поиск по изделию, коду, типу">
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Изделие</th>
+                      <th>Доступно</th>
+                      <th>В заказах</th>
+                      <th>Свободно</th>
+                      <th>Утилизация</th>
+                      <th>По журналу</th>
+                    </tr>
+                  </thead>
+                  <tbody id="stockTableBody">
+                    <tr>
+                      <td colspan="6">Загрузка складских данных...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside class="card entity-detail-card">
+              <div id="emptyStockDetails" class="details-empty">
+                <p class="section-kicker">Склад</p>
+                <h2>Выберите изделие</h2>
+                <p>После выбора строки откроется складская карточка с остатками и движением.</p>
+              </div>
+
+              <form id="stockForm" class="details-form hidden">
+                <div class="card-heading">
+                  <div>
+                    <p class="section-kicker">Складская карточка</p>
+                    <h2 id="stockTitle">Изделие</h2>
+                  </div>
+                  <span id="stockSaveState" class="save-state">Без изменений</span>
+                </div>
+
+                <input name="product_id" type="hidden">
+
+                <div class="metric-highlights metric-highlights-stock">
+                  <div>
+                    <strong id="stockAvailableValue">0</strong>
+                    <small>доступно</small>
+                  </div>
+                  <div>
+                    <strong id="stockReservedValue">0</strong>
+                    <small>в заказах</small>
+                  </div>
+                  <div>
+                    <strong id="stockFreeValue">0</strong>
+                    <small>свободно</small>
+                  </div>
+                </div>
+
+                <div class="field-section">
+                  <h3>Движение по складу</h3>
+                  <label>
+                    <span>Изготовлено, шт</span>
+                    <input name="produced_qty" type="number" min="0" value="0">
+                  </label>
+                  <label>
+                    <span>Брак, шт</span>
+                    <input name="defect_qty" type="number" min="0" value="0">
+                  </label>
+                  <label>
+                    <span>Отгружено, шт</span>
+                    <input name="shipped_qty" type="number" min="0" value="0">
+                  </label>
+                  <label>
+                    <span>Утилизировано, шт</span>
+                    <input name="utilized_qty" type="number" min="0" value="0">
+                  </label>
+                  <label class="wide-field">
+                    <span>Примечание</span>
+                    <textarea name="notes" rows="4"></textarea>
+                  </label>
+                </div>
+
+                <div class="sticky-actions">
+                  <button class="primary-button" type="submit">Сохранить складские данные</button>
+                  <button id="reloadStockButton" class="secondary-button" type="button">Отменить правки</button>
+                </div>
+              </form>
+
+              <section id="stockMovementPanel" class="movement-panel hidden">
+                <div class="card-heading">
+                  <div>
+                    <p class="section-kicker">Перемещение</p>
+                    <h2>Новая операция</h2>
+                  </div>
+                </div>
+                <form id="movementForm" class="details-form">
+                  <input name="product_id" type="hidden">
+                  <div class="field-section">
+                    <label>
+                      <span>Тип операции</span>
+                      <select name="movement_type" id="movementTypeSelect" required></select>
+                    </label>
+                    <label>
+                      <span>Количество, шт</span>
+                      <input name="quantity" type="number" min="1" value="1" required>
+                    </label>
+                    <label>
+                      <span>Дата</span>
+                      <input name="movement_date" type="date">
+                    </label>
+                    <label>
+                      <span>Отправитель</span>
+                      <select name="sender_id" id="movementSenderSelect"></select>
+                    </label>
+                    <label>
+                      <span>Получатель</span>
+                      <select name="receiver_id" id="movementReceiverSelect"></select>
+                    </label>
+                    <label>
+                      <span>Заказчик</span>
+                      <select name="customer_id" id="movementCustomerSelect"></select>
+                    </label>
+                    <label>
+                      <span>Внешний контрагент</span>
+                      <input name="external_party" type="text" placeholder="Поставщик или заказчик">
+                    </label>
+                    <label class="wide-field">
+                      <span>Комментарий</span>
+                      <textarea name="comments" rows="3"></textarea>
+                    </label>
+                  </div>
+                  <div class="sticky-actions">
+                    <button class="primary-button" type="submit">Записать перемещение</button>
+                    <button id="cancelMovementButton" class="secondary-button" type="button">Отмена</button>
+                  </div>
+                </form>
+              </section>
+
+              <section class="stock-ledger">
+                <div class="card-heading">
+                  <div>
+                    <p class="section-kicker">Остатки</p>
+                    <h2>По отделам</h2>
+                  </div>
+                </div>
+                <div class="table-wrap table-wrap-compact">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Отдел</th>
+                        <th>Остаток</th>
+                      </tr>
+                    </thead>
+                    <tbody id="stockBalancesTableBody">
+                      <tr><td colspan="2">Выберите изделие.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="stock-ledger">
+                <div class="card-heading">
+                  <div>
+                    <p class="section-kicker">Журнал</p>
+                    <h2>Последние перемещения</h2>
+                  </div>
+                </div>
+                <div class="table-wrap table-wrap-compact">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Дата</th>
+                        <th>Операция</th>
+                        <th>Маршрут</th>
+                        <th>Кол-во</th>
+                      </tr>
+                    </thead>
+                    <tbody id="movementHistoryTableBody">
+                      <tr><td colspan="4">Выберите изделие.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="stock-ledger">
+                <div class="card-heading">
+                  <div>
+                    <p class="section-kicker">Справочник</p>
+                    <h2>Отделы</h2>
+                  </div>
+                  <button id="newDepartmentDirectoryButton" class="secondary-button" type="button">Новый отдел</button>
+                </div>
+                <div class="table-wrap table-wrap-compact">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Отдел</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                      </tr>
+                    </thead>
+                    <tbody id="departmentsTableBody">
+                      <tr><td colspan="3">Загрузка отделов...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/orders.js"></script>
+  </body>
+</html>
