@@ -1605,19 +1605,19 @@ openStockProductButton.addEventListener('click', () => {
   selectProduct(selectedStockProductId);
 });
 
-Promise.all([loadDictionaries(), loadCustomers(), loadProducts(), loadOrders(1)])
+detailsForm.classList.add('hidden');
+orderDetailsCard.classList.add('hidden');
+orderDetailsBackdrop.classList.add('hidden');
+activateTab('orders');
+
+loadOrders(1).catch((error) => {
+  tableBody.innerHTML = `<tr><td class="empty-state" colspan="9">${escapeHtml(error.message)}</td></tr>`;
+});
+
+Promise.allSettled([loadDictionaries(), loadCustomers(), loadProducts()])
   .then(() => {
     fillSelects();
     fillStatusFilters();
     fillProductTypeSuggestions();
     setDefaultSelects(orderForm);
-    activateTab('orders');
-    detailsForm.classList.add('hidden');
-    orderDetailsCard.classList.add('hidden');
-    orderDetailsBackdrop.classList.add('hidden');
-  })
-  .catch((error) => {
-    tableBody.innerHTML = `<tr><td class="empty-state" colspan="9">${escapeHtml(error.message)}</td></tr>`;
-    planOrdersTableBody.innerHTML = `<tr><td class="empty-state" colspan="9">${escapeHtml(error.message)}</td></tr>`;
-    archiveTableBody.innerHTML = `<tr><td class="empty-state" colspan="8">${escapeHtml(error.message)}</td></tr>`;
   });
