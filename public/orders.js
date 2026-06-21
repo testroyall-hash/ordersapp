@@ -4,6 +4,8 @@ const showFormButton = document.getElementById('showFormButton');
 const closeFormButton = document.getElementById('closeFormButton');
 const resetFormButton = document.getElementById('resetFormButton');
 const refreshButton = document.getElementById('refreshButton');
+const toggleStatsButton = document.getElementById('toggleStatsButton');
+const statsPanel = document.getElementById('statsPanel');
 
 const moduleLinks = [...document.querySelectorAll('[data-module-link]')];
 
@@ -24,6 +26,8 @@ const detailsForm = document.getElementById('detailsForm');
 const detailsTitle = document.getElementById('detailsTitle');
 const detailOrderNumber = document.getElementById('detailOrderNumber');
 const detailRemainingQty = document.getElementById('detailRemainingQty');
+const detailStockSummary = document.getElementById('detailStockSummary');
+const detailMovementQuantity = document.getElementById('detailMovementQuantity');
 const saveState = document.getElementById('saveState');
 const duplicateOrderButton = document.getElementById('duplicateOrderButton');
 const deleteOrderButton = document.getElementById('deleteOrderButton');
@@ -34,6 +38,7 @@ const orderDateFromInput = document.getElementById('orderDateFromInput');
 const orderDateToInput = document.getElementById('orderDateToInput');
 const orderCustomerFilter = document.getElementById('orderCustomerFilter');
 const orderProductFilter = document.getElementById('orderProductFilter');
+const orderSortSelect = document.getElementById('orderSortSelect');
 const orderStatusFilterList = document.getElementById('orderStatusFilterList');
 const clearOrderFiltersButton = document.getElementById('clearOrderFiltersButton');
 const ordersResultCount = document.getElementById('ordersResultCount');
@@ -43,6 +48,7 @@ const planDateFromInput = document.getElementById('planDateFromInput');
 const planDateToInput = document.getElementById('planDateToInput');
 const planCustomerFilter = document.getElementById('planCustomerFilter');
 const planProductFilter = document.getElementById('planProductFilter');
+const planSortSelect = document.getElementById('planSortSelect');
 const planStatusFilterList = document.getElementById('planStatusFilterList');
 const printPlanButton = document.getElementById('printPlanButton');
 const syncPlanFiltersButton = document.getElementById('syncPlanFiltersButton');
@@ -131,14 +137,16 @@ let orderFilters = {
   dateTo: '',
   customerId: '',
   productId: '',
-  statusIds: []
+  statusIds: [],
+  sortBy: 'date_asc'
 };
 let planFilters = {
   dateFrom: '',
   dateTo: '',
   customerId: '',
   productId: '',
-  statusIds: []
+  statusIds: [],
+  sortBy: 'date_asc'
 };
 const selectedPlanOrderIds = new Set();
 let ordersPager = { total: 0, page: 1, pageSize: 50, totalPages: 1 };
@@ -352,6 +360,48 @@ function setDefaultSelects(form) {
   }
 }
 
+const productGroups = [
+  { min: 0, max: 999, name: 'БПИ' },
+  { min: 1000, max: 1999, name: 'РКМА-Р' },
+  { min: 2000, max: 2999, name: 'РКМА-Р-21' },
+  { min: 3000, max: 3999, name: 'РКМА-ОС' },
+  { min: 4000, max: 4999, name: 'Резонаторы' },
+  { min: 5000, max: 5999, name: 'КЭ' },
+  { min: 6000, max: 6999, name: 'ПЭ' }
+];
+
+function getProductGroup(product) {
+  const byId = productGroups.find((group) => product.id >= group.min && product.id <= group.max);
+  return byId?.name || product.type || 'Прочие изделия';
+}
+
+function buildProductOptions(includeEmptyLabel) {
+  const groups = new Map();
+
+  products.forEach((product) => {
+    const groupName = getProductGroup(product);
+    if (!groups.has(groupName)) groups.set(groupName, []);
+    groups.get(groupName).push(product);
+  });
+
+  const groupedOptions = [...groups.entries()]
+    .sort(([left], [right]) => left.localeCompare(right, 'ru'))
+    .map(([groupName, items]) => `
+      <optgroup label="${escapeHtml(groupName)}">
+        ${items
+          .sort((left, right) => String(left.name).localeCompare(String(right.name), 'ru'))
+          .map((product) => {
+            const meta = [product.code, product.type].filter(Boolean).join(' • ');
+            return `<option value="${product.id}">${escapeHtml(product.name)}${meta ? ` — ${escapeHtml(meta)}` : ''}</option>`;
+          })
+          .join('')}
+      </optgroup>
+    `)
+    .join('');
+
+  return `${includeEmptyLabel ? `<option value="">${escapeHtml(includeEmptyLabel)}</option>` : ''}${groupedOptions}`;
+}
+
 function fillSelects() {
   const statusOptions = statuses
     .map((status) => `<option value="${status.id}">${escapeHtml(status.name)}</option>`)
@@ -363,13 +413,7 @@ function fillSelects() {
     '<option value="">Выберите заказчика</option>',
     ...customers.map((customer) => `<option value="${customer.id}">${escapeHtml(customer.name)}</option>`)
   ].join('');
-  const productOptions = [
-    '<option value="">Выберите изделие</option>',
-    ...products.map((product) => {
-      const meta = [product.code, product.type].filter(Boolean).join(' • ');
-      return `<option value="${product.id}">${escapeHtml(product.name)}${meta ? ` — ${escapeHtml(meta)}` : ''}</option>`;
-    })
-  ].join('');
+  const productOptions = buildProductOptions('Выберите изделие');
   const departmentOptions = [
     '<option value="">Не выбран</option>',
     ...departments.map((department) => `<option value="${department.id}">${escapeHtml(department.name)}</option>`)
@@ -399,7 +443,7 @@ function fillSelects() {
   }
 
   orderCustomerFilter.innerHTML = ['<option value="">Все заказчики</option>', ...customers.map((customer) => `<option value="${customer.id}">${escapeHtml(customer.name)}</option>`)].join('');
-  orderProductFilter.innerHTML = ['<option value="">Все изделия</option>', ...products.map((product) => `<option value="${product.id}">${escapeHtml(product.name)}</option>`)].join('');
+  orderProductFilter.innerHTML = buildProductOptions('Все изделия');
   planCustomerFilter.innerHTML = orderCustomerFilter.innerHTML;
   planProductFilter.innerHTML = orderProductFilter.innerHTML;
 
@@ -482,6 +526,9 @@ function buildQuery(filters, pager = null) {
   if (filters.productId) params.set('product_id', filters.productId);
   if (Array.isArray(filters.statusIds) && filters.statusIds.length) {
     params.set('status_ids', filters.statusIds.join(','));
+  }
+  if (filters.sortBy) {
+    params.set('sort_by', filters.sortBy);
   }
   if (pager) {
     params.set('page', pager.page);
@@ -1001,6 +1048,105 @@ async function saveJson(url, method, payload) {
   return data;
 }
 
+function updateDetailStockSummary(details, order = null) {
+  if (!detailStockSummary) return;
+
+  const available = toNumber(details?.product?.available_qty);
+  const reserved = order ? getRemainingQty(order) : 0;
+  const free = Math.max(0, available - reserved);
+
+  detailStockSummary.innerHTML = `
+    <div><strong>${available}</strong><small>доступно</small></div>
+    <div><strong>${reserved}</strong><small>осталось по заказу</small></div>
+    <div><strong>${free}</strong><small>свободно</small></div>
+  `;
+}
+
+async function loadOrderStockDetails(order) {
+  if (!order.product_id) {
+    updateDetailStockSummary(null, order);
+    return null;
+  }
+
+  const response = await fetch(`/api/inventory/products/${order.product_id}`);
+  if (!response.ok) {
+    updateDetailStockSummary(null, order);
+    return null;
+  }
+
+  const details = await response.json();
+  updateDetailStockSummary(details, order);
+  return details;
+}
+
+function findDepartmentIdByName(pattern) {
+  const normalizedPattern = pattern.toLowerCase();
+  return departments.find((department) => String(department.name || '').toLowerCase().includes(normalizedPattern))?.id || null;
+}
+
+async function createOrderMovement(movementType) {
+  if (!selectedOrderId) return;
+
+  const productId = detailsForm.elements.product_id.value;
+  if (!productId) {
+    alert('Выберите изделие в заказе');
+    return;
+  }
+
+  if (!departments.length) {
+    await loadDictionaries();
+  }
+
+  const quantity = toNumber(detailMovementQuantity.value, 0);
+  if (quantity <= 0) {
+    alert('Укажите количество операции');
+    return;
+  }
+
+  const senderId = toNumber(detailsForm.elements.department_id.value, null);
+  const receiverId = toNumber(detailsForm.elements.target_department_id.value, null);
+  const defectReceiverId = findDepartmentIdByName('изолятор') || findDepartmentIdByName('брак');
+  const payload = {
+    product_id: productId,
+    movement_type: movementType,
+    quantity,
+    movement_date: new Date().toISOString().slice(0, 10),
+    comments: `Операция из карточки заказа ${detailOrderNumber.value}`
+  };
+
+  if (movementType === 'produced') {
+    payload.receiver_id = receiverId || senderId;
+  }
+
+  if (movementType === 'to_work') {
+    payload.sender_id = senderId;
+  }
+
+  if (movementType === 'defect') {
+    payload.sender_id = senderId;
+    payload.receiver_id = defectReceiverId;
+  }
+
+  if (movementType === 'defect' && !payload.receiver_id) {
+    alert('Для учета брака нужен отдел "Изолятор брака"');
+    return;
+  }
+
+  await saveJson('/api/inventory/movements', 'POST', payload);
+
+  if (movementType === 'produced') {
+    const amount = toNumber(detailsForm.elements.amount.value);
+    const doneQty = toNumber(detailsForm.elements.done_qty.value);
+    detailsForm.elements.done_qty.value = String(Math.min(amount, doneQty + quantity));
+    await saveJson(`/api/orders/${selectedOrderId}`, 'PUT', orderPayload(detailsForm));
+  }
+
+  await Promise.all([
+    selectOrder(selectedOrderId),
+    loadedTabs.stock ? loadMetrics() : Promise.resolve()
+  ]);
+}
+
 async function selectOrder(orderId) {
   selectedOrderId = Number(orderId);
   renderOrders();
@@ -1034,6 +1180,8 @@ async function selectOrder(orderId) {
   setFormValue(detailsForm, 'comments', order.comments);
   setFormValue(detailsForm, 'status_id', order.status_id);
   setFormValue(detailsForm, 'type_id', order.type_id);
+  detailMovementQuantity.value = String(Math.max(1, getRemainingQty(order) || 1));
+  loadOrderStockDetails(order).catch(() => updateDetailStockSummary(null, order));
   setSaveState('Без изменений');
 }
 
@@ -1110,6 +1258,7 @@ function syncPlanFiltersFromOrders() {
   planDateToInput.value = planFilters.dateTo;
   planCustomerFilter.value = planFilters.customerId;
   planProductFilter.value = planFilters.productId;
+  planSortSelect.value = planFilters.sortBy;
   fillStatusFilters();
   loadPlanOrders(1).catch((error) => alert(error.message));
 }
@@ -1212,6 +1361,9 @@ showFormButton.addEventListener('click', () => {
   activateTab('orders');
   orderFormSection.classList.remove('hidden');
 });
+toggleStatsButton.addEventListener('click', () => {
+  statsPanel.classList.toggle('hidden');
+});
 
 closeFormButton.addEventListener('click', () => orderFormSection.classList.add('hidden'));
 resetFormButton.addEventListener('click', resetCreateForm);
@@ -1293,14 +1445,20 @@ orderProductFilter.addEventListener('change', () => {
   ordersPager.page = 1;
   loadOrders(1).catch((error) => alert(error.message));
 });
+orderSortSelect.addEventListener('change', () => {
+  orderFilters.sortBy = orderSortSelect.value;
+  ordersPager.page = 1;
+  loadOrders(1).catch((error) => alert(error.message));
+});
 clearOrderFiltersButton.addEventListener('click', () => {
-  orderFilters = { search: '', dateFrom: '', dateTo: '', customerId: '', productId: '', statusIds: [] };
+  orderFilters = { search: '', dateFrom: '', dateTo: '', customerId: '', productId: '', statusIds: [], sortBy: 'date_asc' };
   ordersPager.page = 1;
   orderSearchInput.value = '';
   orderDateFromInput.value = '';
   orderDateToInput.value = '';
   orderCustomerFilter.value = '';
   orderProductFilter.value = '';
+  orderSortSelect.value = orderFilters.sortBy;
   fillStatusFilters();
   loadOrders(1).catch((error) => alert(error.message));
 });
@@ -1325,6 +1483,12 @@ planCustomerFilter.addEventListener('change', () => {
 });
 planProductFilter.addEventListener('change', () => {
   planFilters.productId = planProductFilter.value;
+  planPager.page = 1;
+  clearPlanSelection();
+  loadPlanOrders(1).catch((error) => alert(error.message));
+});
+planSortSelect.addEventListener('change', () => {
+  planFilters.sortBy = planSortSelect.value;
   planPager.page = 1;
   clearPlanSelection();
   loadPlanOrders(1).catch((error) => alert(error.message));
@@ -1392,6 +1556,11 @@ reloadDetailsButton.addEventListener('click', () => {
 
 closeDetailsButton.addEventListener('click', clearOrderDetails);
 orderDetailsBackdrop.addEventListener('click', clearOrderDetails);
+document.querySelectorAll('.detail-movement-button').forEach((button) => {
+  button.addEventListener('click', () => {
+    createOrderMovement(button.dataset.movementType).catch((error) => alert(error.message));
+  });
+});
 
 duplicateOrderButton.addEventListener('click', async () => {
   const id = detailsForm.elements.id.value;

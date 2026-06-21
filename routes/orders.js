@@ -556,6 +556,25 @@ function getPaging(query, defaultPageSize = 50) {
   return { page, pageSize };
 }
 
+function getOrderBy(query, fallback = 'date_asc') {
+  const direction = String(query.sort_order || '').toLowerCase() === 'desc' ? 'DESC' : 'ASC';
+  const sortBy = String(query.sort_by || fallback);
+
+  if (sortBy === 'number') {
+    return `Base.order_number ${direction}, Base.finish_date IS NULL, Base.finish_date ${direction}`;
+  }
+
+  if (sortBy === 'date_desc') {
+    return 'Base.finish_date IS NULL, Base.finish_date DESC, Base.order_number DESC';
+  }
+
+  if (sortBy === 'number_desc') {
+    return 'Base.order_number DESC, Base.finish_date IS NULL, Base.finish_date DESC';
+  }
+
+  return 'Base.finish_date IS NULL, Base.finish_date ASC, Base.order_number ASC';
+}
+
 router.get('/', (req, res) => {
   const db = req.app.locals.db;
   const filter = buildFilters(req.query);
@@ -574,7 +593,7 @@ router.get('/', (req, res) => {
     `,
     whereClause: filter.clause.replaceAll('Orders.', 'Base.'),
     values: filter.values,
-    orderBy: 'Base.finish_date IS NULL, Base.finish_date, Base.order_number',
+    orderBy: getOrderBy(req.query),
     page: paging.page,
     pageSize: paging.pageSize
   });
@@ -598,7 +617,7 @@ router.get('/plan', (req, res) => {
     `,
     whereClause: filter.clause.replaceAll('Orders.', 'Base.'),
     values: filter.values,
-    orderBy: 'CASE WHEN Base.finish_date IS NULL THEN 1 ELSE 0 END, Base.finish_date, Base.status_id, Base.order_number',
+    orderBy: getOrderBy(req.query),
     page: paging.page,
     pageSize: paging.pageSize
   });
@@ -646,7 +665,7 @@ router.get('/plan/export', (req, res) => {
     LEFT JOIN Departments AS SourceDepartment ON SourceDepartment.id = Base.department_id
     LEFT JOIN Statuses ON Statuses.id = Base.status_id
     ${exportFilter.clause}
-    ORDER BY CASE WHEN Base.finish_date IS NULL THEN 1 ELSE 0 END, Base.finish_date, Base.status_id, Base.order_number
+    ORDER BY ${getOrderBy(req.query)}
   `;
 
   db.all(sql, exportFilter.values, (error, rows) => {

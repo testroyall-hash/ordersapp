@@ -58,11 +58,12 @@
           </div>
           <div class="topbar-actions">
             <span class="system-badge">База данных подключена</span>
+            <button id="toggleStatsButton" class="secondary-button" type="button">Статистика</button>
             <button id="showFormButton" class="primary-button" type="button">Создать заказ</button>
           </div>
         </header>
 
-        <section class="hero-panel">
+        <section id="statsPanel" class="hero-panel hidden">
           <div>
             <p class="section-kicker">Оперативная сводка</p>
             <h2>Заказ рассматривается как отдельная производственная единица</h2>
@@ -205,6 +206,15 @@
                     <span>Изделие</span>
                     <select id="orderProductFilter">
                       <option value="">Все изделия</option>
+                    </select>
+                  </label>
+                  <label class="compact-field">
+                    <span>Сортировка</span>
+                    <select id="orderSortSelect">
+                      <option value="date_asc">Срок: по возрастанию</option>
+                      <option value="date_desc">Срок: по убыванию</option>
+                      <option value="number">Номер: по возрастанию</option>
+                      <option value="number_desc">Номер: по убыванию</option>
                     </select>
                   </label>
                 </div>
@@ -353,6 +363,24 @@
                 </label>
               </div>
 
+              <div class="field-section">
+                <h3>Склад и ход исполнения</h3>
+                <div id="detailStockSummary" class="detail-summary-grid">
+                  <div><strong>0</strong><small>доступно</small></div>
+                  <div><strong>0</strong><small>в заказах</small></div>
+                  <div><strong>0</strong><small>свободно</small></div>
+                </div>
+                <label>
+                  <span>Количество операции</span>
+                  <input id="detailMovementQuantity" type="number" min="1" value="1">
+                </label>
+                <div class="quick-actions">
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="produced">Принять изготовленное</button>
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="to_work">Списать в работу</button>
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="defect">Учесть брак</button>
+                </div>
+              </div>
+
               <div class="sticky-actions">
                 <button class="primary-button" type="submit">Сохранить изменения</button>
                 <button id="duplicateOrderButton" class="secondary-button" type="button">Сохранить как новый</button>
@@ -396,6 +424,15 @@
                   <span>Изделие</span>
                   <select id="planProductFilter">
                     <option value="">Все изделия</option>
+                  </select>
+                </label>
+                <label class="compact-field">
+                  <span>Сортировка</span>
+                  <select id="planSortSelect">
+                    <option value="date_asc">Срок: по возрастанию</option>
+                    <option value="date_desc">Срок: по убыванию</option>
+                    <option value="number">Номер: по возрастанию</option>
+                    <option value="number_desc">Номер: по убыванию</option>
                   </select>
                 </label>
               </div>
@@ -915,6 +952,6 @@
       </main>
     </div>
 
-    <script src="/orders.js?v=20260617-3"></script>
+    <script src="/orders.js?v=20260621-1"></script>
   </body>
 </html>
