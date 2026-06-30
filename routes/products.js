@@ -19,8 +19,15 @@ function toBooleanInteger(value, defaultValue = 1) {
   return 0;
 }
 
+function toNullableInteger(value) {
+  if (value === undefined || value === null || value === '') return null;
+  const number = Number(value);
+  return Number.isInteger(number) ? number : null;
+}
+
 function mapProductPayload(body) {
   return {
+    sourceId: toNullableInteger(body.source_id),
     name: normalizeText(body.name),
     code: normalizeText(body.code),
     type: normalizeText(body.type),
@@ -33,6 +40,11 @@ function mapProductPayload(body) {
 
 function sendDbError(res, error) {
   if (error && error.message && error.message.includes('UNIQUE constraint failed')) {
+    if (error.message.includes('Products.source_id')) {
+      res.status(400).json({ error: 'Изделие с таким ID уже существует' });
+      return;
+    }
+
     res.status(400).json({ error: 'Изделие с таким названием уже существует' });
     return;
   }
@@ -43,6 +55,7 @@ function sendDbError(res, error) {
 const productListSql = `
   SELECT
     Products.id,
+    Products.source_id,
     Products.name,
     Products.code,
     Products.type,
@@ -55,6 +68,7 @@ const productListSql = `
   LEFT JOIN Orders ON Orders.product_id = Products.id
   GROUP BY
     Products.id,
+    Products.source_id,
     Products.name,
     Products.code,
     Products.type,
@@ -95,6 +109,7 @@ router.post('/', (req, res) => {
 
   const sql = `
     INSERT INTO Products (
+      source_id,
       name,
       code,
       type,
@@ -103,12 +118,13 @@ router.post('/', (req, res) => {
       comments,
       is_active
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.run(
     sql,
     [
+      payload.sourceId,
       payload.name,
       payload.code,
       payload.type,
@@ -135,6 +151,7 @@ router.put('/:id', (req, res) => {
   const sql = `
     UPDATE Products
     SET
+      source_id = ?,
       name = ?,
       code = ?,
       type = ?,
@@ -148,6 +165,7 @@ router.put('/:id', (req, res) => {
   db.run(
     sql,
     [
+      payload.sourceId,
       payload.name,
       payload.code,
       payload.type,

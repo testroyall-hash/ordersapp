@@ -177,7 +177,8 @@ async function ensureProduct(db, cache, row, companyById) {
       db,
       `
         UPDATE Products
-        SET code = COALESCE(code, ?),
+        SET source_id = ?,
+            code = COALESCE(code, ?),
             type = COALESCE(type, ?),
             unit = COALESCE(unit, ?),
             manufacturer = COALESCE(manufacturer, ?),
@@ -186,6 +187,7 @@ async function ensureProduct(db, cache, row, companyById) {
         WHERE id = ?
       `,
       [
+        toNumber(row.ID),
         name,
         type,
         normalizeText(row.Units) || 'шт',
@@ -202,6 +204,7 @@ async function ensureProduct(db, cache, row, companyById) {
     db,
     `
       INSERT INTO Products (
+        source_id,
         name,
         code,
         type,
@@ -210,9 +213,10 @@ async function ensureProduct(db, cache, row, companyById) {
         comments,
         is_active
       )
-      VALUES (?, ?, ?, ?, ?, ?, 1)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 1)
     `,
     [
+      toNumber(row.ID),
       name,
       name,
       type,
@@ -227,6 +231,20 @@ async function ensureProduct(db, cache, row, companyById) {
 
 async function main() {
   const db = new sqlite3.Database(dbPath);
+
+  const productColumns = await new Promise((resolve, reject) => {
+    db.all('PRAGMA table_info(Products)', [], (error, rows) => {
+      if (error) reject(error);
+      else resolve(rows);
+    });
+  });
+  if (!productColumns.some((column) => column.name === 'source_id')) {
+    await run(db, 'ALTER TABLE Products ADD COLUMN source_id INTEGER');
+  }
+  await run(
+    db,
+    'CREATE UNIQUE INDEX IF NOT EXISTS idx_products_source_id ON Products(source_id) WHERE source_id IS NOT NULL'
+  );
 
   const companies = readJson('tblCompanys.json');
   const employees = readJson('tblEmployee.json');

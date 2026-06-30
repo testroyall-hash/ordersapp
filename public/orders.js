@@ -371,6 +371,12 @@ const productGroups = [
 ];
 
 function getProductGroup(product) {
+  const sourceId = Number(product.source_id);
+  const bySourceId = Number.isInteger(sourceId)
+    ? productGroups.find((group) => sourceId >= group.min && sourceId <= group.max)
+    : null;
+  if (bySourceId) return bySourceId.name;
+
   const label = `${product.name || ''} ${product.code || ''}`.trim().toUpperCase();
   const type = String(product.type || '').trim();
 
@@ -382,14 +388,12 @@ function getProductGroup(product) {
   if (label.startsWith('ПЭ')) return 'ПЭ';
   if (label.includes('РЕЗОНАТОР') || type.toUpperCase().includes('РЕЗОНАТОР')) return 'Резонаторы';
 
-  const byId = productGroups.find((group) => product.id >= group.min && product.id <= group.max);
-  if (product.id >= 1000 && byId) return byId.name;
-
   return type && !type.toLowerCase().includes('без группы') ? type : 'Прочие изделия';
 }
 
 function buildProductOptions(includeEmptyLabel) {
   const groups = new Map();
+  const groupOrder = new Map(productGroups.map((group, index) => [group.name, index]));
 
   products.forEach((product) => {
     const groupName = getProductGroup(product);
@@ -398,13 +402,21 @@ function buildProductOptions(includeEmptyLabel) {
   });
 
   const groupedOptions = [...groups.entries()]
-    .sort(([left], [right]) => left.localeCompare(right, 'ru'))
+    .sort(([left], [right]) => {
+      const leftOrder = groupOrder.get(left) ?? Number.MAX_SAFE_INTEGER;
+      const rightOrder = groupOrder.get(right) ?? Number.MAX_SAFE_INTEGER;
+      return leftOrder - rightOrder || left.localeCompare(right, 'ru');
+    })
     .map(([groupName, items]) => `
       <optgroup label="${escapeHtml(groupName)}">
         ${items
           .sort((left, right) => String(left.name).localeCompare(String(right.name), 'ru'))
           .map((product) => {
-            const meta = [product.code, product.type].filter(Boolean).join(' • ');
+            const meta = [
+              product.source_id !== null && product.source_id !== undefined ? `ID ${product.source_id}` : null,
+              product.code,
+              product.type
+            ].filter(Boolean).join(' • ');
             return `<option value="${product.id}">${escapeHtml(product.name)}${meta ? ` — ${escapeHtml(meta)}` : ''}</option>`;
           })
           .join('')}
@@ -758,7 +770,7 @@ function getFilteredProducts() {
   const query = productSearchQuery.trim().toLowerCase();
   return products.filter((product) => {
     if (!query) return true;
-    return [product.name, product.code, product.type, product.manufacturer, product.unit]
+    return [product.source_id, product.name, product.code, product.type, product.manufacturer, product.unit]
       .filter(Boolean)
       .join(' ')
       .toLowerCase()
@@ -778,8 +790,8 @@ function renderProducts() {
     .map((product) => `
       <tr class="${product.id === selectedProductId ? 'selected-row' : ''}" data-product-id="${product.id}">
         <td><strong>${escapeHtml(product.name)}</strong>${product.manufacturer ? `<small>${escapeHtml(product.manufacturer)}</small>` : ''}</td>
-        <td>${escapeHtml(formatValue(product.code))}</td>
-        <td>${escapeHtml(formatValue(product.type))}</td>
+        <td>${escapeHtml(formatValue(product.source_id))}</td>
+        <td>${escapeHtml(getProductGroup(product))}</td>
         <td>${product.orders_count}</td>
         <td><span class="status ${product.is_active ? 'status-new' : 'status-muted'}">${product.is_active ? 'Активное' : 'Неактивное'}</span></td>
       </tr>
@@ -1015,6 +1027,7 @@ function customerPayload(form) {
 function productPayload(form) {
   return {
     id: form.elements.id.value,
+    source_id: form.elements.source_id.value,
     name: form.elements.name.value,
     code: form.elements.code.value,
     type: form.elements.type.value || 'Неклассифицированные / Без группы',
@@ -1225,7 +1238,7 @@ async function selectProduct(productId) {
   }
 
   const product = await response.json();
-  productFormTitle.textContent = `Изделие #${product.id}`;
+  productFormTitle.textContent = `Изделие ID ${product.source_id ?? product.id}`;
   Object.entries(product).forEach(([key, value]) => setFormValue(productForm, key, value));
   setProductSaveState('Без изменений');
 }

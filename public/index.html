@@ -644,7 +644,7 @@
                   <thead>
                     <tr>
                       <th>Наименование</th>
-                      <th>Код</th>
+                      <th>ID изделия</th>
                       <th>Тип</th>
                       <th>Заказы</th>
                       <th>Статус</th>
@@ -676,6 +676,10 @@
                   <label>
                     <span>Наименование изделия</span>
                     <input name="name" type="text" required placeholder="Например: РКМА-20-С">
+                  </label>
+                  <label>
+                    <span>ID изделия</span>
+                    <input name="source_id" type="number" min="0" step="1" placeholder="Например: 1001">
                   </label>
                   <label>
                     <span>Код / обозначение</span>
@@ -952,6 +956,6 @@
       </main>
     </div>
 
-    <script src="/orders.js?v=20260630-1"></script>
+    <script src="/orders.js?v=20260630-2"></script>
   </body>
 </html>

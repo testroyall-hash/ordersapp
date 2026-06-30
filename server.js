@@ -15,6 +15,7 @@ const port = process.env.PORT || 3000;
 const bundledDbPath = path.join(__dirname, 'db.sqlite3');
 const dbPath = process.env.DB_PATH || bundledDbPath;
 const initSqlPath = path.join(__dirname, 'db', 'init.sql');
+const sourceProductsPath = path.join(__dirname, 'data', 'access-import', 'tblProducts.json');
 
 function prepareDatabaseFile() {
   const dbDir = path.dirname(dbPath);
@@ -97,6 +98,7 @@ function migrateProductsTable(callback) {
   migrateTable(
     'Products',
     [
+      { name: 'source_id', definition: 'source_id INTEGER' },
       { name: 'code', definition: 'code TEXT' },
       { name: 'unit', definition: 'unit TEXT' },
       { name: 'manufacturer', definition: 'manufacturer TEXT' },
@@ -105,6 +107,54 @@ function migrateProductsTable(callback) {
     ],
     callback
   );
+}
+
+function backfillProductSourceIds(callback) {
+  if (!fs.existsSync(sourceProductsPath)) {
+    db.run(
+      'CREATE UNIQUE INDEX IF NOT EXISTS idx_products_source_id ON Products(source_id) WHERE source_id IS NOT NULL',
+      callback
+    );
+    return;
+  }
+
+  let sourceProducts;
+  try {
+    const raw = fs.readFileSync(sourceProductsPath, 'utf8').replace(/^\uFEFF/, '');
+    sourceProducts = JSON.parse(raw);
+  } catch (error) {
+    callback(error);
+    return;
+  }
+
+  db.serialize(() => {
+    let firstError = null;
+    db.run('BEGIN TRANSACTION');
+    const statement = db.prepare(
+      'UPDATE Products SET source_id = ? WHERE name = ? AND source_id IS NULL'
+    );
+
+    sourceProducts.forEach((product) => {
+      statement.run(Number(product.ID), String(product.ProductName || '').trim(), (error) => {
+        if (error && !firstError) firstError = error;
+      });
+    });
+
+    statement.finalize((finalizeError) => {
+      if (finalizeError && !firstError) firstError = finalizeError;
+      db.run(firstError ? 'ROLLBACK' : 'COMMIT', (transactionError) => {
+        if (firstError || transactionError) {
+          callback(firstError || transactionError);
+          return;
+        }
+
+        db.run(
+          'CREATE UNIQUE INDEX IF NOT EXISTS idx_products_source_id ON Products(source_id) WHERE source_id IS NOT NULL',
+          callback
+        );
+      });
+    });
+  });
 }
 
 function migrateOrdersTable(callback) {
@@ -262,16 +312,20 @@ function initializeDatabase(callback) {
       migrateProductsTable((productsError) => {
         if (productsError) return callback(productsError);
 
-        migrateOrdersTable((ordersError) => {
-          if (ordersError) return callback(ordersError);
+        backfillProductSourceIds((sourceIdsError) => {
+          if (sourceIdsError) return callback(sourceIdsError);
 
-          createAdditionalTables((extraError) => {
-            if (extraError) return callback(extraError);
+          migrateOrdersTable((ordersError) => {
+            if (ordersError) return callback(ordersError);
 
-            migrateInventoryMovementsTable((inventoryError) => {
-              if (inventoryError) return callback(inventoryError);
+            createAdditionalTables((extraError) => {
+              if (extraError) return callback(extraError);
 
-              fillOrderNumbers(callback);
+              migrateInventoryMovementsTable((inventoryError) => {
+                if (inventoryError) return callback(inventoryError);
+
+                fillOrderNumbers(callback);
+              });
             });
           });
         });
