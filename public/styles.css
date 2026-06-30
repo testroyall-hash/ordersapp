@@ -281,6 +281,7 @@ h2 {
 
 .detail-summary-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-column: 1 / -1;
 }
 
 .detail-summary-grid div {
@@ -307,6 +308,23 @@ h2 {
 
 .quick-actions {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-column: 1 / -1;
+  align-items: stretch;
+}
+
+.quick-actions .secondary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  border-radius: 14px;
+  padding: 10px 12px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: normal;
 }
 
 .card {
@@ -630,6 +648,45 @@ table {
   width: 100%;
   min-width: 860px;
   border-collapse: collapse;
+}
+
+.customers-table {
+  min-width: 720px;
+  table-layout: fixed;
+}
+
+.customers-table th:nth-child(1),
+.customers-table td:nth-child(1) {
+  width: 36%;
+}
+
+.customers-table th:nth-child(2),
+.customers-table td:nth-child(2),
+.customers-table th:nth-child(3),
+.customers-table td:nth-child(3) {
+  width: 17%;
+}
+
+.customers-table th:nth-child(4),
+.customers-table td:nth-child(4) {
+  width: 12%;
+  text-align: center;
+}
+
+.customers-table th:nth-child(5),
+.customers-table td:nth-child(5) {
+  width: 18%;
+}
+
+.customers-table .status {
+  max-width: 100%;
+  border-radius: 12px;
+  padding: 6px 8px;
+  font-size: 12px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: normal;
 }
 
 th,
@@ -1020,6 +1077,8 @@ td small {
   }
 
   .hero-metrics,
+  .detail-summary-grid,
+  .quick-actions,
   .form,
   .filters-grid,
   .filters-grid-wide,

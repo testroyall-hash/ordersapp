@@ -371,8 +371,21 @@ const productGroups = [
 ];
 
 function getProductGroup(product) {
+  const label = `${product.name || ''} ${product.code || ''}`.trim().toUpperCase();
+  const type = String(product.type || '').trim();
+
+  if (label.startsWith('БПИ')) return 'БПИ';
+  if (label.startsWith('РКМА') && /(?:^|[- ])ОС(?:$|[- 0-9])/.test(label)) return 'РКМА-ОС';
+  if (label.startsWith('РКМА') && /(?:^|-)21(?:$|[-А-ЯA-Z])/.test(label)) return 'РКМА-Р-21';
+  if (label.startsWith('РКМА')) return 'РКМА-Р';
+  if (label.startsWith('КЭ')) return 'КЭ';
+  if (label.startsWith('ПЭ')) return 'ПЭ';
+  if (label.includes('РЕЗОНАТОР') || type.toUpperCase().includes('РЕЗОНАТОР')) return 'Резонаторы';
+
   const byId = productGroups.find((group) => product.id >= group.min && product.id <= group.max);
-  return byId?.name || product.type || 'Прочие изделия';
+  if (product.id >= 1000 && byId) return byId.name;
+
+  return type && !type.toLowerCase().includes('без группы') ? type : 'Прочие изделия';
 }
 
 function buildProductOptions(includeEmptyLabel) {
