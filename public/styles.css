@@ -997,6 +997,31 @@ td small {
   gap: 18px;
 }
 
+.detail-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+
+.detail-tab-button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 10px 13px;
+  color: var(--steel);
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.detail-tab-button.active {
+  border-color: var(--accent);
+  color: #fff;
+  background: var(--accent);
+}
+
 .save-state {
   border: 1px solid var(--line);
   border-radius: 999px;

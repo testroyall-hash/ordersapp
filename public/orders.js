@@ -33,6 +33,8 @@ const duplicateOrderButton = document.getElementById('duplicateOrderButton');
 const reloadDetailsButton = document.getElementById('reloadDetailsButton');
 const detailTransferDepartmentSelect = document.getElementById('detailTransferDepartmentSelect');
 const detailTransferButton = document.getElementById('detailTransferButton');
+const detailTabButtons = [...document.querySelectorAll('[data-detail-tab]')];
+const detailTabPanels = [...document.querySelectorAll('[data-detail-panel]')];
 
 const orderSearchInput = document.getElementById('orderSearchInput');
 const orderDateFromInput = document.getElementById('orderDateFromInput');
@@ -1348,8 +1350,18 @@ async function selectOrder(orderId) {
   setFormValue(detailsForm, 'status_id', order.status_id);
   setFormValue(detailsForm, 'type_id', order.type_id);
   detailMovementQuantity.value = String(Math.max(1, getRemainingQty(order) || 1));
-  loadOrderStockDetails(order).catch(() => updateDetailStockSummary(null, order));
+  activateDetailTab('execution');
+  loadOrderStockDetails(order).catch(() => renderOrderExecution(null, order));
   setSaveState('Без изменений');
+}
+
+function activateDetailTab(tabName = 'execution') {
+  detailTabButtons.forEach((button) => {
+    button.classList.toggle('active', button.dataset.detailTab === tabName);
+  });
+  detailTabPanels.forEach((panel) => {
+    panel.classList.toggle('hidden', panel.dataset.detailPanel !== tabName);
+  });
 }
 
 async function selectCustomer(customerId) {
@@ -1768,6 +1780,9 @@ reloadDetailsButton.addEventListener('click', () => {
   } else {
     clearOrderDetails();
   }
+});
+detailTabButtons.forEach((button) => {
+  button.addEventListener('click', () => activateDetailTab(button.dataset.detailTab));
 });
 
 closeDetailsButton.addEventListener('click', clearOrderDetails);

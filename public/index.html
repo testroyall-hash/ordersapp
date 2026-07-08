@@ -140,7 +140,7 @@
                 <select name="customer_id" data-customers-select required></select>
               </label>
               <label>
-                <span>Текущий отдел</span>
+                <span>Исполнитель</span>
                 <div class="inline-field">
                   <select name="department_id" data-departments-select></select>
                   <button id="addDepartmentButton" class="ghost-button icon-button" type="button">+</button>
@@ -286,7 +286,15 @@
               <input name="main_order" type="hidden">
               <input id="detailOrderNumber" type="hidden">
 
-              <div class="field-section">
+              <div class="detail-tabs" role="tablist" aria-label="Разделы карточки заказа">
+                <button class="detail-tab-button active" type="button" data-detail-tab="execution">Ход исполнения</button>
+                <button class="detail-tab-button" type="button" data-detail-tab="dates">Сроки</button>
+                <button class="detail-tab-button" type="button" data-detail-tab="party">Заказчик и исполнитель</button>
+                <button class="detail-tab-button" type="button" data-detail-tab="status">Статус и тип</button>
+                <button class="detail-tab-button" type="button" data-detail-tab="comments">Примечание</button>
+              </div>
+
+              <div class="field-section detail-tab-panel" data-detail-panel="execution">
                 <h3>Ход исполнения заказа</h3>
                 <label>
                   <span>Количество по заказу, шт</span>
@@ -328,7 +336,7 @@
                 </div>
               </div>
 
-              <div class="field-section">
+              <div class="field-section detail-tab-panel hidden" data-detail-panel="dates">
                 <h3>Сроки</h3>
                 <label>
                   <span>Дата исполнения</span>
@@ -336,7 +344,7 @@
                 </label>
               </div>
 
-              <div class="field-section">
+              <div class="field-section detail-tab-panel hidden" data-detail-panel="party">
                 <h3>Заказчик и исполнитель</h3>
                 <label>
                   <span>Заказчик</span>
@@ -351,7 +359,7 @@
                 </label>
               </div>
 
-              <div class="field-section">
+              <div class="field-section detail-tab-panel hidden" data-detail-panel="status">
                 <h3>Статус и тип заказа</h3>
                 <label>
                   <span>Статус заказа</span>
@@ -366,7 +374,7 @@
                 </label>
               </div>
 
-              <div class="field-section">
+              <div class="field-section detail-tab-panel hidden" data-detail-panel="comments">
                 <h3>Примечание к заказу</h3>
                 <label>
                   <span>Примечание</span>
@@ -374,7 +382,7 @@
                 </label>
               </div>
 
-              <div class="field-section">
+              <div class="field-section detail-tab-panel hidden" data-detail-panel="execution">
                 <h3>Передача доступного остатка</h3>
                 <label>
                   <span>Передать в отдел</span>
