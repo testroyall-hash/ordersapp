@@ -107,19 +107,20 @@ CREATE TABLE IF NOT EXISTS ProductMetrics (
 );
 
 INSERT OR IGNORE INTO Statuses (id, name) VALUES
-  (1, 'Новый'),
-  (2, 'В работе'),
-  (3, 'Готово'),
-  (4, 'Запуск в производство'),
-  (5, 'На согласовании'),
-  (6, 'Отгружено');
+  (1, 'Заявка'),
+  (2, 'Запуск в производство'),
+  (3, 'Ожидание комплектации'),
+  (4, 'Исполнение'),
+  (5, 'Выполнен'),
+  (6, 'Удален');
 
-UPDATE Statuses SET name = 'Новый' WHERE id = 1;
-UPDATE Statuses SET name = 'В работе' WHERE id = 2;
-UPDATE Statuses SET name = 'Готово' WHERE id = 3;
-UPDATE Statuses SET name = 'Запуск в производство' WHERE id = 4;
-UPDATE Statuses SET name = 'На согласовании' WHERE id = 5;
-UPDATE Statuses SET name = 'Отгружено' WHERE id = 6;
+UPDATE Statuses SET name = '__status_migration_' || id WHERE id IN (1, 2, 3, 4, 5, 6);
+UPDATE Statuses SET name = 'Заявка' WHERE id = 1;
+UPDATE Statuses SET name = 'Запуск в производство' WHERE id = 2;
+UPDATE Statuses SET name = 'Ожидание комплектации' WHERE id = 3;
+UPDATE Statuses SET name = 'Исполнение' WHERE id = 4;
+UPDATE Statuses SET name = 'Выполнен' WHERE id = 5;
+UPDATE Statuses SET name = 'Удален' WHERE id = 6;
 
 INSERT OR IGNORE INTO OrderTypes (id, name) VALUES
   (1, 'Обычный'),

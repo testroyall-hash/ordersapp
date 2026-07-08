@@ -259,8 +259,13 @@ function createAdditionalTables(callback) {
     "INSERT OR IGNORE INTO Departments (id, name, is_active) VALUES (2, 'ОТК', 1)",
     "INSERT OR IGNORE INTO Departments (id, name, is_active) VALUES (3, 'Склад', 1)",
     "INSERT OR IGNORE INTO Departments (id, name, is_active) VALUES (4, 'Отгрузка', 1)",
-    "UPDATE Statuses SET name = 'На согласовании' WHERE name = 'Выполняется'",
-    'UPDATE Orders SET status_id = 2 WHERE status_id = 5',
+    "UPDATE Statuses SET name = '__status_migration_' || id WHERE id IN (1, 2, 3, 4, 5, 6)",
+    "UPDATE Statuses SET name = 'Заявка' WHERE id = 1",
+    "UPDATE Statuses SET name = 'Запуск в производство' WHERE id = 2",
+    "UPDATE Statuses SET name = 'Ожидание комплектации' WHERE id = 3",
+    "UPDATE Statuses SET name = 'Исполнение' WHERE id = 4",
+    "UPDATE Statuses SET name = 'Выполнен' WHERE id = 5",
+    "UPDATE Statuses SET name = 'Удален' WHERE id = 6",
     'UPDATE Orders SET created_at = COALESCE(created_at, CURRENT_TIMESTAMP)',
     'UPDATE Orders SET updated_at = COALESCE(updated_at, CURRENT_TIMESTAMP)'
   ];

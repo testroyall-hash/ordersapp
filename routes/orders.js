@@ -109,7 +109,7 @@ function formatDateRu(value) {
 }
 
 function formatOrderNumber(value) {
-  return value ? `№ ${String(value).padStart(4, '0')}` : '—';
+  return value ? String(value).padStart(4, '0') : '—';
 }
 
 function textRun(value, options = {}) {
@@ -160,8 +160,8 @@ function buildPlanDocx(rows, meta) {
     tableCell('План', { bold: true, shading: 'E9EEF7', width: 800, align: 'center' }),
     tableCell('Сделано', { bold: true, shading: 'E9EEF7', width: 900, align: 'center' }),
     tableCell('Осталось', { bold: true, shading: 'E9EEF7', width: 900, align: 'center' }),
-    tableCell('Срок', { bold: true, shading: 'E9EEF7', width: 1100, align: 'center' }),
-    tableCell('Отдел', { bold: true, shading: 'E9EEF7', width: 1700 }),
+    tableCell('Дата исполнения', { bold: true, shading: 'E9EEF7', width: 1300, align: 'center' }),
+    tableCell('Исполнитель', { bold: true, shading: 'E9EEF7', width: 1700 }),
     tableCell('Статус', { bold: true, shading: 'E9EEF7', width: 1500 })
   ]);
 
@@ -503,6 +503,15 @@ function buildFilters(query, tableName = 'Orders') {
     values.push(query.customer_id);
   }
 
+  if (query.customer_search) {
+    clauses.push(`(
+      Customers.name LIKE ?
+      OR Customers.short_name LIKE ?
+    )`);
+    const customerSearchValue = `%${query.customer_search}%`;
+    values.push(customerSearchValue, customerSearchValue);
+  }
+
   if (query.product_id) {
     clauses.push(`${tableName}.product_id = ?`);
     values.push(query.product_id);
@@ -547,6 +556,15 @@ function buildFilters(query, tableName = 'Orders') {
     )`);
     const productSearchValue = `%${query.product_search}%`;
     values.push(productSearchValue, productSearchValue, productSearchValue, productSearchValue);
+  }
+
+  if (query.executor_search) {
+    clauses.push(`(
+      SourceDepartment.name LIKE ?
+      OR TargetDepartment.name LIKE ?
+    )`);
+    const executorSearchValue = `%${query.executor_search}%`;
+    values.push(executorSearchValue, executorSearchValue);
   }
 
   return {

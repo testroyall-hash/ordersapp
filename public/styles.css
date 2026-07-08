@@ -482,7 +482,7 @@ h2 {
 }
 
 .filters-grid-wide {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 .inline-field {
@@ -498,7 +498,13 @@ h2 {
 
 .status-filter-panel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  align-items: end;
   gap: 10px;
+}
+
+.sort-field {
+  align-self: end;
 }
 
 .status-filter-list {
@@ -821,7 +827,10 @@ th {
   background: var(--steel-soft);
   font-size: 12px;
   letter-spacing: 0.08em;
+  line-height: 1.25;
+  vertical-align: middle;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 td small {
@@ -1174,6 +1183,7 @@ td small {
   .form,
   .filters-grid,
   .filters-grid-wide,
+  .status-filter-panel,
   .field-section,
   .metric-highlights,
   .module-nav {

@@ -189,20 +189,6 @@
                     <input id="orderSearchInput" type="search" inputmode="numeric" placeholder="Например: 125">
                   </label>
                   <label class="compact-field">
-                    <span>Дата от</span>
-                    <input id="orderDateFromInput" type="date">
-                  </label>
-                  <label class="compact-field">
-                    <span>Дата до</span>
-                    <input id="orderDateToInput" type="date">
-                  </label>
-                  <label class="compact-field">
-                    <span>Заказчик</span>
-                    <select id="orderCustomerFilter">
-                      <option value="">Все заказчики</option>
-                    </select>
-                  </label>
-                  <label class="compact-field">
                     <span>Изделие</span>
                     <div class="product-tree-filter" id="orderProductTreeFilter">
                       <input id="orderProductSearchInput" type="search" placeholder="Все изделия">
@@ -211,21 +197,37 @@
                     </div>
                   </label>
                   <label class="compact-field">
-                    <span>Сортировка</span>
-                    <select id="orderSortSelect">
-                      <option value="date_asc">Срок: по возрастанию</option>
-                      <option value="date_desc">Срок: по убыванию</option>
-                      <option value="number">Номер: по возрастанию</option>
-                      <option value="number_desc">Номер: по убыванию</option>
-                    </select>
+                    <span>Заказчик</span>
+                    <input id="orderCustomerFilter" type="search" placeholder="Все заказчики">
+                  </label>
+                  <label class="compact-field">
+                    <span>Исполнитель</span>
+                    <input id="orderExecutorSearchInput" type="search" placeholder="Все исполнители">
+                  </label>
+                  <label class="compact-field">
+                    <span>Дата исполнения от</span>
+                    <input id="orderDateFromInput" type="date">
+                  </label>
+                  <label class="compact-field">
+                    <span>Дата исполнения до</span>
+                    <input id="orderDateToInput" type="date">
                   </label>
                 </div>
 
                 <div class="status-filter-panel">
                   <div>
-                    <p class="section-kicker">Статусы в выдаче</p>
+                    <p class="section-kicker">Статус заказа</p>
                     <div id="orderStatusFilterList" class="status-filter-list"></div>
                   </div>
+                  <label class="compact-field sort-field">
+                    <span>Сортировка</span>
+                    <select id="orderSortSelect">
+                      <option value="date_asc">Дата исполнения: по возрастанию</option>
+                      <option value="date_desc">Дата исполнения: по убыванию</option>
+                      <option value="number">Номер: по возрастанию</option>
+                      <option value="number_desc">Номер: по убыванию</option>
+                    </select>
+                  </label>
                 </div>
 
                 <div class="toolbar-actions">
@@ -241,17 +243,14 @@
                       <th>№</th>
                       <th>Изделие</th>
                       <th>Заказчик</th>
-                      <th>План</th>
-                      <th>Сделано</th>
-                      <th>Осталось</th>
-                      <th>Срок</th>
-                      <th>Отдел</th>
+                      <th>Дата исполнения</th>
+                      <th>Исполнитель</th>
                       <th>Статус</th>
                     </tr>
                   </thead>
                   <tbody id="ordersTableBody">
                     <tr>
-                      <td colspan="9">Загрузка заказов...</td>
+                      <td colspan="6">Загрузка заказов...</td>
                     </tr>
                   </tbody>
                 </table>
@@ -431,8 +430,8 @@
                 <label class="compact-field">
                   <span>Сортировка</span>
                   <select id="planSortSelect">
-                    <option value="date_asc">Срок: по возрастанию</option>
-                    <option value="date_desc">Срок: по убыванию</option>
+                    <option value="date_asc">Дата исполнения: по возрастанию</option>
+                    <option value="date_desc">Дата исполнения: по убыванию</option>
                     <option value="number">Номер: по возрастанию</option>
                     <option value="number_desc">Номер: по убыванию</option>
                   </select>
@@ -463,8 +462,8 @@
                     <th>План</th>
                     <th>Сделано</th>
                     <th>Осталось</th>
-                    <th>Срок</th>
-                    <th>Отдел</th>
+                    <th>Дата исполнения</th>
+                    <th>Исполнитель</th>
                     <th>Статус</th>
                   </tr>
                 </thead>
@@ -498,7 +497,7 @@
                     <th>Заказчик</th>
                     <th>План</th>
                     <th>Сделано</th>
-                    <th>Срок</th>
+                    <th>Дата исполнения</th>
                     <th>Удален</th>
                     <th>Действие</th>
                   </tr>
@@ -958,6 +957,6 @@
       </main>
     </div>
 
-    <script src="/orders.js?v=20260708-1"></script>
+    <script src="/orders.js?v=20260708-2"></script>
   </body>
 </html>

@@ -40,6 +40,7 @@ const orderCustomerFilter = document.getElementById('orderCustomerFilter');
 const orderProductFilter = document.getElementById('orderProductFilter');
 const orderProductSearchInput = document.getElementById('orderProductSearchInput');
 const orderProductPicker = document.getElementById('orderProductPicker');
+const orderExecutorSearchInput = document.getElementById('orderExecutorSearchInput');
 const orderSortSelect = document.getElementById('orderSortSelect');
 const orderStatusFilterList = document.getElementById('orderStatusFilterList');
 const clearOrderFiltersButton = document.getElementById('clearOrderFiltersButton');
@@ -135,6 +136,8 @@ let stockSearchQuery = '';
 let orderSearchTimer = null;
 let orderFilters = {
   search: '',
+  customerSearch: '',
+  executorSearch: '',
   productSearch: '',
   dateFrom: '',
   dateTo: '',
@@ -186,7 +189,7 @@ function formatDate(value) {
 }
 
 function formatOrderNumber(value) {
-  return value ? `№ ${String(value).padStart(4, '0')}` : '—';
+  return value ? String(value).padStart(4, '0') : '—';
 }
 
 function toNumber(value, fallback = 0) {
@@ -205,17 +208,16 @@ function normalizeStatusName(value) {
 function getStatusTone(statusName) {
   const normalized = normalizeStatusName(statusName);
 
-  if (normalized.includes('отгруж')) return 'done';
-  if (normalized.includes('готов')) return 'done';
-  if (normalized.includes('брак') || normalized.includes('отмен')) return 'danger';
-  if (normalized.includes('запуск') || normalized.includes('соглас')) return 'warning';
-  if (normalized.includes('работ')) return 'progress';
-  if (normalized.includes('нов')) return 'new';
+  if (normalized.includes('выполн') || normalized.includes('отгруж') || normalized.includes('готов')) return 'done';
+  if (normalized.includes('удален') || normalized.includes('брак') || normalized.includes('отмен')) return 'danger';
+  if (normalized.includes('ожид') || normalized.includes('запуск') || normalized.includes('соглас')) return 'warning';
+  if (normalized.includes('исполн') || normalized.includes('работ')) return 'progress';
+  if (normalized.includes('заяв') || normalized.includes('нов')) return 'new';
   return 'neutral';
 }
 
 function getDueState(order) {
-  if (!order.finish_date) return { tone: 'empty', label: 'Срок не указан' };
+  if (!order.finish_date) return { tone: 'empty', label: 'Дата не указана' };
   if (order.fact_date) return { tone: 'done', label: `Закрыт ${formatDate(order.fact_date)}` };
 
   const today = new Date();
@@ -233,10 +235,10 @@ function getDueState(order) {
     return { tone: 'danger', label: `Просрочен на ${Math.abs(diffDays)} дн.` };
   }
   if (diffDays === 0) {
-    return { tone: 'warning', label: 'Срок сегодня' };
+    return { tone: 'warning', label: 'Сегодня' };
   }
   if (diffDays <= 3) {
-    return { tone: 'warning', label: `Срок через ${diffDays} дн.` };
+    return { tone: 'warning', label: `Через ${diffDays} дн.` };
   }
 
   return { tone: 'neutral', label: formatDate(order.finish_date) };
@@ -548,12 +550,11 @@ function fillSelects() {
     movementCustomerSelect.innerHTML = customerOptions;
   }
 
-  orderCustomerFilter.innerHTML = ['<option value="">Все заказчики</option>', ...customers.map((customer) => `<option value="${customer.id}">${escapeHtml(customer.name)}</option>`)].join('');
   const filterProductOptions = buildProductOptions('Все изделия');
-  planCustomerFilter.innerHTML = orderCustomerFilter.innerHTML;
+  planCustomerFilter.innerHTML = ['<option value="">Все заказчики</option>', ...customers.map((customer) => `<option value="${customer.id}">${escapeHtml(customer.name)}</option>`)].join('');
   planProductFilter.innerHTML = filterProductOptions;
 
-  orderCustomerFilter.value = orderFilters.customerId;
+  orderCustomerFilter.value = orderFilters.customerSearch;
   orderProductFilter.value = orderFilters.productId;
   renderOrderProductPicker();
   planCustomerFilter.value = planFilters.customerId;
@@ -627,6 +628,8 @@ function clearPlanSelection() {
 function buildQuery(filters, pager = null) {
   const params = new URLSearchParams();
   if (filters.search) params.set('search', filters.search);
+  if (filters.customerSearch) params.set('customer_search', filters.customerSearch);
+  if (filters.executorSearch) params.set('executor_search', filters.executorSearch);
   if (filters.productSearch) params.set('product_search', filters.productSearch);
   if (filters.dateFrom) params.set('date_from', filters.dateFrom);
   if (filters.dateTo) params.set('date_to', filters.dateTo);
@@ -982,7 +985,7 @@ function renderOrders() {
   ordersResultCount.textContent = formatRecordCount(ordersPager.total);
 
   if (!orders.length) {
-    tableBody.innerHTML = '<tr><td class="empty-state" colspan="9">Заказы по выбранным условиям не найдены.</td></tr>';
+    tableBody.innerHTML = '<tr><td class="empty-state" colspan="6">Заказы по выбранным условиям не найдены.</td></tr>';
     ordersPagination.classList.add('hidden');
     return;
   }
@@ -991,7 +994,6 @@ function renderOrders() {
     .map((order) => {
       const dueState = getDueState(order);
       const statusTone = getStatusTone(order.status_name);
-      const remainingQty = getRemainingQty(order);
       return `
         <tr class="${order.id === selectedOrderId ? 'selected-row' : ''}" data-order-id="${order.id}">
           <td class="id-cell">${escapeHtml(formatOrderNumber(order.order_number))}</td>
@@ -1000,9 +1002,6 @@ function renderOrders() {
             ${order.product_code ? `<small>${escapeHtml(order.product_code)}</small>` : ''}
           </td>
           <td>${escapeHtml(formatValue(order.customer_name))}</td>
-          <td>${order.amount}</td>
-          <td>${order.done_qty}</td>
-          <td>${remainingQty}</td>
           <td>
             <div class="date-cell">
               <strong>${escapeHtml(formatDate(order.finish_date))}</strong>
@@ -1586,10 +1585,22 @@ orderDateToInput.addEventListener('change', () => {
   ordersPager.page = 1;
   loadOrders(1).catch((error) => alert(error.message));
 });
-orderCustomerFilter.addEventListener('change', () => {
-  orderFilters.customerId = orderCustomerFilter.value;
+orderCustomerFilter.addEventListener('input', () => {
+  orderFilters.customerId = '';
+  orderFilters.customerSearch = orderCustomerFilter.value.trim();
   ordersPager.page = 1;
-  loadOrders(1).catch((error) => alert(error.message));
+  clearTimeout(orderSearchTimer);
+  orderSearchTimer = window.setTimeout(() => {
+    loadOrders(1).catch((error) => alert(error.message));
+  }, 250);
+});
+orderExecutorSearchInput.addEventListener('input', () => {
+  orderFilters.executorSearch = orderExecutorSearchInput.value.trim();
+  ordersPager.page = 1;
+  clearTimeout(orderSearchTimer);
+  orderSearchTimer = window.setTimeout(() => {
+    loadOrders(1).catch((error) => alert(error.message));
+  }, 250);
 });
 orderProductFilter.addEventListener('change', () => {
   orderFilters.productId = orderProductFilter.value;
@@ -1602,10 +1613,11 @@ orderSortSelect.addEventListener('change', () => {
   loadOrders(1).catch((error) => alert(error.message));
 });
 clearOrderFiltersButton.addEventListener('click', () => {
-  orderFilters = { search: '', productSearch: '', dateFrom: '', dateTo: '', customerId: '', productId: '', statusIds: [], sortBy: 'date_asc' };
+  orderFilters = { search: '', customerSearch: '', executorSearch: '', productSearch: '', dateFrom: '', dateTo: '', customerId: '', productId: '', statusIds: [], sortBy: 'date_asc' };
   ordersPager.page = 1;
   orderSearchInput.value = '';
   orderProductSearchInput.value = '';
+  orderExecutorSearchInput.value = '';
   orderDateFromInput.value = '';
   orderDateToInput.value = '';
   orderCustomerFilter.value = '';
