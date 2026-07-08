@@ -176,9 +176,13 @@ function migrateInventoryMovementsTable(callback) {
   migrateTable(
     'InventoryMovements',
     [
+      { name: 'order_id', definition: 'order_id INTEGER' },
       { name: 'customer_id', definition: 'customer_id INTEGER' }
     ],
-    callback
+    (error) => {
+      if (error) return callback(error);
+      db.run('CREATE INDEX IF NOT EXISTS idx_inventory_movements_order_id ON InventoryMovements(order_id)', callback);
+    }
   );
 }
 
@@ -216,6 +220,7 @@ function createAdditionalTables(callback) {
     )`,
     `CREATE TABLE IF NOT EXISTS InventoryMovements (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      order_id INTEGER,
       product_id INTEGER NOT NULL,
       movement_type TEXT NOT NULL,
       sender_id INTEGER,
@@ -226,6 +231,7 @@ function createAdditionalTables(callback) {
       movement_date TEXT NOT NULL DEFAULT CURRENT_DATE,
       comments TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (order_id) REFERENCES Orders(id),
       FOREIGN KEY (product_id) REFERENCES Products(id),
       FOREIGN KEY (sender_id) REFERENCES Departments(id),
       FOREIGN KEY (receiver_id) REFERENCES Departments(id),

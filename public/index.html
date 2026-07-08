@@ -277,68 +277,82 @@
 
             <form id="detailsForm" class="details-form hidden">
               <input name="id" type="hidden">
+              <input name="product_id" type="hidden">
+              <input name="product_name_manual" type="hidden">
+              <input name="done_qty" type="hidden">
+              <input name="start_date" type="hidden">
+              <input name="fact_date" type="hidden">
+              <input name="target_department_id" type="hidden">
+              <input name="main_order" type="hidden">
+              <input id="detailOrderNumber" type="hidden">
 
               <div class="field-section">
-                <h3>Номер заказа и изделие</h3>
+                <h3>Ход исполнения заказа</h3>
                 <label>
-                  <span>Номер заказа</span>
-                  <input id="detailOrderNumber" type="text" readonly>
-                </label>
-                <label>
-                  <span>Изделие из справочника</span>
-                  <select name="product_id" data-products-select></select>
-                </label>
-                <label>
-                  <span>Или ввести изделие вручную</span>
-                  <input name="product_name_manual" type="text" placeholder="Для неклассифицированного изделия">
-                </label>
-              </div>
-
-              <div class="field-section">
-                <h3>План и выполнение</h3>
-                <label>
-                  <span>План по заказу, шт</span>
+                  <span>Количество по заказу, шт</span>
                   <input name="amount" type="number" min="1" required>
                 </label>
                 <label>
-                  <span>Сделано по заказу, шт</span>
-                  <input name="done_qty" type="number" min="0">
+                  <span>Операция, шт</span>
+                  <input id="detailMovementQuantity" type="number" min="1" value="1">
                 </label>
+                <div class="execution-actions">
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="produced">Изготовлено</button>
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="defect">Забраковано</button>
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="ship">Отгружено</button>
+                </div>
+                <div class="table-wrap table-wrap-compact execution-table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Изготовлено, шт</th>
+                        <th>Дата</th>
+                        <th>Забраковано, шт</th>
+                        <th>Дата</th>
+                        <th>Отгружено, шт</th>
+                        <th>Дата</th>
+                      </tr>
+                    </thead>
+                    <tbody id="detailExecutionTableBody">
+                      <tr><td colspan="6">Операций по заказу пока нет.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="detailExecutionSummary" class="detail-summary-grid">
+                  <div><strong>0</strong><small>всего изготовлено</small></div>
+                  <div><strong>0</strong><small>всего забраковано</small></div>
+                  <div><strong>0</strong><small>всего отгружено</small></div>
+                  <div><strong>0</strong><small>доступно у исполнителя</small></div>
+                  <div><strong>0</strong><small>осталось выполнить</small></div>
+                  <div><strong>0</strong><small>количество по заказу</small></div>
+                </div>
+              </div>
+
+              <div class="field-section">
+                <h3>Сроки</h3>
                 <label>
-                  <span>Осталось выполнить, шт</span>
-                  <input id="detailRemainingQty" type="text" readonly>
-                </label>
-                <label>
-                  <span>Основной заказ</span>
-                  <input name="main_order" type="number" min="1" placeholder="Номер связанного заказа">
+                  <span>Дата исполнения</span>
+                  <input name="finish_date" type="date">
                 </label>
               </div>
 
               <div class="field-section">
-                <h3>Сроки и маршрут</h3>
+                <h3>Заказчик и исполнитель</h3>
                 <label>
-                  <span>Дата начала</span>
-                  <input name="start_date" type="date">
+                  <span>Заказчик</span>
+                  <select name="customer_id" data-customers-select></select>
                 </label>
                 <label>
-                  <span>Дата выполнения</span>
-                  <input name="finish_date" type="date">
-                </label>
-                <label>
-                  <span>Фактическая дата</span>
-                  <input name="fact_date" type="date">
-                </label>
-                <label>
-                  <span>Текущий отдел</span>
+                  <span>Исполнитель</span>
                   <div class="inline-field">
                     <select name="department_id" data-departments-select></select>
                     <button id="addDepartmentDetailsButton" class="ghost-button icon-button" type="button">+</button>
                   </div>
                 </label>
-                <label>
-                  <span>Передача в отдел</span>
-                  <select name="target_department_id" data-departments-select></select>
-                </label>
+              </div>
+
+              <div class="field-section">
+                <h3>Статус и тип заказа</h3>
                 <label>
                   <span>Статус заказа</span>
                   <select name="status_id" data-statuses-select></select>
@@ -353,40 +367,28 @@
               </div>
 
               <div class="field-section">
-                <h3>Заказчик и примечания</h3>
+                <h3>Примечание к заказу</h3>
                 <label>
-                  <span>Заказчик</span>
-                  <select name="customer_id" data-customers-select></select>
-                </label>
-                <label class="wide-field">
                   <span>Примечание</span>
                   <textarea name="comments" rows="5"></textarea>
                 </label>
               </div>
 
               <div class="field-section">
-                <h3>Склад и ход исполнения</h3>
-                <div id="detailStockSummary" class="detail-summary-grid">
-                  <div><strong>0</strong><small>доступно</small></div>
-                  <div><strong>0</strong><small>в заказах</small></div>
-                  <div><strong>0</strong><small>свободно</small></div>
-                </div>
+                <h3>Передача доступного остатка</h3>
                 <label>
-                  <span>Количество операции</span>
-                  <input id="detailMovementQuantity" type="number" min="1" value="1">
+                  <span>Передать в отдел</span>
+                  <div class="inline-field">
+                    <select id="detailTransferDepartmentSelect" data-departments-select></select>
+                    <button id="detailTransferButton" class="secondary-button" type="button">Передать</button>
+                  </div>
                 </label>
-                <div class="quick-actions">
-                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="produced">Принять в изготовление</button>
-                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="to_work">Списать в работу</button>
-                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="defect">Учесть брак</button>
-                </div>
               </div>
 
               <div class="sticky-actions">
                 <button class="primary-button" type="submit">Сохранить изменения</button>
                 <button id="duplicateOrderButton" class="secondary-button" type="button">Сохранить как новый</button>
                 <button id="reloadDetailsButton" class="secondary-button" type="button">Отменить правки</button>
-                <button id="deleteOrderButton" class="ghost-button danger-button" type="button">Удалить</button>
               </div>
             </form>
           </div>

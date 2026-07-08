@@ -286,6 +286,7 @@ router.post(
   sendAsync(async (req, res) => {
     const db = req.app.locals.db;
     const productId = toInteger(req.body.product_id, null);
+    const orderId = toInteger(req.body.order_id, null);
     const movementType = normalizeText(req.body.movement_type);
     const type = movementTypeById.get(movementType);
     const senderId = toInteger(req.body.sender_id, null);
@@ -342,6 +343,14 @@ router.post(
       return;
     }
 
+    if (orderId) {
+      const order = await get(db, 'SELECT id FROM Orders WHERE id = ?', [orderId]);
+      if (!order) {
+        res.status(404).json({ error: 'Заказ не найден' });
+        return;
+      }
+    }
+
     if (customerId) {
       const customer = await get(db, 'SELECT id FROM Customers WHERE id = ?', [customerId]);
       if (!customer) {
@@ -354,6 +363,7 @@ router.post(
       db,
       `
         INSERT INTO InventoryMovements (
+          order_id,
           product_id,
           movement_type,
           sender_id,
@@ -364,9 +374,9 @@ router.post(
           movement_date,
           comments
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      [productId, movementType, senderId, receiverId, customerId, externalParty, quantity, movementDate, comments]
+      [orderId, productId, movementType, senderId, receiverId, customerId, externalParty, quantity, movementDate, comments]
     );
 
     res.status(201).json({ id: result.lastID });

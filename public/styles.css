@@ -1045,6 +1045,38 @@ td small {
   grid-column: 1 / -1;
 }
 
+.field-section > .table-wrap,
+.field-section > .execution-actions,
+.field-section > .detail-summary-grid {
+  grid-column: 1 / -1;
+}
+
+.field-section textarea {
+  min-height: 120px;
+}
+
+.execution-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.execution-actions .secondary-button {
+  min-width: 0;
+  min-height: 46px;
+  white-space: normal;
+}
+
+.execution-table-wrap table {
+  min-width: 640px;
+}
+
+.execution-table-wrap th,
+.execution-table-wrap td {
+  text-align: center;
+  vertical-align: middle;
+}
+
 .sticky-actions {
   position: sticky;
   bottom: 14px;
@@ -1180,6 +1212,7 @@ td small {
   .hero-metrics,
   .detail-summary-grid,
   .quick-actions,
+  .execution-actions,
   .form,
   .filters-grid,
   .filters-grid-wide,

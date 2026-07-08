@@ -25,13 +25,14 @@ const closeDetailsButton = document.getElementById('closeDetailsButton');
 const detailsForm = document.getElementById('detailsForm');
 const detailsTitle = document.getElementById('detailsTitle');
 const detailOrderNumber = document.getElementById('detailOrderNumber');
-const detailRemainingQty = document.getElementById('detailRemainingQty');
-const detailStockSummary = document.getElementById('detailStockSummary');
+const detailExecutionTableBody = document.getElementById('detailExecutionTableBody');
+const detailExecutionSummary = document.getElementById('detailExecutionSummary');
 const detailMovementQuantity = document.getElementById('detailMovementQuantity');
 const saveState = document.getElementById('saveState');
 const duplicateOrderButton = document.getElementById('duplicateOrderButton');
-const deleteOrderButton = document.getElementById('deleteOrderButton');
 const reloadDetailsButton = document.getElementById('reloadDetailsButton');
+const detailTransferDepartmentSelect = document.getElementById('detailTransferDepartmentSelect');
+const detailTransferButton = document.getElementById('detailTransferButton');
 
 const orderSearchInput = document.getElementById('orderSearchInput');
 const orderDateFromInput = document.getElementById('orderDateFromInput');
@@ -1156,34 +1157,71 @@ async function saveJson(url, method, payload) {
   return data;
 }
 
-function updateDetailStockSummary(details, order = null) {
-  if (!detailStockSummary) return;
+function renderOrderExecution(details, order = null) {
+  if (!detailExecutionTableBody || !detailExecutionSummary) return;
 
-  const available = toNumber(details?.product?.available_qty);
-  const reserved = order ? getRemainingQty(order) : 0;
-  const free = Math.max(0, available - reserved);
+  const orderMovements = (details?.movements || []).filter((movement) => {
+    if (movement.order_id) return Number(movement.order_id) === Number(order?.id);
+    return false;
+  });
+  const byType = {
+    produced: orderMovements.filter((movement) => movement.movement_type === 'produced'),
+    defect: orderMovements.filter((movement) => movement.movement_type === 'defect'),
+    ship: orderMovements.filter((movement) => movement.movement_type === 'ship')
+  };
+  const maxRows = Math.max(byType.produced.length, byType.defect.length, byType.ship.length);
 
-  detailStockSummary.innerHTML = `
-    <div><strong>${available}</strong><small>доступно</small></div>
-    <div><strong>${reserved}</strong><small>осталось по заказу</small></div>
-    <div><strong>${free}</strong><small>свободно</small></div>
+  if (!maxRows) {
+    detailExecutionTableBody.innerHTML = '<tr><td colspan="6">Операций по заказу пока нет.</td></tr>';
+  } else {
+    detailExecutionTableBody.innerHTML = Array.from({ length: maxRows }, (_, index) => {
+      const produced = byType.produced[index];
+      const defect = byType.defect[index];
+      const ship = byType.ship[index];
+      return `
+        <tr>
+          <td>${produced ? produced.quantity : ''}</td>
+          <td>${produced ? escapeHtml(formatDate(produced.movement_date)) : ''}</td>
+          <td>${defect ? defect.quantity : ''}</td>
+          <td>${defect ? escapeHtml(formatDate(defect.movement_date)) : ''}</td>
+          <td>${ship ? ship.quantity : ''}</td>
+          <td>${ship ? escapeHtml(formatDate(ship.movement_date)) : ''}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  const sumByType = (type) => byType[type].reduce((sum, movement) => sum + toNumber(movement.quantity), 0);
+  const producedTotal = sumByType('produced');
+  const defectTotal = sumByType('defect');
+  const shippedTotal = sumByType('ship');
+  const executorBalance = (details?.balances || []).find((balance) => Number(balance.department_id) === Number(order?.department_id));
+  const executorAvailable = toNumber(executorBalance?.quantity);
+
+  detailExecutionSummary.innerHTML = `
+    <div><strong>${producedTotal}</strong><small>всего изготовлено</small></div>
+    <div><strong>${defectTotal}</strong><small>всего забраковано</small></div>
+    <div><strong>${shippedTotal}</strong><small>всего отгружено</small></div>
+    <div><strong>${executorAvailable}</strong><small>доступно у исполнителя</small></div>
+    <div><strong>${order ? getRemainingQty(order) : 0}</strong><small>осталось выполнить</small></div>
+    <div><strong>${toNumber(order?.amount)}</strong><small>количество по заказу</small></div>
   `;
 }
 
 async function loadOrderStockDetails(order) {
   if (!order.product_id) {
-    updateDetailStockSummary(null, order);
+    renderOrderExecution(null, order);
     return null;
   }
 
   const response = await fetch(`/api/inventory/products/${order.product_id}`);
   if (!response.ok) {
-    updateDetailStockSummary(null, order);
+    renderOrderExecution(null, order);
     return null;
   }
 
   const details = await response.json();
-  updateDetailStockSummary(details, order);
+  renderOrderExecution(details, order);
   return details;
 }
 
@@ -1212,9 +1250,10 @@ async function createOrderMovement(movementType) {
   }
 
   const senderId = toNumber(detailsForm.elements.department_id.value, null);
-  const receiverId = toNumber(detailsForm.elements.target_department_id.value, null);
+  const transferReceiverId = toNumber(detailTransferDepartmentSelect.value, null);
   const defectReceiverId = findDepartmentIdByName('изолятор') || findDepartmentIdByName('брак');
   const payload = {
+    order_id: selectedOrderId,
     product_id: productId,
     movement_type: movementType,
     quantity,
@@ -1223,11 +1262,17 @@ async function createOrderMovement(movementType) {
   };
 
   if (movementType === 'produced') {
-    payload.receiver_id = receiverId || senderId;
+    payload.receiver_id = senderId;
   }
 
-  if (movementType === 'to_work') {
+  if (movementType === 'ship') {
     payload.sender_id = senderId;
+    payload.customer_id = detailsForm.elements.customer_id.value;
+  }
+
+  if (movementType === 'transfer') {
+    payload.sender_id = senderId;
+    payload.receiver_id = transferReceiverId;
   }
 
   if (movementType === 'defect') {
@@ -1237,6 +1282,21 @@ async function createOrderMovement(movementType) {
 
   if (movementType === 'defect' && !payload.receiver_id) {
     alert('Для учета брака нужен отдел "Изолятор брака"');
+    return;
+  }
+
+  if (movementType === 'produced' && !payload.receiver_id) {
+    alert('Для изготовления выберите исполнителя');
+    return;
+  }
+
+  if ((movementType === 'ship' || movementType === 'transfer') && !payload.sender_id) {
+    alert('Для операции выберите исполнителя');
+    return;
+  }
+
+  if (movementType === 'transfer' && !payload.receiver_id) {
+    alert('Выберите отдел, куда передать доступный остаток');
     return;
   }
 
@@ -1269,9 +1329,8 @@ async function selectOrder(orderId) {
   orderDetailsBackdrop.classList.remove('hidden');
   orderDetailsCard.classList.remove('hidden');
   detailsForm.classList.remove('hidden');
-  detailsTitle.textContent = `${formatOrderNumber(order.order_number)} · ${formatValue(order.product_name)}`;
+  detailsTitle.textContent = `${formatOrderNumber(order.order_number)} · ${formatValue(order.product_name)} · начало ${formatDate(order.start_date)}`;
   detailOrderNumber.value = formatOrderNumber(order.order_number);
-  detailRemainingQty.value = String(getRemainingQty(order));
 
   setFormValue(detailsForm, 'id', order.id);
   setFormValue(detailsForm, 'product_id', order.product_id);
@@ -1701,14 +1760,7 @@ departmentsTableBody.addEventListener('click', (event) => {
   }
 });
 
-detailsForm.elements.amount.addEventListener('input', () => {
-  detailRemainingQty.value = String(Math.max(0, toNumber(detailsForm.elements.amount.value) - toNumber(detailsForm.elements.done_qty.value)));
-  setSaveState('Есть несохраненные изменения', 'dirty');
-});
-detailsForm.elements.done_qty.addEventListener('input', () => {
-  detailRemainingQty.value = String(Math.max(0, toNumber(detailsForm.elements.amount.value) - toNumber(detailsForm.elements.done_qty.value)));
-  setSaveState('Есть несохраненные изменения', 'dirty');
-});
+detailsForm.elements.amount.addEventListener('input', () => setSaveState('Есть несохраненные изменения', 'dirty'));
 detailsForm.addEventListener('input', () => setSaveState('Есть несохраненные изменения', 'dirty'));
 reloadDetailsButton.addEventListener('click', () => {
   if (selectedOrderId) {
@@ -1725,6 +1777,9 @@ document.querySelectorAll('.detail-movement-button').forEach((button) => {
     createOrderMovement(button.dataset.movementType).catch((error) => alert(error.message));
   });
 });
+detailTransferButton.addEventListener('click', () => {
+  createOrderMovement('transfer').catch((error) => alert(error.message));
+});
 
 duplicateOrderButton.addEventListener('click', async () => {
   const id = detailsForm.elements.id.value;
@@ -1739,28 +1794,6 @@ duplicateOrderButton.addEventListener('click', async () => {
       loadMetrics()
     ]);
     await selectOrder(result.id);
-  } catch (error) {
-    alert(error.message);
-  }
-});
-
-deleteOrderButton.addEventListener('click', async () => {
-  const id = detailsForm.elements.id.value;
-  if (!id) return;
-  if (!window.confirm('Переместить заказ в архив удаленных?')) return;
-
-  try {
-    await fetch(`/api/orders/${id}`, { method: 'DELETE' }).then(async (response) => {
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error || 'Не удалось удалить заказ');
-    });
-    clearOrderDetails();
-    await Promise.all([
-      loadOrders(ordersPager.page),
-      loadedTabs.plan ? loadPlanOrders(planPager.page) : Promise.resolve(),
-      loadedTabs.archive ? loadArchive(archivePager.page) : Promise.resolve(),
-      loadMetrics()
-    ]);
   } catch (error) {
     alert(error.message);
   }
