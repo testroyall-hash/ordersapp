@@ -38,6 +38,8 @@ const orderDateFromInput = document.getElementById('orderDateFromInput');
 const orderDateToInput = document.getElementById('orderDateToInput');
 const orderCustomerFilter = document.getElementById('orderCustomerFilter');
 const orderProductFilter = document.getElementById('orderProductFilter');
+const orderProductSearchInput = document.getElementById('orderProductSearchInput');
+const orderProductPicker = document.getElementById('orderProductPicker');
 const orderSortSelect = document.getElementById('orderSortSelect');
 const orderStatusFilterList = document.getElementById('orderStatusFilterList');
 const clearOrderFiltersButton = document.getElementById('clearOrderFiltersButton');
@@ -133,6 +135,7 @@ let stockSearchQuery = '';
 let orderSearchTimer = null;
 let orderFilters = {
   search: '',
+  productSearch: '',
   dateFrom: '',
   dateTo: '',
   customerId: '',
@@ -427,6 +430,84 @@ function buildProductOptions(includeEmptyLabel) {
   return `${includeEmptyLabel ? `<option value="">${escapeHtml(includeEmptyLabel)}</option>` : ''}${groupedOptions}`;
 }
 
+function getProductSearchText(product) {
+  return [product.name, product.code, product.type, product.source_id]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+}
+
+function buildProductTreeItems(query = '') {
+  const normalizedQuery = query.trim().toLowerCase();
+  const groups = new Map();
+  const groupOrder = new Map(productGroups.map((group, index) => [group.name, index]));
+
+  products
+    .filter((product) => !normalizedQuery || getProductSearchText(product).includes(normalizedQuery))
+    .forEach((product) => {
+      const groupName = getProductGroup(product);
+      if (!groups.has(groupName)) groups.set(groupName, []);
+      groups.get(groupName).push(product);
+    });
+
+  return [...groups.entries()]
+    .sort(([left], [right]) => {
+      const leftOrder = groupOrder.get(left) ?? Number.MAX_SAFE_INTEGER;
+      const rightOrder = groupOrder.get(right) ?? Number.MAX_SAFE_INTEGER;
+      return leftOrder - rightOrder || left.localeCompare(right, 'ru');
+    })
+    .map(([groupName, items]) => ({
+      groupName,
+      items: items.sort((left, right) => String(left.name).localeCompare(String(right.name), 'ru'))
+    }));
+}
+
+function renderOrderProductPicker() {
+  if (!orderProductPicker) return;
+
+  const query = orderProductSearchInput.value;
+  const groups = buildProductTreeItems(query);
+  const resetButton = `
+    <button class="product-tree-reset" type="button" data-product-reset>
+      Все изделия
+    </button>
+  `;
+
+  if (!groups.length) {
+    orderProductPicker.innerHTML = `${resetButton}<div class="product-tree-empty">Изделия не найдены</div>`;
+    return;
+  }
+
+  orderProductPicker.innerHTML = `
+    ${resetButton}
+    ${groups.map(({ groupName, items }) => `
+      <div class="product-tree-group">
+        <div class="product-tree-group-title">${escapeHtml(groupName)}</div>
+        <div class="product-tree-items">
+          ${items.map((product) => {
+            const meta = product.source_id !== null && product.source_id !== undefined ? `ID ${product.source_id}` : product.code;
+            return `
+              <button class="product-tree-item" type="button" data-product-id="${product.id}" data-product-name="${escapeHtml(product.name)}">
+                <span>${escapeHtml(product.name)}</span>
+                ${meta ? `<small>${escapeHtml(meta)}</small>` : ''}
+              </button>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function openOrderProductPicker() {
+  renderOrderProductPicker();
+  orderProductPicker.classList.remove('hidden');
+}
+
+function closeOrderProductPicker() {
+  orderProductPicker.classList.add('hidden');
+}
+
 function fillSelects() {
   const statusOptions = statuses
     .map((status) => `<option value="${status.id}">${escapeHtml(status.name)}</option>`)
@@ -468,12 +549,13 @@ function fillSelects() {
   }
 
   orderCustomerFilter.innerHTML = ['<option value="">Все заказчики</option>', ...customers.map((customer) => `<option value="${customer.id}">${escapeHtml(customer.name)}</option>`)].join('');
-  orderProductFilter.innerHTML = buildProductOptions('Все изделия');
+  const filterProductOptions = buildProductOptions('Все изделия');
   planCustomerFilter.innerHTML = orderCustomerFilter.innerHTML;
-  planProductFilter.innerHTML = orderProductFilter.innerHTML;
+  planProductFilter.innerHTML = filterProductOptions;
 
   orderCustomerFilter.value = orderFilters.customerId;
   orderProductFilter.value = orderFilters.productId;
+  renderOrderProductPicker();
   planCustomerFilter.value = planFilters.customerId;
   planProductFilter.value = planFilters.productId;
 }
@@ -545,6 +627,7 @@ function clearPlanSelection() {
 function buildQuery(filters, pager = null) {
   const params = new URLSearchParams();
   if (filters.search) params.set('search', filters.search);
+  if (filters.productSearch) params.set('product_search', filters.productSearch);
   if (filters.dateFrom) params.set('date_from', filters.dateFrom);
   if (filters.dateTo) params.set('date_to', filters.dateTo);
   if (filters.customerId) params.set('customer_id', filters.customerId);
@@ -1451,6 +1534,48 @@ orderSearchInput.addEventListener('input', () => {
     loadOrders(1).catch((error) => alert(error.message));
   }, 250);
 });
+orderProductSearchInput.addEventListener('focus', openOrderProductPicker);
+orderProductSearchInput.addEventListener('input', () => {
+  orderFilters.productId = '';
+  orderFilters.productSearch = orderProductSearchInput.value.trim();
+  orderProductFilter.value = '';
+  ordersPager.page = 1;
+  renderOrderProductPicker();
+  openOrderProductPicker();
+  clearTimeout(orderSearchTimer);
+  orderSearchTimer = window.setTimeout(() => {
+    loadOrders(1).catch((error) => alert(error.message));
+  }, 250);
+});
+orderProductPicker.addEventListener('click', (event) => {
+  const resetButton = event.target.closest('[data-product-reset]');
+  const productButton = event.target.closest('[data-product-id]');
+
+  if (resetButton) {
+    orderFilters.productId = '';
+    orderFilters.productSearch = '';
+    orderProductFilter.value = '';
+    orderProductSearchInput.value = '';
+    ordersPager.page = 1;
+    closeOrderProductPicker();
+    loadOrders(1).catch((error) => alert(error.message));
+    return;
+  }
+
+  if (!productButton) return;
+  orderFilters.productId = productButton.dataset.productId;
+  orderFilters.productSearch = '';
+  orderProductFilter.value = productButton.dataset.productId;
+  orderProductSearchInput.value = productButton.dataset.productName;
+  ordersPager.page = 1;
+  closeOrderProductPicker();
+  loadOrders(1).catch((error) => alert(error.message));
+});
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('#orderProductTreeFilter')) {
+    closeOrderProductPicker();
+  }
+});
 orderDateFromInput.addEventListener('change', () => {
   orderFilters.dateFrom = orderDateFromInput.value;
   ordersPager.page = 1;
@@ -1477,9 +1602,10 @@ orderSortSelect.addEventListener('change', () => {
   loadOrders(1).catch((error) => alert(error.message));
 });
 clearOrderFiltersButton.addEventListener('click', () => {
-  orderFilters = { search: '', dateFrom: '', dateTo: '', customerId: '', productId: '', statusIds: [], sortBy: 'date_asc' };
+  orderFilters = { search: '', productSearch: '', dateFrom: '', dateTo: '', customerId: '', productId: '', statusIds: [], sortBy: 'date_asc' };
   ordersPager.page = 1;
   orderSearchInput.value = '';
+  orderProductSearchInput.value = '';
   orderDateFromInput.value = '';
   orderDateToInput.value = '';
   orderCustomerFilter.value = '';

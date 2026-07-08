@@ -185,8 +185,8 @@
               <div class="orders-toolbar">
                 <div class="filters-grid filters-grid-wide">
                   <label class="compact-field">
-                    <span>Поиск</span>
-                    <input id="orderSearchInput" type="search" placeholder="Номер, изделие, заказчик, комментарий">
+                    <span>Номер заказа</span>
+                    <input id="orderSearchInput" type="search" inputmode="numeric" placeholder="Например: 125">
                   </label>
                   <label class="compact-field">
                     <span>Дата от</span>
@@ -204,9 +204,11 @@
                   </label>
                   <label class="compact-field">
                     <span>Изделие</span>
-                    <select id="orderProductFilter">
-                      <option value="">Все изделия</option>
-                    </select>
+                    <div class="product-tree-filter" id="orderProductTreeFilter">
+                      <input id="orderProductSearchInput" type="search" placeholder="Все изделия">
+                      <input id="orderProductFilter" type="hidden">
+                      <div id="orderProductPicker" class="product-tree-panel hidden"></div>
+                    </div>
                   </label>
                   <label class="compact-field">
                     <span>Сортировка</span>
@@ -278,7 +280,7 @@
               <input name="id" type="hidden">
 
               <div class="field-section">
-                <h3>Номер и изделие</h3>
+                <h3>Номер заказа и изделие</h3>
                 <label>
                   <span>Номер заказа</span>
                   <input id="detailOrderNumber" type="text" readonly>
@@ -956,6 +958,6 @@
       </main>
     </div>
 
-    <script src="/orders.js?v=20260630-2"></script>
+    <script src="/orders.js?v=20260708-1"></script>
   </body>
 </html>

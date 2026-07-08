@@ -533,15 +533,20 @@ function buildFilters(query, tableName = 'Orders') {
   }
 
   if (query.search) {
+    clauses.push(`CAST(${tableName}.order_number AS TEXT) LIKE ?`);
+    const searchValue = `%${query.search}%`;
+    values.push(searchValue);
+  }
+
+  if (query.product_search) {
     clauses.push(`(
       Products.name LIKE ?
       OR Products.code LIKE ?
-      OR Customers.name LIKE ?
-      OR ${tableName}.comments LIKE ?
-      OR CAST(${tableName}.order_number AS TEXT) LIKE ?
+      OR Products.type LIKE ?
+      OR CAST(Products.source_id AS TEXT) LIKE ?
     )`);
-    const searchValue = `%${query.search}%`;
-    values.push(searchValue, searchValue, searchValue, searchValue, searchValue);
+    const productSearchValue = `%${query.product_search}%`;
+    values.push(productSearchValue, productSearchValue, productSearchValue, productSearchValue);
   }
 
   return {
