@@ -177,11 +177,53 @@ function migrateInventoryMovementsTable(callback) {
     'InventoryMovements',
     [
       { name: 'order_id', definition: 'order_id INTEGER' },
-      { name: 'customer_id', definition: 'customer_id INTEGER' }
+      { name: 'customer_id', definition: 'customer_id INTEGER' },
+      { name: 'transfer_status', definition: "transfer_status TEXT NOT NULL DEFAULT 'accepted'" },
+      { name: 'accepted_at', definition: 'accepted_at TEXT' }
     ],
     (error) => {
       if (error) return callback(error);
-      db.run('CREATE INDEX IF NOT EXISTS idx_inventory_movements_order_id ON InventoryMovements(order_id)', callback);
+      db.run('CREATE INDEX IF NOT EXISTS idx_inventory_movements_order_id ON InventoryMovements(order_id)', (indexError) => {
+        if (indexError) return callback(indexError);
+        db.run(
+          `
+            INSERT INTO InventoryMovements (
+              order_id,
+              product_id,
+              movement_type,
+              sender_id,
+              receiver_id,
+              quantity,
+              movement_date,
+              transfer_status,
+              accepted_at,
+              comments
+            )
+            SELECT
+              source.order_id,
+              source.product_id,
+              'transfer_received',
+              source.sender_id,
+              source.receiver_id,
+              source.quantity,
+              source.movement_date,
+              'accepted',
+              COALESCE(source.accepted_at, source.created_at, CURRENT_TIMESTAMP),
+              'Автоматическая приемка существующей передачи #' || source.id
+            FROM InventoryMovements AS source
+            WHERE source.movement_type = 'transfer'
+              AND COALESCE(source.transfer_status, 'accepted') = 'accepted'
+              AND source.receiver_id IS NOT NULL
+              AND NOT EXISTS (
+                SELECT 1
+                FROM InventoryMovements AS receipt
+                WHERE receipt.movement_type = 'transfer_received'
+                  AND receipt.comments = 'Автоматическая приемка существующей передачи #' || source.id
+              )
+          `,
+          callback
+        );
+      });
     }
   );
 }
@@ -229,6 +271,8 @@ function createAdditionalTables(callback) {
       external_party TEXT,
       quantity INTEGER NOT NULL,
       movement_date TEXT NOT NULL DEFAULT CURRENT_DATE,
+      transfer_status TEXT NOT NULL DEFAULT 'accepted',
+      accepted_at TEXT,
       comments TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (order_id) REFERENCES Orders(id),
@@ -253,6 +297,30 @@ function createAdditionalTables(callback) {
     'CREATE INDEX IF NOT EXISTS idx_inventory_movements_receiver_id ON InventoryMovements(receiver_id)',
     'CREATE INDEX IF NOT EXISTS idx_inventory_movements_customer_id ON InventoryMovements(customer_id)',
     'CREATE INDEX IF NOT EXISTS idx_inventory_movements_date ON InventoryMovements(movement_date)',
+    `CREATE VIEW IF NOT EXISTS ProductAccountingJournal AS
+      SELECT
+        id,
+        product_id,
+        CASE
+          WHEN movement_type IN ('produced', 'supplier_receipt', 'transfer_received') THEN quantity
+          WHEN movement_type = 'inventory' AND receiver_id IS NOT NULL AND sender_id IS NULL THEN quantity
+          ELSE -quantity
+        END AS amount,
+        CASE
+          WHEN movement_type IN ('produced', 'supplier_receipt', 'transfer_received') THEN receiver_id
+          WHEN movement_type = 'inventory' AND receiver_id IS NOT NULL AND sender_id IS NULL THEN receiver_id
+          ELSE sender_id
+        END AS account_id,
+        movement_date AS date,
+        movement_type AS status_id,
+        CASE
+          WHEN movement_type IN ('produced', 'supplier_receipt', 'transfer_received') THEN COALESCE(sender_id, customer_id)
+          WHEN movement_type = 'inventory' AND receiver_id IS NOT NULL AND sender_id IS NULL THEN COALESCE(sender_id, customer_id)
+          ELSE COALESCE(receiver_id, customer_id)
+        END AS source_destination_id,
+        comments,
+        COALESCE(order_id, 0) AS order_id
+      FROM InventoryMovements`,
     "INSERT OR IGNORE INTO Departments (name, is_active) VALUES ('ОМОК', 1)",
     "INSERT OR IGNORE INTO Departments (name, is_active) VALUES ('ОС и ФЛГ 1', 1)",
     "INSERT OR IGNORE INTO Departments (name, is_active) VALUES ('ОС и ФЛГ 2', 1)",

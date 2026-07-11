@@ -114,6 +114,7 @@ const movementCustomerSelect = document.getElementById('movementCustomerSelect')
 const cancelMovementButton = document.getElementById('cancelMovementButton');
 const stockBalancesTableBody = document.getElementById('stockBalancesTableBody');
 const movementHistoryTableBody = document.getElementById('movementHistoryTableBody');
+const pendingTransfersTableBody = document.getElementById('pendingTransfersTableBody');
 const departmentsTableBody = document.getElementById('departmentsTableBody');
 const newDepartmentDirectoryButton = document.getElementById('newDepartmentDirectoryButton');
 
@@ -923,6 +924,7 @@ function renderStockDetails(details) {
   if (!details) {
     stockBalancesTableBody.innerHTML = '<tr><td colspan="2">Выберите изделие.</td></tr>';
     movementHistoryTableBody.innerHTML = '<tr><td colspan="4">Выберите изделие.</td></tr>';
+    pendingTransfersTableBody.innerHTML = '<tr><td colspan="5">Выберите изделие.</td></tr>';
     return;
   }
 
@@ -941,24 +943,42 @@ function renderStockDetails(details) {
 
   if (!details.movements.length) {
     movementHistoryTableBody.innerHTML = '<tr><td colspan="4">Перемещений по изделию пока нет.</td></tr>';
+  } else {
+    movementHistoryTableBody.innerHTML = details.movements
+      .map((movement) => {
+        const route = [
+          movement.sender_name || movement.external_party || '—',
+          movement.receiver_label || '—'
+        ].join(' → ');
+        const pendingLabel = movement.transfer_status === 'pending' ? '<small>ожидает приемки</small>' : '';
+        return `
+          <tr>
+            <td>${escapeHtml(formatDate(movement.movement_date))}</td>
+            <td>${escapeHtml(movement.type_name)}${pendingLabel}</td>
+            <td>${escapeHtml(route)}</td>
+            <td>${movement.signed_amount ?? movement.quantity}</td>
+          </tr>
+        `;
+      })
+      .join('');
+  }
+
+  const pendingTransfers = details.pending_transfers || [];
+  if (!pendingTransfers.length) {
+    pendingTransfersTableBody.innerHTML = '<tr><td colspan="5">Ожидающих передач нет.</td></tr>';
     return;
   }
 
-  movementHistoryTableBody.innerHTML = details.movements
-    .map((movement) => {
-      const route = [
-        movement.sender_name || movement.external_party || '—',
-        movement.receiver_label || '—'
-      ].join(' → ');
-      return `
-        <tr>
-          <td>${escapeHtml(formatDate(movement.movement_date))}</td>
-          <td>${escapeHtml(movement.type_name)}</td>
-          <td>${escapeHtml(route)}</td>
-          <td>${movement.quantity}</td>
-        </tr>
-      `;
-    })
+  pendingTransfersTableBody.innerHTML = pendingTransfers
+    .map((movement) => `
+      <tr>
+        <td>${escapeHtml(formatDate(movement.movement_date))}</td>
+        <td>${escapeHtml(movement.sender_name || '—')}</td>
+        <td>${escapeHtml(movement.receiver_name || '—')}</td>
+        <td>${movement.quantity}</td>
+        <td><button class="secondary-button accept-transfer-button" type="button" data-transfer-id="${movement.id}">Принять</button></td>
+      </tr>
+    `)
     .join('');
 }
 
@@ -1275,6 +1295,7 @@ async function createOrderMovement(movementType) {
   if (movementType === 'transfer') {
     payload.sender_id = senderId;
     payload.receiver_id = transferReceiverId;
+    payload.pending_transfer = true;
   }
 
   if (movementType === 'defect') {
@@ -1594,6 +1615,19 @@ productsTableBody.addEventListener('click', (event) => {
 stockTableBody.addEventListener('click', (event) => {
   const row = event.target.closest('tr[data-stock-product-id]');
   if (row) selectStockProduct(row.dataset.stockProductId);
+});
+pendingTransfersTableBody.addEventListener('click', async (event) => {
+  const button = event.target.closest('.accept-transfer-button');
+  if (!button) return;
+
+  try {
+    await saveJson(`/api/inventory/transfers/${button.dataset.transferId}/accept`, 'POST', {});
+    await loadMetrics();
+    if (selectedStockProductId) await selectStockProduct(selectedStockProductId);
+    if (selectedOrderId) await selectOrder(selectedOrderId);
+  } catch (error) {
+    alert(error.message);
+  }
 });
 
 orderSearchInput.addEventListener('input', () => {

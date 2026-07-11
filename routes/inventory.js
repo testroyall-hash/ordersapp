@@ -19,21 +19,28 @@ const movementTypes = [
   },
   {
     id: 'transfer',
-    name: 'Передать в другой отдел',
+    name: 'В другой отдел',
     description: 'Передача продукции из отдела в отдел',
     senderRequired: true,
     receiverRequired: true
   },
   {
+    id: 'transfer_received',
+    name: 'Получено из другого отдела',
+    description: 'Подтверждение приемки продукции из другого отдела',
+    senderRequired: true,
+    receiverRequired: true
+  },
+  {
     id: 'defect',
-    name: 'Списать брак',
+    name: 'Забраковано',
     description: 'Учет забракованной продукции',
     senderRequired: true,
     receiverRequired: true
   },
   {
     id: 'ship',
-    name: 'Отгрузить заказчику',
+    name: 'Отгрузка',
     description: 'Отгрузка продукции заказчику или внутреннему получателю',
     senderRequired: true,
     receiverRequired: false
@@ -47,7 +54,7 @@ const movementTypes = [
   },
   {
     id: 'utilize',
-    name: 'Утилизировать',
+    name: 'Утилизация',
     description: 'Передача продукции на утилизацию',
     senderRequired: true,
     receiverRequired: false
@@ -109,8 +116,19 @@ function sendAsync(handler) {
 }
 
 function mapMovement(row) {
+  const isIncoming = ['produced', 'supplier_receipt', 'inventory', 'transfer_received'].includes(row.movement_type);
+  const accountId = isIncoming ? row.receiver_id : row.sender_id;
+  const sourceDestinationId = isIncoming
+    ? row.sender_id || row.customer_id || null
+    : row.receiver_id || row.customer_id || null;
+  const isPositive = ['produced', 'supplier_receipt', 'transfer_received'].includes(row.movement_type)
+    || (row.movement_type === 'inventory' && row.receiver_id && !row.sender_id);
+  const signedAmount = isPositive ? row.quantity : -row.quantity;
   return {
     ...row,
+    account_id: accountId,
+    source_destination_id: sourceDestinationId,
+    signed_amount: signedAmount,
     type_name: movementTypeById.get(row.movement_type)?.name || row.movement_type,
     receiver_label: row.receiver_name || row.customer_name || row.external_party || null
   };
@@ -121,10 +139,12 @@ const balanceCte = `
     SELECT product_id, receiver_id AS department_id, quantity AS delta
     FROM InventoryMovements
     WHERE receiver_id IS NOT NULL
+      AND movement_type != 'transfer'
     UNION ALL
     SELECT product_id, sender_id AS department_id, -quantity AS delta
     FROM InventoryMovements
     WHERE sender_id IS NOT NULL
+      AND movement_type != 'transfer_received'
   )
 `;
 
@@ -265,6 +285,28 @@ router.get(
       [productId]
     );
 
+    const pendingTransfers = await all(
+      db,
+      `
+        SELECT
+          InventoryMovements.*,
+          Products.name AS product_name,
+          sender.name AS sender_name,
+          receiver.name AS receiver_name,
+          Orders.order_number
+        FROM InventoryMovements
+        LEFT JOIN Products ON Products.id = InventoryMovements.product_id
+        LEFT JOIN Departments sender ON sender.id = InventoryMovements.sender_id
+        LEFT JOIN Departments receiver ON receiver.id = InventoryMovements.receiver_id
+        LEFT JOIN Orders ON Orders.id = InventoryMovements.order_id
+        WHERE InventoryMovements.product_id = ?
+          AND InventoryMovements.movement_type = 'transfer'
+          AND COALESCE(InventoryMovements.transfer_status, 'accepted') = 'pending'
+        ORDER BY InventoryMovements.movement_date DESC, InventoryMovements.id DESC
+      `,
+      [productId]
+    );
+
     const metricAvailable = product.produced_qty - product.defect_qty - product.shipped_qty - product.utilized_qty;
     const movementQty = balances.reduce((sum, row) => sum + row.quantity, 0);
 
@@ -276,7 +318,8 @@ router.get(
         available_qty: movementQty || metricAvailable
       },
       balances,
-      movements: movements.map(mapMovement)
+      movements: movements.map(mapMovement),
+      pending_transfers: pendingTransfers.map(mapMovement)
     });
   })
 );
@@ -296,6 +339,7 @@ router.post(
     const movementDate = normalizeText(req.body.movement_date) || new Date().toISOString().slice(0, 10);
     const externalParty = normalizeText(req.body.external_party);
     const comments = normalizeText(req.body.comments);
+    const transferStatus = movementType === 'transfer' && req.body.pending_transfer !== false ? 'pending' : 'accepted';
 
     if (!productId) {
       res.status(400).json({ error: 'Выберите изделие' });
@@ -372,14 +416,134 @@ router.post(
           external_party,
           quantity,
           movement_date,
+          transfer_status,
           comments
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      [orderId, productId, movementType, senderId, receiverId, customerId, externalParty, quantity, movementDate, comments]
+      [orderId, productId, movementType, senderId, receiverId, customerId, externalParty, quantity, movementDate, transferStatus, comments]
     );
 
     res.status(201).json({ id: result.lastID });
+  })
+);
+
+router.get(
+  '/transfers/pending',
+  sendAsync(async (req, res) => {
+    const db = req.app.locals.db;
+    const productId = toInteger(req.query.product_id, null);
+    const receiverId = toInteger(req.query.receiver_id, null);
+    const clauses = [
+      "InventoryMovements.movement_type = 'transfer'",
+      "COALESCE(InventoryMovements.transfer_status, 'accepted') = 'pending'"
+    ];
+    const params = [];
+
+    if (productId) {
+      clauses.push('InventoryMovements.product_id = ?');
+      params.push(productId);
+    }
+
+    if (receiverId) {
+      clauses.push('InventoryMovements.receiver_id = ?');
+      params.push(receiverId);
+    }
+
+    const rows = await all(
+      db,
+      `
+        SELECT
+          InventoryMovements.*,
+          Products.name AS product_name,
+          sender.name AS sender_name,
+          receiver.name AS receiver_name,
+          Orders.order_number
+        FROM InventoryMovements
+        LEFT JOIN Products ON Products.id = InventoryMovements.product_id
+        LEFT JOIN Departments sender ON sender.id = InventoryMovements.sender_id
+        LEFT JOIN Departments receiver ON receiver.id = InventoryMovements.receiver_id
+        LEFT JOIN Orders ON Orders.id = InventoryMovements.order_id
+        WHERE ${clauses.join(' AND ')}
+        ORDER BY InventoryMovements.movement_date DESC, InventoryMovements.id DESC
+      `,
+      params
+    );
+
+    res.json(rows.map(mapMovement));
+  })
+);
+
+router.post(
+  '/transfers/:id/accept',
+  sendAsync(async (req, res) => {
+    const db = req.app.locals.db;
+    const transferId = toInteger(req.params.id, null);
+
+    if (!transferId) {
+      res.status(400).json({ error: 'Некорректный идентификатор передачи' });
+      return;
+    }
+
+    const transfer = await get(
+      db,
+      `
+        SELECT *
+        FROM InventoryMovements
+        WHERE id = ?
+          AND movement_type = 'transfer'
+          AND COALESCE(transfer_status, 'accepted') = 'pending'
+      `,
+      [transferId]
+    );
+
+    if (!transfer) {
+      res.status(404).json({ error: 'Ожидающая передача не найдена' });
+      return;
+    }
+
+    await run(db, 'BEGIN TRANSACTION');
+    try {
+      const acceptedAt = new Date().toISOString();
+      await run(
+        db,
+        'UPDATE InventoryMovements SET transfer_status = ?, accepted_at = ? WHERE id = ?',
+        ['accepted', acceptedAt, transferId]
+      );
+      const result = await run(
+        db,
+        `
+          INSERT INTO InventoryMovements (
+            order_id,
+            product_id,
+            movement_type,
+            sender_id,
+            receiver_id,
+            quantity,
+            movement_date,
+            transfer_status,
+            accepted_at,
+            comments
+          )
+          VALUES (?, ?, 'transfer_received', ?, ?, ?, ?, 'accepted', ?, ?)
+        `,
+        [
+          transfer.order_id,
+          transfer.product_id,
+          transfer.sender_id,
+          transfer.receiver_id,
+          transfer.quantity,
+          new Date().toISOString().slice(0, 10),
+          acceptedAt,
+          `Приемка по передаче #${transfer.id}`
+        ]
+      );
+      await run(db, 'COMMIT');
+      res.json({ id: result.lastID, transfer_id: transferId });
+    } catch (error) {
+      await run(db, 'ROLLBACK').catch(() => {});
+      throw error;
+    }
   })
 );
 
