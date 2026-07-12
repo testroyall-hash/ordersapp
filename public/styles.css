@@ -565,6 +565,7 @@ h2 {
 }
 
 .product-tree-reset,
+.product-tree-group-title,
 .product-tree-item {
   width: 100%;
   border: 0;
@@ -585,14 +586,46 @@ h2 {
 }
 
 .product-tree-group-title {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
   position: sticky;
   top: -10px;
   border-bottom: 1px solid var(--line);
+  border-radius: 12px 12px 0 0;
   padding: 9px 10px;
   color: var(--steel);
   background: #fff;
   font-size: 13px;
   font-weight: 900;
+}
+
+.product-tree-group-title:hover {
+  background: var(--steel-soft);
+  transform: none;
+}
+
+.product-tree-group-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-tree-group-title small {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 7px;
+  color: var(--muted);
+  background: #fff;
+  font-size: 11px;
+}
+
+.product-tree-caret {
+  width: 16px;
+  color: var(--accent-dark);
+  font-size: 14px;
+  line-height: 1;
 }
 
 .product-tree-items {
@@ -615,6 +648,11 @@ h2 {
 .product-tree-reset:hover {
   background: var(--steel-soft);
   transform: none;
+}
+
+.product-tree-item.active {
+  background: rgba(200, 111, 47, 0.12);
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .product-tree-item span {

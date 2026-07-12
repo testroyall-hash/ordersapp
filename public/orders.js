@@ -138,6 +138,7 @@ let customerSearchQuery = '';
 let productSearchQuery = '';
 let stockSearchQuery = '';
 let orderSearchTimer = null;
+const expandedProductGroups = new Set();
 let orderFilters = {
   search: '',
   customerSearch: '',
@@ -472,6 +473,7 @@ function renderOrderProductPicker() {
   if (!orderProductPicker) return;
 
   const query = orderProductSearchInput.value;
+  const hasSearch = Boolean(query.trim());
   const groups = buildProductTreeItems(query);
   const resetButton = `
     <button class="product-tree-reset" type="button" data-product-reset>
@@ -488,12 +490,16 @@ function renderOrderProductPicker() {
     ${resetButton}
     ${groups.map(({ groupName, items }) => `
       <div class="product-tree-group">
-        <div class="product-tree-group-title">${escapeHtml(groupName)}</div>
-        <div class="product-tree-items">
+        <button class="product-tree-group-title" type="button" data-product-group="${escapeHtml(groupName)}" aria-expanded="${hasSearch || expandedProductGroups.has(groupName) ? 'true' : 'false'}">
+          <span class="product-tree-caret">${hasSearch || expandedProductGroups.has(groupName) ? '▾' : '▸'}</span>
+          <span>${escapeHtml(groupName)}</span>
+          <small>${items.length}</small>
+        </button>
+        <div class="product-tree-items ${hasSearch || expandedProductGroups.has(groupName) ? '' : 'hidden'}">
           ${items.map((product) => {
             const meta = product.source_id !== null && product.source_id !== undefined ? `ID ${product.source_id}` : product.code;
             return `
-              <button class="product-tree-item" type="button" data-product-id="${product.id}" data-product-name="${escapeHtml(product.name)}">
+              <button class="product-tree-item ${String(orderFilters.productId) === String(product.id) ? 'active' : ''}" type="button" data-product-id="${product.id}" data-product-name="${escapeHtml(product.name)}">
                 <span>${escapeHtml(product.name)}</span>
                 ${meta ? `<small>${escapeHtml(meta)}</small>` : ''}
               </button>
@@ -506,6 +512,10 @@ function renderOrderProductPicker() {
 }
 
 function openOrderProductPicker() {
+  if (orderFilters.productId) {
+    const selectedProduct = products.find((product) => String(product.id) === String(orderFilters.productId));
+    if (selectedProduct) expandedProductGroups.add(getProductGroup(selectedProduct));
+  }
   renderOrderProductPicker();
   orderProductPicker.classList.remove('hidden');
 }
@@ -1653,6 +1663,7 @@ orderProductSearchInput.addEventListener('input', () => {
 });
 orderProductPicker.addEventListener('click', (event) => {
   const resetButton = event.target.closest('[data-product-reset]');
+  const groupButton = event.target.closest('[data-product-group]');
   const productButton = event.target.closest('[data-product-id]');
 
   if (resetButton) {
@@ -1663,6 +1674,17 @@ orderProductPicker.addEventListener('click', (event) => {
     ordersPager.page = 1;
     closeOrderProductPicker();
     loadOrders(1).catch((error) => alert(error.message));
+    return;
+  }
+
+  if (groupButton) {
+    const groupName = groupButton.dataset.productGroup;
+    if (expandedProductGroups.has(groupName)) {
+      expandedProductGroups.delete(groupName);
+    } else {
+      expandedProductGroups.add(groupName);
+    }
+    renderOrderProductPicker();
     return;
   }
 
