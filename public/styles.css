@@ -637,6 +637,10 @@ h2 {
   margin-left: 10px;
 }
 
+.product-tree-items.hidden {
+  display: none;
+}
+
 .product-tree-item {
   display: grid;
   gap: 2px;
