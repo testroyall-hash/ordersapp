@@ -42,8 +42,8 @@ const orderDateToInput = document.getElementById('orderDateToInput');
 const orderCustomerFilter = document.getElementById('orderCustomerFilter');
 const orderProductFilter = document.getElementById('orderProductFilter');
 const orderProductSearchInput = document.getElementById('orderProductSearchInput');
-const orderProductPicker = document.getElementById('orderProductPicker');
 const orderExecutorSearchInput = document.getElementById('orderExecutorSearchInput');
+const productTreeContainers = [...document.querySelectorAll('[data-product-tree]')];
 const orderSortSelect = document.getElementById('orderSortSelect');
 const orderStatusFilterList = document.getElementById('orderStatusFilterList');
 const clearOrderFiltersButton = document.getElementById('clearOrderFiltersButton');
@@ -138,7 +138,15 @@ let customerSearchQuery = '';
 let productSearchQuery = '';
 let stockSearchQuery = '';
 let orderSearchTimer = null;
-const expandedProductGroups = new Set();
+let planSearchTimer = null;
+const productTreeWidgets = productTreeContainers.map((container) => ({
+  container,
+  mode: container.dataset.productTreeMode || 'form',
+  searchInput: container.querySelector('[data-product-tree-search]'),
+  valueInput: container.querySelector('[data-product-tree-value]'),
+  panel: container.querySelector('[data-product-tree-panel]'),
+  expandedGroups: new Set()
+}));
 let orderFilters = {
   search: '',
   customerSearch: '',
@@ -152,6 +160,7 @@ let orderFilters = {
   sortBy: 'date_asc'
 };
 let planFilters = {
+  productSearch: '',
   dateFrom: '',
   dateTo: '',
   customerId: '',
@@ -316,6 +325,7 @@ function resetCreateForm() {
   orderForm.elements.amount.value = 1;
   orderForm.elements.done_qty.value = 0;
   setDefaultSelects(orderForm);
+  syncProductTreeDisplays();
 }
 
 function resetCustomerForm() {
@@ -469,37 +479,37 @@ function buildProductTreeItems(query = '') {
     }));
 }
 
-function renderOrderProductPicker() {
-  if (!orderProductPicker) return;
+function renderProductTree(widget) {
+  if (!widget?.panel) return;
 
-  const query = orderProductSearchInput.value;
+  const query = widget.searchInput.value;
   const hasSearch = Boolean(query.trim());
   const groups = buildProductTreeItems(query);
   const resetButton = `
     <button class="product-tree-reset" type="button" data-product-reset>
-      Все изделия
+      ${widget.mode === 'form' ? 'Не выбирать изделие' : 'Все изделия'}
     </button>
   `;
 
   if (!groups.length) {
-    orderProductPicker.innerHTML = `${resetButton}<div class="product-tree-empty">Изделия не найдены</div>`;
+    widget.panel.innerHTML = `${resetButton}<div class="product-tree-empty">Изделия не найдены</div>`;
     return;
   }
 
-  orderProductPicker.innerHTML = `
+  widget.panel.innerHTML = `
     ${resetButton}
     ${groups.map(({ groupName, items }) => `
       <div class="product-tree-group">
-        <button class="product-tree-group-title" type="button" data-product-group="${escapeHtml(groupName)}" aria-expanded="${hasSearch || expandedProductGroups.has(groupName) ? 'true' : 'false'}">
-          <span class="product-tree-caret">${hasSearch || expandedProductGroups.has(groupName) ? '▾' : '▸'}</span>
+        <button class="product-tree-group-title" type="button" data-product-group="${escapeHtml(groupName)}" aria-expanded="${hasSearch || widget.expandedGroups.has(groupName) ? 'true' : 'false'}">
+          <span class="product-tree-caret">${hasSearch || widget.expandedGroups.has(groupName) ? '▾' : '▸'}</span>
           <span>${escapeHtml(groupName)}</span>
           <small>${items.length}</small>
         </button>
-        <div class="product-tree-items ${hasSearch || expandedProductGroups.has(groupName) ? '' : 'hidden'}">
+        <div class="product-tree-items ${hasSearch || widget.expandedGroups.has(groupName) ? '' : 'hidden'}">
           ${items.map((product) => {
             const meta = product.source_id !== null && product.source_id !== undefined ? `ID ${product.source_id}` : product.code;
             return `
-              <button class="product-tree-item ${String(orderFilters.productId) === String(product.id) ? 'active' : ''}" type="button" data-product-id="${product.id}" data-product-name="${escapeHtml(product.name)}">
+              <button class="product-tree-item ${String(widget.valueInput.value) === String(product.id) ? 'active' : ''}" type="button" data-product-id="${product.id}" data-product-name="${escapeHtml(product.name)}">
                 <span>${escapeHtml(product.name)}</span>
                 ${meta ? `<small>${escapeHtml(meta)}</small>` : ''}
               </button>
@@ -511,17 +521,84 @@ function renderOrderProductPicker() {
   `;
 }
 
-function openOrderProductPicker() {
-  if (orderFilters.productId) {
-    const selectedProduct = products.find((product) => String(product.id) === String(orderFilters.productId));
-    if (selectedProduct) expandedProductGroups.add(getProductGroup(selectedProduct));
-  }
-  renderOrderProductPicker();
-  orderProductPicker.classList.remove('hidden');
+function positionProductTreePanel(widget) {
+  const margin = 16;
+  const rect = widget.container.getBoundingClientRect();
+  const width = Math.min(880, Math.max(280, window.innerWidth - margin * 2));
+  const left = Math.min(
+    Math.max(rect.left, margin),
+    Math.max(margin, window.innerWidth - width - margin)
+  );
+  const top = Math.min(rect.bottom + 8, Math.max(margin, window.innerHeight - 160));
+  const maxHeight = Math.max(240, Math.min(440, window.innerHeight - top - margin));
+
+  Object.assign(widget.panel.style, {
+    position: 'fixed',
+    left: `${left}px`,
+    top: `${top}px`,
+    width: `${width}px`,
+    maxHeight: `${maxHeight}px`
+  });
 }
 
-function closeOrderProductPicker() {
-  orderProductPicker.classList.add('hidden');
+function openProductTree(widget) {
+  if (widget.valueInput.value) {
+    const selectedProduct = products.find((product) => String(product.id) === String(widget.valueInput.value));
+    if (selectedProduct) widget.expandedGroups.add(getProductGroup(selectedProduct));
+  }
+  renderProductTree(widget);
+  positionProductTreePanel(widget);
+  widget.panel.classList.remove('hidden');
+}
+
+function closeProductTree(widget) {
+  widget.panel.classList.add('hidden');
+}
+
+function closeAllProductTrees(exceptWidget = null) {
+  productTreeWidgets.forEach((widget) => {
+    if (widget !== exceptWidget) closeProductTree(widget);
+  });
+}
+
+function getProductTreeByMode(mode) {
+  return productTreeWidgets.find((widget) => widget.mode === mode);
+}
+
+function syncProductTreeDisplay(widget) {
+  const selectedProduct = products.find((product) => String(product.id) === String(widget.valueInput.value));
+  if (selectedProduct) {
+    widget.searchInput.value = selectedProduct.name;
+  } else if (widget.mode === 'order-filter') {
+    widget.searchInput.value = orderFilters.productSearch || '';
+  } else if (widget.mode === 'plan-filter') {
+    widget.searchInput.value = planFilters.productSearch || '';
+  } else {
+    widget.searchInput.value = '';
+  }
+  renderProductTree(widget);
+}
+
+function syncProductTreeDisplays() {
+  productTreeWidgets.forEach(syncProductTreeDisplay);
+}
+
+function handleProductTreeValueChange(widget) {
+  if (widget.mode === 'order-filter') {
+    orderFilters.productId = widget.valueInput.value;
+    orderFilters.productSearch = '';
+    ordersPager.page = 1;
+    loadOrders(1).catch((error) => alert(error.message));
+    return;
+  }
+
+  if (widget.mode === 'plan-filter') {
+    planFilters.productId = widget.valueInput.value;
+    planFilters.productSearch = '';
+    planPager.page = 1;
+    clearPlanSelection();
+    loadPlanOrders(1).catch((error) => alert(error.message));
+  }
 }
 
 function fillSelects() {
@@ -535,7 +612,6 @@ function fillSelects() {
     '<option value="">Выберите заказчика</option>',
     ...customers.map((customer) => `<option value="${customer.id}">${escapeHtml(customer.name)}</option>`)
   ].join('');
-  const productOptions = buildProductOptions('Выберите изделие');
   const departmentOptions = [
     '<option value="">Не выбран</option>',
     ...departments.map((department) => `<option value="${department.id}">${escapeHtml(department.name)}</option>`)
@@ -550,9 +626,6 @@ function fillSelects() {
   document.querySelectorAll('[data-customers-select]').forEach((select) => {
     select.innerHTML = customerOptions;
   });
-  document.querySelectorAll('[data-products-select]').forEach((select) => {
-    select.innerHTML = productOptions;
-  });
   document.querySelectorAll('[data-departments-select]').forEach((select) => {
     select.innerHTML = departmentOptions;
   });
@@ -564,15 +637,13 @@ function fillSelects() {
     movementCustomerSelect.innerHTML = customerOptions;
   }
 
-  const filterProductOptions = buildProductOptions('Все изделия');
   planCustomerFilter.innerHTML = ['<option value="">Все заказчики</option>', ...customers.map((customer) => `<option value="${customer.id}">${escapeHtml(customer.name)}</option>`)].join('');
-  planProductFilter.innerHTML = filterProductOptions;
 
   orderCustomerFilter.value = orderFilters.customerSearch;
   orderProductFilter.value = orderFilters.productId;
-  renderOrderProductPicker();
   planCustomerFilter.value = planFilters.customerId;
   planProductFilter.value = planFilters.productId;
+  syncProductTreeDisplays();
 }
 
 function fillMovementSelects() {
@@ -1469,6 +1540,7 @@ function syncPlanFiltersFromOrders() {
   planCustomerFilter.value = planFilters.customerId;
   planProductFilter.value = planFilters.productId;
   planSortSelect.value = planFilters.sortBy;
+  syncProductTreeDisplays();
   fillStatusFilters();
   loadPlanOrders(1).catch((error) => alert(error.message));
 }
@@ -1648,60 +1720,71 @@ orderSearchInput.addEventListener('input', () => {
     loadOrders(1).catch((error) => alert(error.message));
   }, 250);
 });
-orderProductSearchInput.addEventListener('focus', openOrderProductPicker);
-orderProductSearchInput.addEventListener('input', () => {
-  orderFilters.productId = '';
-  orderFilters.productSearch = orderProductSearchInput.value.trim();
-  orderProductFilter.value = '';
-  ordersPager.page = 1;
-  renderOrderProductPicker();
-  openOrderProductPicker();
-  clearTimeout(orderSearchTimer);
-  orderSearchTimer = window.setTimeout(() => {
-    loadOrders(1).catch((error) => alert(error.message));
-  }, 250);
-});
-orderProductPicker.addEventListener('click', (event) => {
-  const resetButton = event.target.closest('[data-product-reset]');
-  const groupButton = event.target.closest('[data-product-group]');
-  const productButton = event.target.closest('[data-product-id]');
+productTreeWidgets.forEach((widget) => {
+  widget.container.addEventListener('click', (event) => event.stopPropagation());
+  widget.searchInput.addEventListener('focus', () => {
+    closeAllProductTrees(widget);
+    openProductTree(widget);
+  });
+  widget.searchInput.addEventListener('input', () => {
+    widget.valueInput.value = '';
+    renderProductTree(widget);
+    openProductTree(widget);
 
-  if (resetButton) {
-    orderFilters.productId = '';
-    orderFilters.productSearch = '';
-    orderProductFilter.value = '';
-    orderProductSearchInput.value = '';
-    ordersPager.page = 1;
-    closeOrderProductPicker();
-    loadOrders(1).catch((error) => alert(error.message));
-    return;
-  }
-
-  if (groupButton) {
-    const groupName = groupButton.dataset.productGroup;
-    if (expandedProductGroups.has(groupName)) {
-      expandedProductGroups.delete(groupName);
-    } else {
-      expandedProductGroups.add(groupName);
+    if (widget.mode === 'order-filter') {
+      orderFilters.productId = '';
+      orderFilters.productSearch = widget.searchInput.value.trim();
+      ordersPager.page = 1;
+      clearTimeout(orderSearchTimer);
+      orderSearchTimer = window.setTimeout(() => {
+        loadOrders(1).catch((error) => alert(error.message));
+      }, 250);
+    } else if (widget.mode === 'plan-filter') {
+      planFilters.productId = '';
+      planFilters.productSearch = widget.searchInput.value.trim();
+      planPager.page = 1;
+      clearPlanSelection();
+      clearTimeout(planSearchTimer);
+      planSearchTimer = window.setTimeout(() => {
+        loadPlanOrders(1).catch((error) => alert(error.message));
+      }, 250);
     }
-    renderOrderProductPicker();
-    return;
-  }
+  });
+  widget.panel.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const resetButton = event.target.closest('[data-product-reset]');
+    const groupButton = event.target.closest('[data-product-group]');
+    const productButton = event.target.closest('[data-product-id]');
 
-  if (!productButton) return;
-  orderFilters.productId = productButton.dataset.productId;
-  orderFilters.productSearch = '';
-  orderProductFilter.value = productButton.dataset.productId;
-  orderProductSearchInput.value = productButton.dataset.productName;
-  ordersPager.page = 1;
-  closeOrderProductPicker();
-  loadOrders(1).catch((error) => alert(error.message));
+    if (resetButton) {
+      widget.valueInput.value = '';
+      widget.searchInput.value = '';
+      closeProductTree(widget);
+      renderProductTree(widget);
+      handleProductTreeValueChange(widget);
+      return;
+    }
+
+    if (groupButton) {
+      const groupName = groupButton.dataset.productGroup;
+      if (widget.expandedGroups.has(groupName)) {
+        widget.expandedGroups.delete(groupName);
+      } else {
+        widget.expandedGroups.add(groupName);
+      }
+      renderProductTree(widget);
+      return;
+    }
+
+    if (!productButton) return;
+    widget.valueInput.value = productButton.dataset.productId;
+    widget.searchInput.value = productButton.dataset.productName;
+    closeProductTree(widget);
+    renderProductTree(widget);
+    handleProductTreeValueChange(widget);
+  });
 });
-document.addEventListener('click', (event) => {
-  if (!event.target.closest('#orderProductTreeFilter')) {
-    closeOrderProductPicker();
-  }
-});
+document.addEventListener('click', () => closeAllProductTrees());
 orderDateFromInput.addEventListener('change', () => {
   orderFilters.dateFrom = orderDateFromInput.value;
   ordersPager.page = 1;
@@ -1729,11 +1812,6 @@ orderExecutorSearchInput.addEventListener('input', () => {
     loadOrders(1).catch((error) => alert(error.message));
   }, 250);
 });
-orderProductFilter.addEventListener('change', () => {
-  orderFilters.productId = orderProductFilter.value;
-  ordersPager.page = 1;
-  loadOrders(1).catch((error) => alert(error.message));
-});
 orderSortSelect.addEventListener('change', () => {
   orderFilters.sortBy = orderSortSelect.value;
   ordersPager.page = 1;
@@ -1750,6 +1828,7 @@ clearOrderFiltersButton.addEventListener('click', () => {
   orderCustomerFilter.value = '';
   orderProductFilter.value = '';
   orderSortSelect.value = orderFilters.sortBy;
+  syncProductTreeDisplays();
   fillStatusFilters();
   loadOrders(1).catch((error) => alert(error.message));
 });
@@ -1768,12 +1847,6 @@ planDateToInput.addEventListener('change', () => {
 });
 planCustomerFilter.addEventListener('change', () => {
   planFilters.customerId = planCustomerFilter.value;
-  planPager.page = 1;
-  clearPlanSelection();
-  loadPlanOrders(1).catch((error) => alert(error.message));
-});
-planProductFilter.addEventListener('change', () => {
-  planFilters.productId = planProductFilter.value;
   planPager.page = 1;
   clearPlanSelection();
   loadPlanOrders(1).catch((error) => alert(error.message));

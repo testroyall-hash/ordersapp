@@ -113,7 +113,11 @@
             <form id="orderForm" class="form">
               <label>
                 <span>Изделие из справочника</span>
-                <select name="product_id" data-products-select></select>
+                <div class="product-tree-filter product-tree-filter-wide" data-product-tree data-product-tree-mode="form">
+                  <input data-product-tree-search type="search" placeholder="Выберите изделие">
+                  <input name="product_id" data-product-tree-value type="hidden">
+                  <div data-product-tree-panel class="product-tree-panel hidden"></div>
+                </div>
               </label>
               <label>
                 <span>Или ввести изделие вручную</span>
@@ -190,10 +194,10 @@
                   </label>
                   <label class="compact-field">
                     <span>Изделие</span>
-                    <div class="product-tree-filter" id="orderProductTreeFilter">
-                      <input id="orderProductSearchInput" type="search" placeholder="Все изделия">
-                      <input id="orderProductFilter" type="hidden">
-                      <div id="orderProductPicker" class="product-tree-panel hidden"></div>
+                    <div class="product-tree-filter product-tree-filter-wide" id="orderProductTreeFilter" data-product-tree data-product-tree-mode="order-filter">
+                      <input id="orderProductSearchInput" data-product-tree-search type="search" placeholder="Все изделия">
+                      <input id="orderProductFilter" data-product-tree-value type="hidden">
+                      <div id="orderProductPicker" data-product-tree-panel class="product-tree-panel hidden"></div>
                     </div>
                   </label>
                   <label class="compact-field">
@@ -433,9 +437,11 @@
                 </label>
                 <label class="compact-field">
                   <span>Изделие</span>
-                  <select id="planProductFilter">
-                    <option value="">Все изделия</option>
-                  </select>
+                  <div class="product-tree-filter product-tree-filter-wide" data-product-tree data-product-tree-mode="plan-filter">
+                    <input data-product-tree-search type="search" placeholder="Все изделия">
+                    <input id="planProductFilter" data-product-tree-value type="hidden">
+                    <div data-product-tree-panel class="product-tree-panel hidden"></div>
+                  </div>
                 </label>
                 <label class="compact-field">
                   <span>Сортировка</span>
