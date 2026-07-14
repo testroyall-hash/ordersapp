@@ -1282,37 +1282,42 @@ function renderOrderExecution(details, order = null) {
     if (movement.order_id) return Number(movement.order_id) === Number(order?.id);
     return false;
   });
+  const operationLabels = {
+    produced: 'Изготовлено',
+    defect: 'Забраковано',
+    ship: 'Отгружено',
+    transfer: 'Передано'
+  };
   const byType = {
     produced: orderMovements.filter((movement) => movement.movement_type === 'produced'),
     defect: orderMovements.filter((movement) => movement.movement_type === 'defect'),
-    ship: orderMovements.filter((movement) => movement.movement_type === 'ship')
+    ship: orderMovements.filter((movement) => movement.movement_type === 'ship'),
+    transfer: orderMovements.filter((movement) => movement.movement_type === 'transfer')
   };
-  const maxRows = Math.max(byType.produced.length, byType.defect.length, byType.ship.length);
 
-  if (!maxRows) {
+  if (!orderMovements.length) {
     detailExecutionTableBody.innerHTML = '<tr><td colspan="6">Операций по заказу пока нет.</td></tr>';
   } else {
-    detailExecutionTableBody.innerHTML = Array.from({ length: maxRows }, (_, index) => {
-      const produced = byType.produced[index];
-      const defect = byType.defect[index];
-      const ship = byType.ship[index];
-      return `
+    detailExecutionTableBody.innerHTML = [...orderMovements]
+      .sort((left, right) => String(left.movement_date).localeCompare(String(right.movement_date)) || Number(left.id) - Number(right.id))
+      .map((movement) => `
         <tr>
-          <td>${produced ? produced.quantity : ''}</td>
-          <td>${produced ? escapeHtml(formatDate(produced.movement_date)) : ''}</td>
-          <td>${defect ? defect.quantity : ''}</td>
-          <td>${defect ? escapeHtml(formatDate(defect.movement_date)) : ''}</td>
-          <td>${ship ? ship.quantity : ''}</td>
-          <td>${ship ? escapeHtml(formatDate(ship.movement_date)) : ''}</td>
+          <td>${movement.movement_type === 'produced' ? movement.quantity : ''}</td>
+          <td>${movement.movement_type === 'produced' ? escapeHtml(formatDate(movement.movement_date)) : ''}</td>
+          <td>${movement.movement_type === 'defect' ? movement.quantity : ''}</td>
+          <td>${movement.movement_type === 'defect' ? escapeHtml(formatDate(movement.movement_date)) : ''}</td>
+          <td>${movement.movement_type === 'ship' ? movement.quantity : movement.movement_type === 'transfer' ? escapeHtml(`${movement.quantity} (${operationLabels.transfer})`) : ''}</td>
+          <td>${movement.movement_type === 'ship' || movement.movement_type === 'transfer' ? escapeHtml(formatDate(movement.movement_date)) : ''}</td>
         </tr>
-      `;
-    }).join('');
+      `)
+      .join('');
   }
 
   const sumByType = (type) => byType[type].reduce((sum, movement) => sum + toNumber(movement.quantity), 0);
   const producedTotal = sumByType('produced');
   const defectTotal = sumByType('defect');
   const shippedTotal = sumByType('ship');
+  const transferredTotal = sumByType('transfer');
   const executorBalance = (details?.balances || []).find((balance) => Number(balance.department_id) === Number(order?.department_id));
   const executorAvailable = toNumber(executorBalance?.quantity);
 
@@ -1323,6 +1328,7 @@ function renderOrderExecution(details, order = null) {
     <div><strong>${executorAvailable}</strong><small>доступно у исполнителя</small></div>
     <div><strong>${order ? getRemainingQty(order) : 0}</strong><small>осталось выполнить</small></div>
     <div><strong>${toNumber(order?.amount)}</strong><small>количество по заказу</small></div>
+    <div><strong>${transferredTotal}</strong><small>всего передано</small></div>
   `;
 }
 
@@ -1348,6 +1354,21 @@ function findDepartmentIdByName(pattern) {
   return departments.find((department) => String(department.name || '').toLowerCase().includes(normalizedPattern))?.id || null;
 }
 
+function getDetailsFormOrderSnapshot() {
+  return {
+    id: selectedOrderId,
+    product_id: detailsForm.elements.product_id.value,
+    amount: toNumber(detailsForm.elements.amount.value),
+    done_qty: toNumber(detailsForm.elements.done_qty.value),
+    department_id: detailsForm.elements.department_id.value
+  };
+}
+
+function getExecutorAvailable(details, order) {
+  const executorBalance = (details?.balances || []).find((balance) => Number(balance.department_id) === Number(order?.department_id));
+  return toNumber(executorBalance?.quantity);
+}
+
 async function createOrderMovement(movementType) {
   if (!selectedOrderId) return;
 
@@ -1370,6 +1391,35 @@ async function createOrderMovement(movementType) {
   const senderId = toNumber(detailsForm.elements.department_id.value, null);
   const transferReceiverId = toNumber(detailTransferDepartmentSelect.value, null);
   const defectReceiverId = findDepartmentIdByName('изолятор') || findDepartmentIdByName('брак');
+  const orderSnapshot = getDetailsFormOrderSnapshot();
+  const stockDetails = movementType === 'produced' ? null : await loadOrderStockDetails(orderSnapshot);
+  const executorAvailable = movementType === 'produced' ? 0 : getExecutorAvailable(stockDetails, orderSnapshot);
+
+  if (movementType === 'produced') {
+    const remaining = Math.max(0, toNumber(detailsForm.elements.amount.value) - toNumber(detailsForm.elements.done_qty.value));
+    if (remaining <= 0) {
+      alert('По заказу уже изготовлено нужное количество');
+      return;
+    }
+
+    if (quantity > remaining) {
+      alert(`Нельзя изготовить больше остатка по заказу. Осталось: ${remaining}`);
+      return;
+    }
+  }
+
+  if (['defect', 'ship', 'transfer'].includes(movementType)) {
+    if (executorAvailable <= 0) {
+      alert('У исполнителя нет доступного изготовленного остатка для этой операции');
+      return;
+    }
+
+    if (quantity > executorAvailable) {
+      alert(`Нельзя провести операцию больше доступного остатка. Доступно: ${executorAvailable}`);
+      return;
+    }
+  }
+
   const payload = {
     order_id: selectedOrderId,
     product_id: productId,
@@ -1416,6 +1466,11 @@ async function createOrderMovement(movementType) {
 
   if (movementType === 'transfer' && !payload.receiver_id) {
     alert('Выберите отдел, куда передать доступный остаток');
+    return;
+  }
+
+  if (movementType === 'transfer' && Number(payload.sender_id) === Number(payload.receiver_id)) {
+    alert('Нельзя передать изделие в тот же отдел');
     return;
   }
 
@@ -1467,7 +1522,7 @@ async function selectOrder(orderId) {
   setFormValue(detailsForm, 'status_id', order.status_id);
   setFormValue(detailsForm, 'type_id', order.type_id);
   detailMovementQuantity.value = String(Math.max(1, getRemainingQty(order) || 1));
-  activateDetailTab('execution');
+  activateDetailTab('dates');
   loadOrderStockDetails(order).catch(() => renderOrderExecution(null, order));
   setSaveState('Без изменений');
 }

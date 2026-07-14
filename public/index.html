@@ -171,7 +171,7 @@
                 <div class="filters-grid filters-grid-wide">
                   <label class="compact-field">
                     <span>Номер заказа</span>
-                    <input id="orderSearchInput" type="search" inputmode="numeric" placeholder="Например: 125">
+                    <input id="orderSearchInput" type="search" inputmode="numeric" placeholder="#">
                   </label>
                   <label class="compact-field">
                     <span>Изделие</span>
@@ -272,58 +272,14 @@
               <input id="detailOrderNumber" type="hidden">
 
               <div class="detail-tabs" role="tablist" aria-label="Разделы карточки заказа">
-                <button class="detail-tab-button active" type="button" data-detail-tab="execution">Ход исполнения</button>
-                <button class="detail-tab-button" type="button" data-detail-tab="dates">Сроки</button>
+                <button class="detail-tab-button active" type="button" data-detail-tab="dates">Сроки</button>
                 <button class="detail-tab-button" type="button" data-detail-tab="party">Заказчик и исполнитель</button>
                 <button class="detail-tab-button" type="button" data-detail-tab="status">Статус и тип</button>
                 <button class="detail-tab-button" type="button" data-detail-tab="comments">Примечание</button>
+                <button class="detail-tab-button" type="button" data-detail-tab="execution">Ход исполнения</button>
               </div>
 
-              <div class="field-section detail-tab-panel" data-detail-panel="execution">
-                <h3>Ход исполнения заказа</h3>
-                <label>
-                  <span>Количество по заказу, шт</span>
-                  <input name="amount" type="number" min="1" required>
-                </label>
-                <label>
-                  <span>Операция, шт</span>
-                  <input id="detailMovementQuantity" type="number" min="1" value="1">
-                </label>
-                <div class="execution-actions">
-                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="produced">Изготовлено</button>
-                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="defect">Забраковано</button>
-                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="ship">Отгружено</button>
-                  <select id="detailTransferDepartmentSelect" data-departments-select aria-label="Передать в отдел"></select>
-                  <button id="detailTransferButton" class="secondary-button" type="button">Передать</button>
-                </div>
-                <div class="table-wrap table-wrap-compact execution-table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Изготовлено, шт</th>
-                        <th>Дата</th>
-                        <th>Забраковано, шт</th>
-                        <th>Дата</th>
-                        <th>Отгружено, шт</th>
-                        <th>Дата</th>
-                      </tr>
-                    </thead>
-                    <tbody id="detailExecutionTableBody">
-                      <tr><td colspan="6">Операций по заказу пока нет.</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div id="detailExecutionSummary" class="detail-summary-grid">
-                  <div><strong>0</strong><small>всего изготовлено</small></div>
-                  <div><strong>0</strong><small>всего забраковано</small></div>
-                  <div><strong>0</strong><small>всего отгружено</small></div>
-                  <div><strong>0</strong><small>доступно у исполнителя</small></div>
-                  <div><strong>0</strong><small>осталось выполнить</small></div>
-                  <div><strong>0</strong><small>количество по заказу</small></div>
-                </div>
-              </div>
-
-              <div class="field-section detail-tab-panel hidden" data-detail-panel="dates">
+              <div class="field-section detail-tab-panel" data-detail-panel="dates">
                 <h3>Сроки</h3>
                 <label>
                   <span>Дата исполнения</span>
@@ -367,6 +323,51 @@
                   <span>Примечание</span>
                   <textarea name="comments" rows="5"></textarea>
                 </label>
+              </div>
+
+              <div class="field-section detail-tab-panel hidden" data-detail-panel="execution">
+                <h3>Ход исполнения заказа</h3>
+                <label>
+                  <span>Количество по заказу, шт</span>
+                  <input name="amount" type="number" min="1" required>
+                </label>
+                <label>
+                  <span>Операция, шт</span>
+                  <input id="detailMovementQuantity" type="number" min="1" value="1">
+                </label>
+                <div class="execution-actions">
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="produced">Изготовлено</button>
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="defect">Забраковано</button>
+                  <button class="secondary-button detail-movement-button" type="button" data-movement-type="ship">Отгружено</button>
+                  <select id="detailTransferDepartmentSelect" data-departments-select aria-label="Передать в отдел"></select>
+                  <button id="detailTransferButton" class="secondary-button" type="button">Передать</button>
+                </div>
+                <div class="table-wrap table-wrap-compact execution-table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Изготовлено, шт</th>
+                        <th>Дата</th>
+                        <th>Забраковано, шт</th>
+                        <th>Дата</th>
+                        <th>Отгружено, шт</th>
+                        <th>Дата</th>
+                      </tr>
+                    </thead>
+                    <tbody id="detailExecutionTableBody">
+                      <tr><td colspan="6">Операций по заказу пока нет.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="detailExecutionSummary" class="detail-summary-grid">
+                  <div><strong>0</strong><small>всего изготовлено</small></div>
+                  <div><strong>0</strong><small>всего забраковано</small></div>
+                  <div><strong>0</strong><small>всего отгружено</small></div>
+                  <div><strong>0</strong><small>доступно у исполнителя</small></div>
+                  <div><strong>0</strong><small>осталось выполнить</small></div>
+                  <div><strong>0</strong><small>количество по заказу</small></div>
+                  <div><strong>0</strong><small>всего передано</small></div>
+                </div>
               </div>
 
               <div class="sticky-actions">
