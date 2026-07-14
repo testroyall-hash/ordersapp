@@ -1125,11 +1125,12 @@ td small {
 
 .execution-actions {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
 }
 
-.execution-actions .secondary-button {
+.execution-actions .secondary-button,
+.execution-actions select {
   min-width: 0;
   min-height: 46px;
   white-space: normal;

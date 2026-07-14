@@ -382,25 +382,82 @@ function resolveCustomerId(db, payload, callback) {
   );
 }
 
+function getNextTemporaryProductSourceId(db, callback) {
+  db.get(
+    'SELECT COALESCE(MIN(source_id), 0) - 1 AS next_source_id FROM Products WHERE source_id < 0',
+    [],
+    (error, row) => {
+      if (error) {
+        callback(error);
+        return;
+      }
+
+      callback(null, Number(row.next_source_id || -1));
+    }
+  );
+}
+
 function resolveProductId(db, payload, callback) {
   if (payload.productId) {
     callback(null, payload.productId);
     return;
   }
 
-  ensureDictionaryValue(
-    db,
-    'Products',
-    payload.productName,
-    {
-      type: payload.productType || 'Неклассифицированные / Без группы',
-      unit: payload.productUnit || 'шт',
-      manufacturer: payload.productManufacturer,
-      comments: payload.productComments,
-      is_active: 1
-    },
-    callback
-  );
+  const productName = normalizeText(payload.productName);
+  if (!productName) {
+    callback(null, null);
+    return;
+  }
+
+  db.get('SELECT id FROM Products WHERE name = ?', [productName], (selectError, row) => {
+    if (selectError) {
+      callback(selectError);
+      return;
+    }
+
+    if (row) {
+      callback(null, row.id);
+      return;
+    }
+
+    getNextTemporaryProductSourceId(db, (sourceError, sourceId) => {
+      if (sourceError) {
+        callback(sourceError);
+        return;
+      }
+
+      db.run(
+        `
+          INSERT INTO Products (
+            source_id,
+            name,
+            type,
+            unit,
+            manufacturer,
+            comments,
+            is_active
+          )
+          VALUES (?, ?, ?, ?, ?, ?, 1)
+        `,
+        [
+          sourceId,
+          productName,
+          payload.productType || 'Без группы',
+          payload.productUnit || 'шт',
+          payload.productManufacturer,
+          payload.productComments
+        ],
+        function insertProduct(insertError) {
+          if (insertError) {
+            callback(insertError);
+            return;
+          }
+
+          callback(null, this.lastID);
+        }
+      );
+    });
+  });
 }
 
 function getNextOrderNumber(db, callback) {

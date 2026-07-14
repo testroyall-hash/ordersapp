@@ -203,7 +203,7 @@ function formatDate(value) {
 }
 
 function formatOrderNumber(value) {
-  return value ? String(value).padStart(4, '0') : '—';
+  return value ? `#${String(value).padStart(4, '0')}` : '#';
 }
 
 function toNumber(value, fallback = 0) {
@@ -323,7 +323,9 @@ function clearOrderDetails() {
 function resetCreateForm() {
   orderForm.reset();
   orderForm.elements.amount.value = 1;
-  orderForm.elements.done_qty.value = 0;
+  if (orderForm.elements.done_qty) {
+    orderForm.elements.done_qty.value = 0;
+  }
   setDefaultSelects(orderForm);
   syncProductTreeDisplays();
 }
@@ -344,6 +346,8 @@ function resetProductForm() {
   productForm.reset();
   productFormTitle.textContent = 'Новое изделие';
   productForm.elements.id.value = '';
+  productForm.elements.source_id.value = '';
+  productForm.elements.type.value = 'Без группы';
   productForm.elements.is_active.checked = true;
   setProductSaveState('Готово к вводу');
   renderProducts();
@@ -387,7 +391,8 @@ const productGroups = [
   { min: 3000, max: 3999, name: 'РКМА-ОС' },
   { min: 4000, max: 4999, name: 'Резонаторы' },
   { min: 5000, max: 5999, name: 'КЭ' },
-  { min: 6000, max: 6999, name: 'ПЭ' }
+  { min: 6000, max: 6999, name: 'ПЭ' },
+  { min: null, max: null, name: 'Без группы' }
 ];
 
 function getProductGroup(product) {
@@ -408,7 +413,7 @@ function getProductGroup(product) {
   if (label.startsWith('ПЭ')) return 'ПЭ';
   if (label.includes('РЕЗОНАТОР') || type.toUpperCase().includes('РЕЗОНАТОР')) return 'Резонаторы';
 
-  return type && !type.toLowerCase().includes('без группы') ? type : 'Прочие изделия';
+  return type || 'Без группы';
 }
 
 function buildProductOptions(includeEmptyLabel) {
@@ -671,6 +676,16 @@ function fillStatusFilters() {
 
 function fillProductTypeSuggestions() {
   const uniqueTypes = [...new Set(products.map((product) => product.type).filter(Boolean))].sort();
+  const typeOptions = [...new Set([...productGroups.map((group) => group.name), ...uniqueTypes, 'Без группы'])];
+
+  document.querySelectorAll('[data-product-group-select]').forEach((select) => {
+    const currentValue = select.value || 'Без группы';
+    select.innerHTML = typeOptions
+      .map((type) => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`)
+      .join('');
+    select.value = typeOptions.includes(currentValue) ? currentValue : 'Без группы';
+  });
+
   productTypeSuggestions.innerHTML = uniqueTypes
     .map((type) => `<option value="${escapeHtml(type)}"></option>`)
     .join('');
@@ -1216,7 +1231,7 @@ function productPayload(form) {
     source_id: form.elements.source_id.value,
     name: form.elements.name.value,
     code: form.elements.code.value,
-    type: form.elements.type.value || 'Неклассифицированные / Без группы',
+    type: form.elements.type.value || 'Без группы',
     unit: form.elements.unit.value,
     manufacturer: form.elements.manufacturer.value,
     comments: form.elements.comments.value,
@@ -1885,7 +1900,9 @@ bindFilterCheckboxes(planStatusFilterList, 'plan');
 
 addDepartmentButton.addEventListener('click', () => addDictionaryItem('/api/departments', 'Введите название нового отдела', 'Отдел добавлен'));
 addDepartmentDetailsButton.addEventListener('click', () => addDictionaryItem('/api/departments', 'Введите название нового отдела', 'Отдел добавлен'));
-addTypeButton.addEventListener('click', () => addDictionaryItem('/api/types', 'Введите новый тип заказа', 'Тип заказа добавлен'));
+if (addTypeButton) {
+  addTypeButton.addEventListener('click', () => addDictionaryItem('/api/types', 'Введите новый тип заказа', 'Тип заказа добавлен'));
+}
 addTypeDetailsButton.addEventListener('click', () => addDictionaryItem('/api/types', 'Введите новый тип заказа', 'Тип заказа добавлен'));
 newDepartmentDirectoryButton.addEventListener('click', createDepartmentFromPrompt);
 departmentsTableBody.addEventListener('click', (event) => {

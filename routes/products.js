@@ -25,12 +25,72 @@ function toNullableInteger(value) {
   return Number.isInteger(number) ? number : null;
 }
 
+const productGroups = [
+  { min: 0, max: 999, name: 'БПИ' },
+  { min: 1000, max: 1999, name: 'РКМА-Р' },
+  { min: 2000, max: 2999, name: 'РКМА-Р-21' },
+  { min: 3000, max: 3999, name: 'РКМА-ОС' },
+  { min: 4000, max: 4999, name: 'Резонаторы' },
+  { min: 5000, max: 5999, name: 'КЭ' },
+  { min: 6000, max: 6999, name: 'ПЭ' }
+];
+
+function normalizeProductType(value) {
+  return normalizeText(value) || 'Без группы';
+}
+
+function getProductGroupByType(type) {
+  const normalized = String(type || '').trim().toLowerCase();
+  return productGroups.find((group) => group.name.toLowerCase() === normalized) || null;
+}
+
+function getNextSourceId(db, type, currentSourceId, callback) {
+  const group = getProductGroupByType(type);
+  const currentNumber = Number(currentSourceId);
+
+  if (!group) {
+    if (Number.isInteger(currentNumber) && currentNumber < 0) {
+      callback(null, currentNumber);
+      return;
+    }
+
+    db.get(
+      'SELECT COALESCE(MIN(source_id), 0) - 1 AS next_source_id FROM Products WHERE source_id < 0',
+      [],
+      (error, row) => {
+        if (error) return callback(error);
+        callback(null, Number(row.next_source_id || -1));
+      }
+    );
+    return;
+  }
+
+  if (Number.isInteger(currentNumber) && currentNumber >= group.min && currentNumber <= group.max) {
+    callback(null, currentNumber);
+    return;
+  }
+
+  db.get(
+    'SELECT COALESCE(MAX(source_id), ?) + 1 AS next_source_id FROM Products WHERE source_id BETWEEN ? AND ?',
+    [group.min - 1, group.min, group.max],
+    (error, row) => {
+      if (error) return callback(error);
+      const nextSourceId = Number(row.next_source_id);
+      if (nextSourceId > group.max) {
+        callback(new Error(`В группе "${group.name}" закончился диапазон ID`));
+        return;
+      }
+      callback(null, nextSourceId);
+    }
+  );
+}
+
 function mapProductPayload(body) {
   return {
     sourceId: toNullableInteger(body.source_id),
     name: normalizeText(body.name),
     code: normalizeText(body.code),
-    type: normalizeText(body.type),
+    type: normalizeProductType(body.type),
     unit: normalizeText(body.unit),
     manufacturer: normalizeText(body.manufacturer),
     comments: normalizeText(body.comments),
@@ -107,37 +167,41 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: 'Название изделия обязательно' });
   }
 
-  const sql = `
-    INSERT INTO Products (
-      source_id,
-      name,
-      code,
-      type,
-      unit,
-      manufacturer,
-      comments,
-      is_active
-    )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `;
+  getNextSourceId(db, payload.type, null, (sourceError, sourceId) => {
+    if (sourceError) return sendDbError(res, sourceError);
 
-  db.run(
-    sql,
-    [
-      payload.sourceId,
-      payload.name,
-      payload.code,
-      payload.type,
-      payload.unit,
-      payload.manufacturer,
-      payload.comments,
-      payload.isActive
-    ],
-    function insertProduct(error) {
-      if (error) return sendDbError(res, error);
-      res.status(201).json({ id: this.lastID });
-    }
-  );
+    const sql = `
+      INSERT INTO Products (
+        source_id,
+        name,
+        code,
+        type,
+        unit,
+        manufacturer,
+        comments,
+        is_active
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.run(
+      sql,
+      [
+        sourceId,
+        payload.name,
+        payload.code,
+        payload.type,
+        payload.unit,
+        payload.manufacturer,
+        payload.comments,
+        payload.isActive
+      ],
+      function insertProduct(error) {
+        if (error) return sendDbError(res, error);
+        res.status(201).json({ id: this.lastID });
+      }
+    );
+  });
 });
 
 router.put('/:id', (req, res) => {
@@ -148,39 +212,51 @@ router.put('/:id', (req, res) => {
     return res.status(400).json({ error: 'Название изделия обязательно' });
   }
 
-  const sql = `
-    UPDATE Products
-    SET
-      source_id = ?,
-      name = ?,
-      code = ?,
-      type = ?,
-      unit = ?,
-      manufacturer = ?,
-      comments = ?,
-      is_active = ?
-    WHERE id = ?
-  `;
+  db.get('SELECT source_id, type FROM Products WHERE id = ?', [req.params.id], (selectError, currentProduct) => {
+    if (selectError) return sendDbError(res, selectError);
+    if (!currentProduct) return res.status(404).json({ error: 'Изделие не найдено' });
 
-  db.run(
-    sql,
-    [
-      payload.sourceId,
-      payload.name,
-      payload.code,
-      payload.type,
-      payload.unit,
-      payload.manufacturer,
-      payload.comments,
-      payload.isActive,
-      req.params.id
-    ],
-    function updateProduct(error) {
-      if (error) return sendDbError(res, error);
-      if (!this.changes) return res.status(404).json({ error: 'Изделие не найдено' });
-      res.json({ id: Number(req.params.id) });
-    }
-  );
+    const typeChanged = String(currentProduct.type || '') !== String(payload.type || '');
+    const sourceIdInput = typeChanged ? null : currentProduct.source_id;
+
+    getNextSourceId(db, payload.type, sourceIdInput, (sourceError, sourceId) => {
+      if (sourceError) return sendDbError(res, sourceError);
+
+      const sql = `
+        UPDATE Products
+        SET
+          source_id = ?,
+          name = ?,
+          code = ?,
+          type = ?,
+          unit = ?,
+          manufacturer = ?,
+          comments = ?,
+          is_active = ?
+        WHERE id = ?
+      `;
+
+      db.run(
+        sql,
+        [
+          sourceId,
+          payload.name,
+          payload.code,
+          payload.type,
+          payload.unit,
+          payload.manufacturer,
+          payload.comments,
+          payload.isActive,
+          req.params.id
+        ],
+        function updateProduct(error) {
+          if (error) return sendDbError(res, error);
+          if (!this.changes) return res.status(404).json({ error: 'Изделие не найдено' });
+          res.json({ id: Number(req.params.id) });
+        }
+      );
+    });
+  });
 });
 
 module.exports = router;
