@@ -7,6 +7,32 @@
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
+    <div id="authOverlay" class="auth-overlay">
+      <form id="authForm" class="auth-card">
+        <p class="section-kicker">Вход в приложение</p>
+        <h1>Выберите роль</h1>
+        <div class="auth-role-grid">
+          <label class="auth-role-option">
+            <input type="radio" name="role" value="director" checked>
+            <span>Директор</span>
+          </label>
+          <label class="auth-role-option">
+            <input type="radio" name="role" value="department">
+            <span>Отдел</span>
+          </label>
+        </div>
+        <label id="authDepartmentField" class="hidden">
+          <span>Отдел</span>
+          <select name="department_id" id="authDepartmentSelect"></select>
+        </label>
+        <label>
+          <span>Пароль</span>
+          <input name="password" type="password" autocomplete="current-password" placeholder="Пароль директора">
+        </label>
+        <button class="primary-button" type="submit">Войти</button>
+        <p id="authError" class="auth-error hidden"></p>
+      </form>
+    </div>
     <div class="app-shell">
       <aside class="sidebar" aria-label="Основная навигация">
         <a class="brand" href="/">
@@ -46,7 +72,8 @@
 
         <div class="sidebar-note">
           <span class="pulse"></span>
-          <p>План формируется по заказам, а склад и остатки остаются привязаны к изделиям.</p>
+          <p id="authUserNote">План формируется по заказам, а склад и остатки остаются привязаны к изделиям.</p>
+          <button id="logoutButton" class="ghost-button" type="button">Выйти</button>
         </div>
       </aside>
 

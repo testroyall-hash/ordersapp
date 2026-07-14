@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
@@ -12,6 +13,7 @@ const inventoryRouter = require('./routes/inventory');
 
 const app = express();
 const port = process.env.PORT || 3000;
+const sessions = new Map();
 const bundledDbPath = path.join(__dirname, 'db.sqlite3');
 const dbPath = process.env.DB_PATH || bundledDbPath;
 const initSqlPath = path.join(__dirname, 'db', 'init.sql');
@@ -418,15 +420,114 @@ function normalizeText(value) {
   return text || null;
 }
 
+function readSession(req, res, next) {
+  const token = req.get('x-app-token');
+  req.appUser = token ? sessions.get(token) || null : null;
+  next();
+}
+
+function requireAuth(req, res, next) {
+  if (req.path.startsWith('/auth/')) {
+    next();
+    return;
+  }
+
+  if (!req.appUser) {
+    res.status(401).json({ error: 'Войдите в приложение' });
+    return;
+  }
+
+  next();
+}
+
+function requireDirectorForWrites(req, res, next) {
+  if (req.method === 'GET') {
+    next();
+    return;
+  }
+
+  if (req.appUser?.role === 'director') {
+    next();
+    return;
+  }
+
+  res.status(403).json({ error: 'Это действие доступно только директору' });
+}
+
 app.locals.db = db;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/orders', ordersRouter);
-app.use('/api/customers', customersRouter);
-app.use('/api/products', productsRouter);
-app.use('/api/product-metrics', productMetricsRouter);
+app.use('/api', readSession);
+
+app.get('/api/auth/context', (req, res) => {
+  db.all('SELECT id, name FROM Departments WHERE is_active = 1 ORDER BY name', [], (error, departments) => {
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ departments });
+  });
+});
+
+app.post('/api/auth/login', (req, res) => {
+  const role = normalizeText(req.body.role);
+  const password = String(req.body.password || '');
+
+  if (role === 'director') {
+    const expectedPassword = process.env.DIRECTOR_PASSWORD || 'director';
+    if (password !== expectedPassword) {
+      return res.status(401).json({ error: 'Неверный пароль директора' });
+    }
+
+    const token = crypto.randomUUID();
+    const user = { role: 'director', name: 'Директор' };
+    sessions.set(token, user);
+    return res.json({ token, user });
+  }
+
+  if (role === 'department') {
+    const departmentId = Number.parseInt(req.body.department_id, 10);
+    const expectedPassword = process.env.DEPARTMENT_PASSWORD || '';
+
+    if (expectedPassword && password !== expectedPassword) {
+      return res.status(401).json({ error: 'Неверный пароль отдела' });
+    }
+
+    if (!Number.isFinite(departmentId)) {
+      return res.status(400).json({ error: 'Выберите отдел' });
+    }
+
+    db.get('SELECT id, name FROM Departments WHERE id = ? AND is_active = 1', [departmentId], (error, department) => {
+      if (error) return res.status(500).json({ error: error.message });
+      if (!department) return res.status(404).json({ error: 'Отдел не найден или отключен' });
+
+      const token = crypto.randomUUID();
+      const user = {
+        role: 'department',
+        department_id: department.id,
+        department_name: department.name,
+        name: department.name
+      };
+      sessions.set(token, user);
+      res.json({ token, user });
+    });
+    return;
+  }
+
+  res.status(400).json({ error: 'Выберите роль' });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  const token = req.get('x-app-token');
+  if (token) sessions.delete(token);
+  res.json({ ok: true });
+});
+
+app.use('/api', requireAuth);
+
+app.use('/api/orders', requireDirectorForWrites, ordersRouter);
+app.use('/api/customers', requireDirectorForWrites, customersRouter);
+app.use('/api/products', requireDirectorForWrites, productsRouter);
+app.use('/api/product-metrics', requireDirectorForWrites, productMetricsRouter);
 app.use('/api/inventory', inventoryRouter);
 
 app.get('/api/statuses', (req, res) => {
@@ -444,6 +545,10 @@ app.get('/api/types', (req, res) => {
 });
 
 app.post('/api/types', (req, res) => {
+  if (req.appUser?.role !== 'director') {
+    return res.status(403).json({ error: 'Это действие доступно только директору' });
+  }
+
   const name = normalizeText(req.body.name);
   if (!name) {
     return res.status(400).json({ error: 'Название типа заказа обязательно' });
@@ -469,6 +574,10 @@ app.get('/api/departments', (req, res) => {
 });
 
 app.post('/api/departments', (req, res) => {
+  if (req.appUser?.role !== 'director') {
+    return res.status(403).json({ error: 'Это действие доступно только директору' });
+  }
+
   const name = normalizeText(req.body.name);
   if (!name) {
     return res.status(400).json({ error: 'Название отдела обязательно' });
@@ -487,6 +596,10 @@ app.post('/api/departments', (req, res) => {
 });
 
 app.put('/api/departments/:id', (req, res) => {
+  if (req.appUser?.role !== 'director') {
+    return res.status(403).json({ error: 'Это действие доступно только директору' });
+  }
+
   const name = normalizeText(req.body.name);
   const isActive = req.body.is_active === false || req.body.is_active === '0' || req.body.is_active === 0 ? 0 : 1;
 
@@ -512,6 +625,10 @@ app.put('/api/departments/:id', (req, res) => {
 });
 
 app.delete('/api/departments/:id', (req, res) => {
+  if (req.appUser?.role !== 'director') {
+    return res.status(403).json({ error: 'Это действие доступно только директору' });
+  }
+
   const id = Number.parseInt(req.params.id, 10);
 
   if (!Number.isFinite(id)) {

@@ -1,3 +1,13 @@
+const authOverlay = document.getElementById('authOverlay');
+const authForm = document.getElementById('authForm');
+const authDepartmentField = document.getElementById('authDepartmentField');
+const authDepartmentSelect = document.getElementById('authDepartmentSelect');
+const authError = document.getElementById('authError');
+const authUserNote = document.getElementById('authUserNote');
+const logoutButton = document.getElementById('logoutButton');
+const nativeFetch = window.fetch.bind(window);
+const AUTH_STORAGE_KEY = 'orders-app-session';
+
 const orderForm = document.getElementById('orderForm');
 const orderFormSection = document.getElementById('orderFormSection');
 const showFormButton = document.getElementById('showFormButton');
@@ -118,6 +128,7 @@ const pendingTransfersTableBody = document.getElementById('pendingTransfersTable
 const departmentsTableBody = document.getElementById('departmentsTableBody');
 const newDepartmentDirectoryButton = document.getElementById('newDepartmentDirectoryButton');
 
+let authSession = null;
 let orders = [];
 let archivedOrders = [];
 let planOrders = [];
@@ -181,6 +192,154 @@ const loadedTabs = {
   products: false,
   stock: false
 };
+
+window.fetch = async (resource, options = {}) => {
+  const headers = new Headers(options.headers || {});
+  const url = typeof resource === 'string' ? resource : resource.url;
+  if (authSession?.token) {
+    if (String(url).startsWith('/api')) {
+      headers.set('x-app-token', authSession.token);
+    }
+  }
+
+  const response = await nativeFetch(resource, { ...options, headers });
+  if (response.status === 401 && !String(url).startsWith('/api/auth/')) {
+    clearAuthSession();
+    updateAccessControls();
+    throw new Error('Сессия истекла. Войдите заново.');
+  }
+  return response;
+};
+
+function getSavedAuthSession() {
+  try {
+    return JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY) || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function saveAuthSession(session) {
+  authSession = session;
+  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+}
+
+function clearAuthSession() {
+  authSession = null;
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+}
+
+function isDirector() {
+  return authSession?.user?.role === 'director';
+}
+
+function showAuthError(message) {
+  authError.textContent = message;
+  authError.classList.toggle('hidden', !message);
+}
+
+function updateAccessControls() {
+  const director = isDirector();
+  const user = authSession?.user;
+  authOverlay.classList.toggle('hidden', Boolean(authSession));
+  authUserNote.textContent = user
+    ? `Вход: ${user.role === 'director' ? 'Директор' : `Отдел ${user.department_name || user.name}`}`
+    : 'План формируется по заказам, а склад и остатки остаются привязаны к изделиям.';
+
+  [
+    showFormButton,
+    duplicateOrderButton,
+    resetFormButton,
+    newCustomerButton,
+    resetCustomerFormButton,
+    newProductButton,
+    resetProductFormButton,
+    newMovementButton,
+    addDepartmentButton,
+    addDepartmentDetailsButton,
+    addTypeButton,
+    addTypeDetailsButton,
+    newDepartmentDirectoryButton,
+    ...document.querySelectorAll('.edit-department-button, .delete-department-button')
+  ].filter(Boolean).forEach((element) => {
+    element.toggleAttribute('data-access-hidden', !director);
+  });
+
+  detailsForm.querySelectorAll('button[type="submit"], .detail-movement-button').forEach((element) => {
+    element.toggleAttribute('data-access-hidden', !director);
+  });
+  [orderForm, customerForm, productForm, stockForm, movementForm].filter(Boolean).forEach((form) => {
+    form.querySelectorAll('button[type="submit"]').forEach((element) => {
+      element.toggleAttribute('data-access-hidden', !director);
+    });
+  });
+  if (detailTransferButton) detailTransferButton.toggleAttribute('data-access-hidden', !director);
+  if (detailTransferDepartmentSelect) detailTransferDepartmentSelect.toggleAttribute('data-access-hidden', !director);
+  if (stockForm) stockForm.querySelectorAll('button[type="submit"]').forEach((element) => element.toggleAttribute('data-access-hidden', !director));
+}
+
+async function loadAuthContext() {
+  const response = await nativeFetch('/api/auth/context');
+  if (!response.ok) throw new Error('Не удалось загрузить список отделов');
+  const data = await response.json();
+  authDepartmentSelect.innerHTML = (data.departments || [])
+    .map((department) => `<option value="${department.id}">${escapeHtml(department.name)}</option>`)
+    .join('');
+}
+
+async function notifyPendingTransfers() {
+  if (authSession?.user?.role !== 'department') return;
+
+  const response = await fetch(`/api/inventory/transfers/pending?receiver_id=${authSession.user.department_id}`);
+  if (!response.ok) return;
+  const transfers = await response.json();
+  if (transfers.length) {
+    alert(`Для отдела "${authSession.user.department_name}" есть входящие передачи: ${transfers.length}. Откройте склад и подтвердите приемку.`);
+  }
+}
+
+async function startApplication() {
+  updateAccessControls();
+  activateTab('orders');
+
+  try {
+    await Promise.all([loadDictionaries(), loadCustomers(), loadProducts()]);
+    fillSelects();
+    fillStatusFilters();
+    fillProductTypeSuggestions();
+    setDefaultSelects(orderForm);
+    await loadOrders(1);
+    await notifyPendingTransfers();
+  } catch (error) {
+    tableBody.innerHTML = `<tr><td class="empty-state" colspan="9">${escapeHtml(error.message)}</td></tr>`;
+  }
+}
+
+async function loginFromForm(event) {
+  event.preventDefault();
+  showAuthError('');
+
+  const formData = new FormData(authForm);
+  const payload = Object.fromEntries(formData.entries());
+  if (payload.role === 'director') {
+    delete payload.department_id;
+  }
+
+  try {
+    const response = await nativeFetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'Не удалось войти');
+
+    saveAuthSession(data);
+    await startApplication();
+  } catch (error) {
+    showAuthError(error.message);
+  }
+}
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -1098,6 +1257,7 @@ function renderDepartmentsDirectory() {
       </tr>
     `)
     .join('');
+  updateAccessControls();
 }
 
 function renderOrders() {
@@ -2190,16 +2350,37 @@ openStockProductButton.addEventListener('click', () => {
 detailsForm.classList.add('hidden');
 orderDetailsCard.classList.add('hidden');
 orderDetailsBackdrop.classList.add('hidden');
-activateTab('orders');
 
-loadOrders(1).catch((error) => {
-  tableBody.innerHTML = `<tr><td class="empty-state" colspan="9">${escapeHtml(error.message)}</td></tr>`;
+authForm.addEventListener('change', () => {
+  const role = new FormData(authForm).get('role');
+  authDepartmentField.classList.toggle('hidden', role !== 'department');
+  authForm.elements.password.placeholder = role === 'director' ? 'Пароль директора' : 'Пароль отдела';
+});
+authForm.addEventListener('submit', loginFromForm);
+logoutButton.addEventListener('click', async () => {
+  try {
+    if (authSession?.token) {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    }
+  } finally {
+    clearAuthSession();
+    window.location.reload();
+  }
 });
 
-Promise.allSettled([loadDictionaries(), loadCustomers(), loadProducts()])
-  .then(() => {
-    fillSelects();
-    fillStatusFilters();
-    fillProductTypeSuggestions();
-    setDefaultSelects(orderForm);
-  });
+async function initializeAuth() {
+  try {
+    await loadAuthContext();
+  } catch (error) {
+    showAuthError(error.message);
+  }
+
+  authSession = getSavedAuthSession();
+  if (authSession?.token) {
+    await startApplication();
+  } else {
+    updateAccessControls();
+  }
+}
+
+initializeAuth();

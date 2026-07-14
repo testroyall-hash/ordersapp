@@ -327,6 +327,11 @@ router.get(
 router.post(
   '/movements',
   sendAsync(async (req, res) => {
+    if (req.appUser?.role !== 'director') {
+      res.status(403).json({ error: 'Складские операции доступны только директору' });
+      return;
+    }
+
     const db = req.app.locals.db;
     const productId = toInteger(req.body.product_id, null);
     const orderId = toInteger(req.body.order_id, null);
@@ -433,7 +438,9 @@ router.get(
   sendAsync(async (req, res) => {
     const db = req.app.locals.db;
     const productId = toInteger(req.query.product_id, null);
-    const receiverId = toInteger(req.query.receiver_id, null);
+    const receiverId = req.appUser?.role === 'department'
+      ? toInteger(req.appUser.department_id, null)
+      : toInteger(req.query.receiver_id, null);
     const clauses = [
       "InventoryMovements.movement_type = 'transfer'",
       "COALESCE(InventoryMovements.transfer_status, 'accepted') = 'pending'"
@@ -499,6 +506,16 @@ router.post(
 
     if (!transfer) {
       res.status(404).json({ error: 'Ожидающая передача не найдена' });
+      return;
+    }
+
+    if (req.appUser?.role === 'department' && Number(req.appUser.department_id) !== Number(transfer.receiver_id)) {
+      res.status(403).json({ error: 'Можно принять только передачу, адресованную вашему отделу' });
+      return;
+    }
+
+    if (req.appUser?.role !== 'director' && req.appUser?.role !== 'department') {
+      res.status(403).json({ error: 'Недостаточно прав для приемки передачи' });
       return;
     }
 
