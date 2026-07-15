@@ -327,11 +327,6 @@ router.get(
 router.post(
   '/movements',
   sendAsync(async (req, res) => {
-    if (req.appUser?.role !== 'director') {
-      res.status(403).json({ error: 'Складские операции доступны только директору' });
-      return;
-    }
-
     const db = req.app.locals.db;
     const productId = toInteger(req.body.product_id, null);
     const orderId = toInteger(req.body.order_id, null);

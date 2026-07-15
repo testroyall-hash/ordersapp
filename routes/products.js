@@ -44,6 +44,14 @@ function getProductGroupByType(type) {
   return productGroups.find((group) => group.name.toLowerCase() === normalized) || null;
 }
 
+function canAssignProductIds(req) {
+  return req.appUser?.role === 'director';
+}
+
+function requiresProductIdAssignment(type) {
+  return Boolean(getProductGroupByType(type));
+}
+
 function getNextSourceId(db, type, currentSourceId, callback) {
   const group = getProductGroupByType(type);
   const currentNumber = Number(currentSourceId);
@@ -167,6 +175,10 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: 'Название изделия обязательно' });
   }
 
+  if (requiresProductIdAssignment(payload.type) && !canAssignProductIds(req)) {
+    return res.status(403).json({ error: 'Назначать ID изделия по типу может только администратор' });
+  }
+
   getNextSourceId(db, payload.type, null, (sourceError, sourceId) => {
     if (sourceError) return sendDbError(res, sourceError);
 
@@ -218,6 +230,10 @@ router.put('/:id', (req, res) => {
 
     const typeChanged = String(currentProduct.type || '') !== String(payload.type || '');
     const sourceIdInput = typeChanged ? null : currentProduct.source_id;
+
+    if (typeChanged && requiresProductIdAssignment(payload.type) && !canAssignProductIds(req)) {
+      return res.status(403).json({ error: 'Назначать ID изделия по типу может только администратор' });
+    }
 
     getNextSourceId(db, payload.type, sourceIdInput, (sourceError, sourceId) => {
       if (sourceError) return sendDbError(res, sourceError);

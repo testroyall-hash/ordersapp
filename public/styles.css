@@ -71,6 +71,11 @@ button:hover {
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
 }
 
+.auth-card label {
+  display: grid;
+  gap: 7px;
+}
+
 .auth-card h1 {
   margin: 0;
   font-size: 34px;
@@ -83,14 +88,51 @@ button:hover {
 }
 
 .auth-role-option {
-  display: flex;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
+  min-height: 48px;
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 12px;
   cursor: pointer;
   font-weight: 900;
+}
+
+.auth-role-option input {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.auth-role-option input::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: scale(0);
+  transition: transform 0.14s ease;
+}
+
+.auth-role-option input:checked {
+  border-color: var(--accent);
+}
+
+.auth-role-option input:checked::before {
+  transform: scale(1);
+}
+
+.auth-role-option:has(input:checked) {
+  border-color: var(--accent);
+  background: rgba(200, 111, 47, 0.08);
 }
 
 .auth-error {

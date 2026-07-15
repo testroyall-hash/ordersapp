@@ -233,49 +233,26 @@ function isDirector() {
   return authSession?.user?.role === 'director';
 }
 
+function canAssignProductIds() {
+  return isDirector();
+}
+
 function showAuthError(message) {
   authError.textContent = message;
   authError.classList.toggle('hidden', !message);
 }
 
 function updateAccessControls() {
-  const director = isDirector();
+  const canAssignIds = canAssignProductIds();
   const user = authSession?.user;
   authOverlay.classList.toggle('hidden', Boolean(authSession));
   authUserNote.textContent = user
-    ? `Вход: ${user.role === 'director' ? 'Директор' : `Отдел ${user.department_name || user.name}`}`
+    ? `Вход: ${user.role === 'director' ? 'Администратор' : `Отдел ${user.department_name || user.name}`}`
     : 'План формируется по заказам, а склад и остатки остаются привязаны к изделиям.';
 
-  [
-    showFormButton,
-    duplicateOrderButton,
-    resetFormButton,
-    newCustomerButton,
-    resetCustomerFormButton,
-    newProductButton,
-    resetProductFormButton,
-    newMovementButton,
-    addDepartmentButton,
-    addDepartmentDetailsButton,
-    addTypeButton,
-    addTypeDetailsButton,
-    newDepartmentDirectoryButton,
-    ...document.querySelectorAll('.edit-department-button, .delete-department-button')
-  ].filter(Boolean).forEach((element) => {
-    element.toggleAttribute('data-access-hidden', !director);
+  productForm.querySelectorAll('[data-product-group-select]').forEach((select) => {
+    select.disabled = !canAssignIds;
   });
-
-  detailsForm.querySelectorAll('button[type="submit"], .detail-movement-button').forEach((element) => {
-    element.toggleAttribute('data-access-hidden', !director);
-  });
-  [orderForm, customerForm, productForm, stockForm, movementForm].filter(Boolean).forEach((form) => {
-    form.querySelectorAll('button[type="submit"]').forEach((element) => {
-      element.toggleAttribute('data-access-hidden', !director);
-    });
-  });
-  if (detailTransferButton) detailTransferButton.toggleAttribute('data-access-hidden', !director);
-  if (detailTransferDepartmentSelect) detailTransferDepartmentSelect.toggleAttribute('data-access-hidden', !director);
-  if (stockForm) stockForm.querySelectorAll('button[type="submit"]').forEach((element) => element.toggleAttribute('data-access-hidden', !director));
 }
 
 async function loadAuthContext() {
@@ -2354,7 +2331,7 @@ orderDetailsBackdrop.classList.add('hidden');
 authForm.addEventListener('change', () => {
   const role = new FormData(authForm).get('role');
   authDepartmentField.classList.toggle('hidden', role !== 'department');
-  authForm.elements.password.placeholder = role === 'director' ? 'Пароль директора' : 'Пароль отдела';
+  authForm.elements.password.placeholder = role === 'director' ? 'Пароль администратора' : 'Пароль отдела';
 });
 authForm.addEventListener('submit', loginFromForm);
 logoutButton.addEventListener('click', async () => {

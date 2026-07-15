@@ -440,20 +440,6 @@ function requireAuth(req, res, next) {
   next();
 }
 
-function requireDirectorForWrites(req, res, next) {
-  if (req.method === 'GET') {
-    next();
-    return;
-  }
-
-  if (req.appUser?.role === 'director') {
-    next();
-    return;
-  }
-
-  res.status(403).json({ error: 'Это действие доступно только директору' });
-}
-
 app.locals.db = db;
 app.use(cors());
 app.use(bodyParser.json());
@@ -473,13 +459,13 @@ app.post('/api/auth/login', (req, res) => {
   const password = String(req.body.password || '');
 
   if (role === 'director') {
-    const expectedPassword = process.env.DIRECTOR_PASSWORD || 'director';
+    const expectedPassword = process.env.ADMIN_PASSWORD || process.env.DIRECTOR_PASSWORD || 'admin';
     if (password !== expectedPassword) {
       return res.status(401).json({ error: 'Неверный пароль директора' });
     }
 
     const token = crypto.randomUUID();
-    const user = { role: 'director', name: 'Директор' };
+    const user = { role: 'director', name: 'Администратор' };
     sessions.set(token, user);
     return res.json({ token, user });
   }
@@ -524,10 +510,10 @@ app.post('/api/auth/logout', (req, res) => {
 
 app.use('/api', requireAuth);
 
-app.use('/api/orders', requireDirectorForWrites, ordersRouter);
-app.use('/api/customers', requireDirectorForWrites, customersRouter);
-app.use('/api/products', requireDirectorForWrites, productsRouter);
-app.use('/api/product-metrics', requireDirectorForWrites, productMetricsRouter);
+app.use('/api/orders', ordersRouter);
+app.use('/api/customers', customersRouter);
+app.use('/api/products', productsRouter);
+app.use('/api/product-metrics', productMetricsRouter);
 app.use('/api/inventory', inventoryRouter);
 
 app.get('/api/statuses', (req, res) => {
@@ -545,10 +531,6 @@ app.get('/api/types', (req, res) => {
 });
 
 app.post('/api/types', (req, res) => {
-  if (req.appUser?.role !== 'director') {
-    return res.status(403).json({ error: 'Это действие доступно только директору' });
-  }
-
   const name = normalizeText(req.body.name);
   if (!name) {
     return res.status(400).json({ error: 'Название типа заказа обязательно' });
@@ -574,10 +556,6 @@ app.get('/api/departments', (req, res) => {
 });
 
 app.post('/api/departments', (req, res) => {
-  if (req.appUser?.role !== 'director') {
-    return res.status(403).json({ error: 'Это действие доступно только директору' });
-  }
-
   const name = normalizeText(req.body.name);
   if (!name) {
     return res.status(400).json({ error: 'Название отдела обязательно' });
@@ -596,10 +574,6 @@ app.post('/api/departments', (req, res) => {
 });
 
 app.put('/api/departments/:id', (req, res) => {
-  if (req.appUser?.role !== 'director') {
-    return res.status(403).json({ error: 'Это действие доступно только директору' });
-  }
-
   const name = normalizeText(req.body.name);
   const isActive = req.body.is_active === false || req.body.is_active === '0' || req.body.is_active === 0 ? 0 : 1;
 
@@ -625,10 +599,6 @@ app.put('/api/departments/:id', (req, res) => {
 });
 
 app.delete('/api/departments/:id', (req, res) => {
-  if (req.appUser?.role !== 'director') {
-    return res.status(403).json({ error: 'Это действие доступно только директору' });
-  }
-
   const id = Number.parseInt(req.params.id, 10);
 
   if (!Number.isFinite(id)) {
