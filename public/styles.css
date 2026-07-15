@@ -1238,6 +1238,17 @@ td small {
   top: 24px;
 }
 
+.stock-detail-card {
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.stock-detail-card .sticky-actions {
+  bottom: 0;
+}
+
 .details-backdrop {
   position: fixed;
   inset: 0;
@@ -1523,6 +1534,11 @@ td small {
   .detail-card,
   .entity-detail-card {
     position: static;
+  }
+
+  .stock-detail-card {
+    max-height: none;
+    overflow: visible;
   }
 }
 
