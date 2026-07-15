@@ -142,6 +142,7 @@ let statuses = [];
 let types = [];
 let departments = [];
 let selectedOrderId = null;
+let orderDetailsSnapshot = null;
 let selectedCustomerId = null;
 let selectedProductId = null;
 let selectedStockProductId = null;
@@ -448,8 +449,19 @@ function setFormValue(form, name, value) {
   field.value = value ?? '';
 }
 
+function getFormSnapshot(form) {
+  return Object.fromEntries(new FormData(form).entries());
+}
+
+function restoreFormSnapshot(form, snapshot) {
+  if (!snapshot) return false;
+  Object.entries(snapshot).forEach(([name, value]) => setFormValue(form, name, value));
+  return true;
+}
+
 function clearOrderDetails() {
   selectedOrderId = null;
+  orderDetailsSnapshot = null;
   orderDetailsCard.classList.add('hidden');
   orderDetailsBackdrop.classList.add('hidden');
   detailsForm.classList.add('hidden');
@@ -1658,6 +1670,7 @@ async function selectOrder(orderId) {
   setFormValue(detailsForm, 'comments', order.comments);
   setFormValue(detailsForm, 'status_id', order.status_id);
   setFormValue(detailsForm, 'type_id', order.type_id);
+  orderDetailsSnapshot = getFormSnapshot(detailsForm);
   detailMovementQuantity.value = String(Math.max(1, getRemainingQty(order) || 1));
   activateDetailTab('dates');
   loadOrderStockDetails(order).catch(() => renderOrderExecution(null, order));
@@ -2112,11 +2125,23 @@ departmentsTableBody.addEventListener('click', (event) => {
 
 detailsForm.elements.amount.addEventListener('input', () => setSaveState('Есть несохраненные изменения', 'dirty'));
 detailsForm.addEventListener('input', () => setSaveState('Есть несохраненные изменения', 'dirty'));
-reloadDetailsButton.addEventListener('click', () => {
-  if (selectedOrderId) {
-    selectOrder(selectedOrderId);
-  } else {
+detailsForm.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter') return;
+  if (event.target instanceof HTMLTextAreaElement) return;
+  if (event.target instanceof HTMLButtonElement) return;
+  event.preventDefault();
+});
+reloadDetailsButton.addEventListener('click', async (event) => {
+  event.preventDefault();
+  if (!selectedOrderId) {
     clearOrderDetails();
+    return;
+  }
+
+  if (restoreFormSnapshot(detailsForm, orderDetailsSnapshot)) {
+    setSaveState('Правки отменены', 'saved');
+  } else {
+    await selectOrder(selectedOrderId);
   }
 });
 detailTabButtons.forEach((button) => {
@@ -2328,11 +2353,17 @@ detailsForm.classList.add('hidden');
 orderDetailsCard.classList.add('hidden');
 orderDetailsBackdrop.classList.add('hidden');
 
-authForm.addEventListener('change', () => {
+function syncAuthRoleControls() {
   const role = new FormData(authForm).get('role');
   authDepartmentField.classList.toggle('hidden', role !== 'department');
   authForm.elements.password.placeholder = role === 'director' ? 'Пароль администратора' : 'Пароль отдела';
-});
+  authForm.querySelectorAll('.auth-role-option').forEach((option) => {
+    const input = option.querySelector('input[name="role"]');
+    option.classList.toggle('active', input?.value === role);
+  });
+}
+
+authForm.addEventListener('change', syncAuthRoleControls);
 authForm.addEventListener('submit', loginFromForm);
 logoutButton.addEventListener('click', async () => {
   try {
@@ -2346,6 +2377,7 @@ logoutButton.addEventListener('click', async () => {
 });
 
 async function initializeAuth() {
+  syncAuthRoleControls();
   try {
     await loadAuthContext();
   } catch (error) {

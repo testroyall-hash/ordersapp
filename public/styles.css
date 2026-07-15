@@ -64,7 +64,7 @@ button:hover {
 .auth-card {
   display: grid;
   gap: clamp(12px, 2.2vw, 16px);
-  width: min(520px, 100%);
+  width: min(540px, 100%);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 18px;
   padding: clamp(18px, 4vw, 28px);
@@ -89,57 +89,46 @@ button:hover {
 
 .auth-role-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
 .auth-role-option {
-  display: grid;
-  grid-template-columns: 20px minmax(0, 1fr);
+  position: relative;
+  display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   min-height: 56px;
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 13px 16px;
   cursor: pointer;
   font-weight: 900;
   line-height: 1.2;
+  text-align: center;
+  background: #fff;
+  transition: border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
 }
 
 .auth-role-option input {
-  appearance: none;
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
   margin: 0;
-  border: 2px solid var(--muted);
-  border-radius: 50%;
-  background: #fff;
+  cursor: pointer;
 }
 
-.auth-role-option input::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  transform: scale(0);
-  transition: transform 0.14s ease;
-}
-
-.auth-role-option input:checked {
-  border-color: var(--accent);
-}
-
-.auth-role-option input:checked::before {
-  transform: scale(1);
-}
-
-.auth-role-option:has(input:checked) {
+.auth-role-option:hover,
+.auth-role-option.active {
   border-color: var(--accent);
   background: rgba(200, 111, 47, 0.08);
+}
+
+.auth-role-option.active {
+  border-color: var(--accent);
+  background: rgba(200, 111, 47, 0.08);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  color: var(--ink);
 }
 
 .auth-role-option span {
@@ -244,7 +233,8 @@ button:hover {
 }
 
 .sidebar-note {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 12px;
   margin-top: auto;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -258,6 +248,16 @@ button:hover {
   margin: 0;
   font-size: 13px;
   line-height: 1.45;
+  min-width: 0;
+}
+
+.sidebar-note .ghost-button {
+  grid-column: 2;
+  justify-self: start;
+  padding: 8px 12px;
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .pulse {
