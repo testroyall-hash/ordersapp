@@ -270,6 +270,9 @@ router.get(
         SELECT
           InventoryMovements.*,
           Products.name AS product_name,
+          Products.code AS product_code,
+          Products.type AS product_type,
+          Products.source_id AS product_source_id,
           sender.name AS sender_name,
           receiver.name AS receiver_name,
           Customers.name AS customer_name
@@ -291,6 +294,9 @@ router.get(
         SELECT
           InventoryMovements.*,
           Products.name AS product_name,
+          Products.code AS product_code,
+          Products.type AS product_type,
+          Products.source_id AS product_source_id,
           sender.name AS sender_name,
           receiver.name AS receiver_name,
           Orders.order_number

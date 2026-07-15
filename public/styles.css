@@ -978,6 +978,7 @@ textarea:focus {
 
 .stock-priority-item strong,
 .stock-priority-item span,
+.stock-priority-item small,
 .stock-priority-item p {
   display: block;
   min-width: 0;
@@ -989,6 +990,13 @@ textarea:focus {
   color: var(--muted);
   font-size: 12px;
   font-weight: 800;
+}
+
+.stock-priority-item small {
+  margin-top: 5px;
+  color: var(--steel);
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .stock-priority-item p {

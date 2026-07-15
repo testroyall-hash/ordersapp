@@ -283,6 +283,14 @@ function updateTransferNotice() {
     : 'Нужно подтвердить входящую передачу продукции.';
 }
 
+function transferProductMeta(transfer) {
+  return [
+    transfer.product_code ? `Шифр: ${transfer.product_code}` : '',
+    transfer.product_type ? `Тип: ${transfer.product_type}` : '',
+    transfer.product_source_id ? `ID: ${transfer.product_source_id}` : ''
+  ].filter(Boolean).join(' · ');
+}
+
 function renderStockPriority() {
   if (!stockPriorityPanel || !stockPriorityList) return;
 
@@ -298,16 +306,18 @@ function renderStockPriority() {
   stockPriorityList.innerHTML = pendingTransfers
     .map((transfer) => {
       const orderNumber = transfer.order_number ? `Заказ ${escapeHtml(formatOrderNumber(transfer.order_number))}` : 'Без привязки к заказу';
+      const productMeta = transferProductMeta(transfer);
       return `
         <article class="stock-priority-item">
           <div>
             <strong>${escapeHtml(transfer.product_name || 'Изделие')}</strong>
             <span>${escapeHtml(orderNumber)} · ${escapeHtml(formatDate(transfer.movement_date))}</span>
+            ${productMeta ? `<small>${escapeHtml(productMeta)}</small>` : ''}
             <p>${escapeHtml(transfer.sender_name || 'Отправитель не указан')} → ${escapeHtml(transfer.receiver_name || 'Ваш отдел')}</p>
           </div>
           <div class="stock-priority-action">
             <b>${toNumber(transfer.quantity)} шт</b>
-            <button class="primary-button accept-transfer-button" type="button" data-transfer-id="${transfer.id}">Принять</button>
+            <button class="primary-button accept-transfer-button" type="button" data-transfer-id="${transfer.id}" data-product-id="${transfer.product_id}">Принять</button>
           </div>
         </article>
       `;
@@ -1282,20 +1292,24 @@ function renderPendingTransfers(transfers = []) {
   if (!pendingTransfersTableBody) return;
 
   if (!transfers.length) {
-    pendingTransfersTableBody.innerHTML = '<tr><td colspan="5">Ожидающих передач нет.</td></tr>';
+    pendingTransfersTableBody.innerHTML = '<tr><td colspan="6">Ожидающих передач нет.</td></tr>';
     return;
   }
 
   pendingTransfersTableBody.innerHTML = transfers
-    .map((movement) => `
+    .map((movement) => {
+      const productMeta = transferProductMeta(movement);
+      return `
       <tr>
         <td>${escapeHtml(formatDate(movement.movement_date))}</td>
+        <td><strong>${escapeHtml(movement.product_name || 'Изделие')}</strong>${productMeta ? `<small>${escapeHtml(productMeta)}</small>` : ''}</td>
         <td>${escapeHtml(movement.sender_name || '—')}</td>
         <td>${escapeHtml(movement.receiver_name || '—')}</td>
         <td>${movement.quantity}</td>
-        <td><button class="secondary-button accept-transfer-button" type="button" data-transfer-id="${movement.id}">Принять</button></td>
+        <td><button class="secondary-button accept-transfer-button" type="button" data-transfer-id="${movement.id}" data-product-id="${movement.product_id}">Принять</button></td>
       </tr>
-    `)
+    `;
+    })
     .join('');
 }
 
@@ -2031,12 +2045,18 @@ stockTableBody.addEventListener('click', (event) => {
 async function acceptTransferFromEvent(event) {
   const button = event.target.closest('.accept-transfer-button');
   if (!button) return;
+  const acceptedProductId = toNumber(button.dataset.productId, null);
 
   try {
     await saveJson(`/api/inventory/transfers/${button.dataset.transferId}/accept`, 'POST', {});
     await loadPendingTransfers();
     await loadMetrics();
-    if (selectedStockProductId) await selectStockProduct(selectedStockProductId);
+    if (acceptedProductId) {
+      await selectStockProduct(acceptedProductId);
+      stockForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (selectedStockProductId) {
+      await selectStockProduct(selectedStockProductId);
+    }
     if (selectedOrderId) await selectOrder(selectedOrderId);
   } catch (error) {
     alert(error.message);
