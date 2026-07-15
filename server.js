@@ -459,7 +459,7 @@ app.post('/api/auth/login', (req, res) => {
   const password = String(req.body.password || '');
 
   if (role === 'director') {
-    const expectedPassword = process.env.ADMIN_PASSWORD || process.env.DIRECTOR_PASSWORD || 'admin';
+    const expectedPassword = process.env.ADMIN_PASSWORD || process.env.DIRECTOR_PASSWORD || 'adminelpa';
     if (password !== expectedPassword) {
       return res.status(401).json({ error: 'Неверный пароль директора' });
     }
@@ -472,7 +472,7 @@ app.post('/api/auth/login', (req, res) => {
 
   if (role === 'department') {
     const departmentId = Number.parseInt(req.body.department_id, 10);
-    const expectedPassword = process.env.DEPARTMENT_PASSWORD || '';
+    const expectedPassword = process.env.DEPARTMENT_PASSWORD || '1234';
 
     if (expectedPassword && password !== expectedPassword) {
       return res.status(401).json({ error: 'Неверный пароль отдела' });

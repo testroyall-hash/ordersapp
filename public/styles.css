@@ -51,7 +51,8 @@ button:hover {
   inset: 0;
   display: grid;
   place-items: center;
-  padding: 24px;
+  overflow: auto;
+  padding: clamp(14px, 4vw, 32px);
   background: rgba(31, 48, 59, 0.88);
   backdrop-filter: blur(8px);
 }
@@ -62,11 +63,11 @@ button:hover {
 
 .auth-card {
   display: grid;
-  gap: 16px;
-  width: min(460px, 100%);
+  gap: clamp(12px, 2.2vw, 16px);
+  width: min(520px, 100%);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 18px;
-  padding: 28px;
+  padding: clamp(18px, 4vw, 28px);
   background: #fff;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
 }
@@ -76,36 +77,42 @@ button:hover {
   gap: 7px;
 }
 
+.auth-card label.hidden {
+  display: none;
+}
+
 .auth-card h1 {
   margin: 0;
-  font-size: 34px;
+  font-size: clamp(26px, 5vw, 34px);
+  line-height: 1.08;
 }
 
 .auth-role-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
 }
 
 .auth-role-option {
   display: grid;
-  grid-template-columns: 18px minmax(0, 1fr);
+  grid-template-columns: 20px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
-  min-height: 48px;
+  min-height: 56px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  padding: 12px;
+  padding: 12px 14px;
   cursor: pointer;
   font-weight: 900;
+  line-height: 1.2;
 }
 
 .auth-role-option input {
   appearance: none;
   display: grid;
   place-items: center;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   margin: 0;
   border: 2px solid var(--muted);
   border-radius: 50%;
@@ -135,6 +142,11 @@ button:hover {
   background: rgba(200, 111, 47, 0.08);
 }
 
+.auth-role-option span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .auth-error {
   margin: 0;
   color: var(--danger);
@@ -147,7 +159,7 @@ button:hover {
 
 .app-shell {
   display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
+  grid-template-columns: clamp(244px, 18vw, 300px) minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -258,9 +270,10 @@ button:hover {
 }
 
 .workspace {
-  width: min(1660px, calc(100% - 40px));
+  width: min(1660px, calc(100% - clamp(16px, 3vw, 40px)));
   margin: 0 auto;
-  padding: 34px 0 52px;
+  padding: clamp(18px, 3vw, 34px) 0 52px;
+  min-width: 0;
 }
 
 .topbar,
@@ -270,6 +283,8 @@ button:hover {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .topbar {
@@ -310,9 +325,10 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(40px, 6vw, 70px);
-  letter-spacing: -0.05em;
-  line-height: 0.95;
+  font-size: clamp(34px, 5.2vw, 70px);
+  letter-spacing: 0;
+  line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 h2 {
@@ -528,6 +544,11 @@ h2 {
   padding: 12px 18px;
   cursor: pointer;
   font-weight: 800;
+  max-width: 100%;
+  min-width: 0;
+  line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .primary-button {
@@ -564,7 +585,7 @@ h2 {
 
 .form {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: 16px;
   margin-top: 22px;
 }
@@ -577,12 +598,12 @@ h2 {
 
 .filters-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 14px;
 }
 
 .filters-grid-wide {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
 }
 
 .inline-field {
@@ -841,6 +862,7 @@ textarea {
   color: var(--ink);
   background: #fff;
   outline: none;
+  min-width: 0;
 }
 
 input:focus,
@@ -858,9 +880,10 @@ textarea:focus {
 .work-grid,
 .entity-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(460px, 1fr);
+  grid-template-columns: minmax(0, 1.45fr) minmax(min(420px, 100%), 1fr);
   gap: 22px;
   align-items: start;
+  min-width: 0;
 }
 
 .work-grid-collapsible {
@@ -873,10 +896,12 @@ textarea:focus {
 
 .table-wrap {
   overflow-x: auto;
+  max-width: 100%;
   margin-top: 20px;
   border: 1px solid var(--line);
   border-radius: 20px;
   background: #fff;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table-hint {
@@ -1094,9 +1119,9 @@ td small {
   top: 0;
   right: 0;
   z-index: 50;
-  width: min(760px, 92vw);
+  width: min(760px, 100vw);
   height: 100vh;
-  padding: 20px;
+  padding: clamp(10px, 2vw, 20px);
 }
 
 .detail-drawer-card {
@@ -1315,11 +1340,7 @@ td small {
 
 @media (max-width: 1400px) {
   .workspace {
-    width: min(100% - 28px, 1660px);
-  }
-
-  .filters-grid-wide {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(1660px, calc(100% - 28px));
   }
 
   .topbar {
@@ -1330,14 +1351,6 @@ td small {
 @media (max-width: 1200px) {
   .hero-panel {
     grid-template-columns: 1fr;
-  }
-
-  .filters-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .filters-grid-wide {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .work-grid,
@@ -1372,6 +1385,14 @@ td small {
 }
 
 @media (max-width: 720px) {
+  .auth-card {
+    border-radius: 16px;
+  }
+
+  .auth-role-grid {
+    grid-template-columns: 1fr;
+  }
+
   .workspace {
     width: min(100% - 28px, 1660px);
     padding-top: 24px;
@@ -1409,7 +1430,7 @@ td small {
   .hero-panel,
   .card {
     border-radius: 22px;
-    padding: 20px;
+    padding: clamp(14px, 4vw, 20px);
   }
 
   .details-drawer {
@@ -1420,6 +1441,14 @@ td small {
   .product-tree-panel {
     width: calc(100vw - 44px);
     max-height: 60vh;
+  }
+
+  table {
+    min-width: 640px;
+  }
+
+  .customers-table {
+    min-width: 620px;
   }
 }
 
