@@ -834,9 +834,13 @@
                     <small>свободно</small>
                   </div>
                 </div>
+                <div id="stockWorkflowHint" class="stock-workflow-hint">
+                  Выберите изделие, чтобы увидеть ближайшие действия по складу.
+                </div>
 
                 <div class="field-section">
-                  <h3>Движение по складу</h3>
+                  <h3>Ручные итоги и примечание</h3>
+                  <p class="field-note wide-field">Основные операции лучше записывать через “Новое перемещение” ниже: так сохраняется маршрут, дата и история. Эти поля нужны для ручной сверки итоговых значений.</p>
                   <label>
                     <span>Изготовлено, шт</span>
                     <input name="produced_qty" type="number" min="0" value="0">
@@ -878,6 +882,7 @@
                     <label>
                       <span>Тип операции</span>
                       <select name="movement_type" id="movementTypeSelect" required></select>
+                      <small id="movementHelp" class="movement-help">Выберите тип операции, чтобы увидеть нужные поля.</small>
                     </label>
                     <label>
                       <span>Количество, шт</span>
@@ -887,19 +892,19 @@
                       <span>Дата</span>
                       <input name="movement_date" type="date">
                     </label>
-                    <label>
+                    <label data-movement-field="sender">
                       <span>Отправитель</span>
                       <select name="sender_id" id="movementSenderSelect"></select>
                     </label>
-                    <label>
+                    <label data-movement-field="receiver">
                       <span>Получатель</span>
                       <select name="receiver_id" id="movementReceiverSelect"></select>
                     </label>
-                    <label>
+                    <label data-movement-field="customer">
                       <span>Заказчик</span>
                       <select name="customer_id" id="movementCustomerSelect"></select>
                     </label>
-                    <label>
+                    <label data-movement-field="external">
                       <span>Внешний контрагент</span>
                       <input name="external_party" type="text" placeholder="Поставщик или заказчик">
                     </label>

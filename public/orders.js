@@ -121,6 +121,7 @@ const openStockProductButton = document.getElementById('openStockProductButton')
 const stockAvailableValue = document.getElementById('stockAvailableValue');
 const stockReservedValue = document.getElementById('stockReservedValue');
 const stockFreeValue = document.getElementById('stockFreeValue');
+const stockWorkflowHint = document.getElementById('stockWorkflowHint');
 const newMovementButton = document.getElementById('newMovementButton');
 const stockMovementPanel = document.getElementById('stockMovementPanel');
 const movementForm = document.getElementById('movementForm');
@@ -128,6 +129,7 @@ const movementTypeSelect = document.getElementById('movementTypeSelect');
 const movementSenderSelect = document.getElementById('movementSenderSelect');
 const movementReceiverSelect = document.getElementById('movementReceiverSelect');
 const movementCustomerSelect = document.getElementById('movementCustomerSelect');
+const movementHelp = document.getElementById('movementHelp');
 const cancelMovementButton = document.getElementById('cancelMovementButton');
 const stockBalancesTableBody = document.getElementById('stockBalancesTableBody');
 const movementHistoryTableBody = document.getElementById('movementHistoryTableBody');
@@ -154,6 +156,7 @@ let selectedOrderDetails = null;
 let selectedOrderStockDetails = null;
 let pendingOrderMovements = [];
 let pendingTransfers = [];
+let selectedStockMetric = null;
 let selectedCustomerId = null;
 let selectedProductId = null;
 let selectedStockProductId = null;
@@ -170,6 +173,49 @@ const productTreeWidgets = productTreeContainers.map((container) => ({
   panel: container.querySelector('[data-product-tree-panel]'),
   expandedGroups: new Set()
 }));
+const movementUiRules = {
+  produced: {
+    help: 'Приход изготовленной продукции: выберите отдел, куда поставить готовые изделия.',
+    fields: ['receiver']
+  },
+  supplier_receipt: {
+    help: 'Получение от поставщика: укажите получателя и поставщика во внешнем контрагенте.',
+    fields: ['receiver', 'external']
+  },
+  transfer: {
+    help: 'Передача в другой отдел: у отправителя спишется сразу, у получателя появится задача на приемку.',
+    fields: ['sender', 'receiver'],
+    outgoing: true
+  },
+  transfer_received: {
+    help: 'Подтверждение приемки обычно выполняется кнопкой "Принять" во входящей приемке.',
+    fields: ['sender', 'receiver']
+  },
+  defect: {
+    help: 'Учет брака: выберите отдел-отправитель и отдел брака/изолятор получателем.',
+    fields: ['sender', 'receiver'],
+    outgoing: true
+  },
+  ship: {
+    help: 'Отгрузка: выберите отправителя и укажите заказчика или внешнего получателя.',
+    fields: ['sender', 'customer', 'external'],
+    outgoing: true
+  },
+  utilize: {
+    help: 'Утилизация: выберите отдел, из которого списывается остаток.',
+    fields: ['sender'],
+    outgoing: true
+  },
+  to_work: {
+    help: 'Передача в работу: выберите отдел, из которого комплектующие уходят в работу.',
+    fields: ['sender'],
+    outgoing: true
+  },
+  inventory: {
+    help: 'Инвентаризация: укажите получателя для прихода или отправителя для списания по результатам проверки.',
+    fields: ['sender', 'receiver']
+  }
+};
 let orderFilters = {
   search: '',
   customerSearch: '',
@@ -291,6 +337,23 @@ function transferProductMeta(transfer) {
   ].filter(Boolean).join(' · ');
 }
 
+function transferConfirmText(transfer) {
+  const product = transfer?.product_name || 'изделие';
+  const quantity = `${toNumber(transfer?.quantity)} шт`;
+  const sender = transfer?.sender_name || 'отправитель не указан';
+  const receiver = transfer?.receiver_name || 'ваш отдел';
+  const order = transfer?.order_number ? `\nЗаказ: ${formatOrderNumber(transfer.order_number)}` : '';
+  const meta = transferProductMeta(transfer);
+
+  return [
+    `Принять ${quantity}: ${product}`,
+    meta,
+    `Маршрут: ${sender} → ${receiver}${order}`,
+    '',
+    'После подтверждения количество появится на складе отдела.'
+  ].filter((line) => line !== '').join('\n');
+}
+
 function renderStockPriority() {
   if (!stockPriorityPanel || !stockPriorityList) return;
 
@@ -317,7 +380,7 @@ function renderStockPriority() {
           </div>
           <div class="stock-priority-action">
             <b>${toNumber(transfer.quantity)} шт</b>
-            <button class="primary-button accept-transfer-button" type="button" data-transfer-id="${transfer.id}" data-product-id="${transfer.product_id}">Принять</button>
+            <button class="primary-button accept-transfer-button" type="button" data-transfer-id="${transfer.id}" data-product-id="${transfer.product_id}">Принять ${toNumber(transfer.quantity)} шт</button>
           </div>
         </article>
       `;
@@ -1306,7 +1369,7 @@ function renderPendingTransfers(transfers = []) {
         <td>${escapeHtml(movement.sender_name || '—')}</td>
         <td>${escapeHtml(movement.receiver_name || '—')}</td>
         <td>${movement.quantity}</td>
-        <td><button class="secondary-button accept-transfer-button" type="button" data-transfer-id="${movement.id}" data-product-id="${movement.product_id}">Принять</button></td>
+        <td><button class="secondary-button accept-transfer-button" type="button" data-transfer-id="${movement.id}" data-product-id="${movement.product_id}">Принять ${toNumber(movement.quantity)} шт</button></td>
       </tr>
     `;
     })
@@ -1629,6 +1692,97 @@ function getExecutorAvailableWithDrafts(details, order) {
   return getExecutorAvailable(details, order) + getPendingExecutorDelta(order?.department_id);
 }
 
+function getDepartmentBalance(details, departmentId) {
+  const balance = (details?.balances || []).find((item) => Number(item.department_id) === Number(departmentId));
+  return toNumber(balance?.quantity);
+}
+
+function getTotalBalance(details) {
+  return (details?.balances || []).reduce((sum, item) => sum + toNumber(item.quantity), 0);
+}
+
+function renderStockWorkflow(item, details) {
+  if (!stockWorkflowHint) return;
+
+  if (!item || !details) {
+    stockWorkflowHint.textContent = 'Выберите изделие, чтобы увидеть ближайшие действия по складу.';
+    return;
+  }
+
+  const currentDepartmentId = authSession?.user?.role === 'department' ? authSession.user.department_id : null;
+  const departmentBalance = currentDepartmentId ? getDepartmentBalance(details, currentDepartmentId) : null;
+  const totalBalance = getTotalBalance(details);
+  const productPendingTransfers = pendingTransfers.filter((transfer) => Number(transfer.product_id) === Number(item.product_id));
+  const actions = [];
+
+  if (productPendingTransfers.length) {
+    actions.push(`принять входящие передачи: ${productPendingTransfers.reduce((sum, transfer) => sum + toNumber(transfer.quantity), 0)} шт`);
+  }
+
+  if (currentDepartmentId) {
+    actions.push(departmentBalance > 0
+      ? `у вашего отдела доступно ${departmentBalance} шт: можно передать, отгрузить, списать в брак или работу`
+      : 'у вашего отдела нет остатка для исходящих операций');
+  } else {
+    actions.push(totalBalance > 0
+      ? `общий остаток по отделам ${totalBalance} шт: выберите отправителя для операции`
+      : 'остатка по отделам нет: сначала оформите изготовление или поступление');
+  }
+
+  if (toNumber(item.active_order_qty) > 0) {
+    actions.push(`в активных заказах ${toNumber(item.active_order_qty)} шт`);
+  }
+
+  stockWorkflowHint.innerHTML = `
+    <strong>Следующие действия</strong>
+    <ul>${actions.map((action) => `<li>${escapeHtml(action)}</li>`).join('')}</ul>
+  `;
+}
+
+function setMovementFieldVisibility() {
+  const type = movementTypeSelect.value;
+  const rule = movementUiRules[type] || { fields: ['sender', 'receiver', 'customer', 'external'] };
+  movementForm.querySelectorAll('[data-movement-field]').forEach((field) => {
+    const isVisible = rule.fields.includes(field.dataset.movementField);
+    field.classList.toggle('hidden', !isVisible);
+    if (!isVisible) {
+      const control = field.querySelector('input, select, textarea');
+      if (control) control.value = '';
+    }
+  });
+  if (movementHelp) movementHelp.textContent = rule.help || 'Заполните поля операции.';
+
+  const userDepartmentId = authSession?.user?.role === 'department' ? authSession.user.department_id : '';
+  if (userDepartmentId && rule.fields.includes('sender') && !movementSenderSelect.value) {
+    movementSenderSelect.value = userDepartmentId;
+  }
+  if (userDepartmentId && rule.fields.includes('receiver') && ['produced', 'supplier_receipt', 'transfer_received'].includes(type) && !movementReceiverSelect.value) {
+    movementReceiverSelect.value = userDepartmentId;
+  }
+}
+
+function validateMovementBeforeSave() {
+  const type = movementTypeSelect.value;
+  const rule = movementUiRules[type] || {};
+  const quantity = toNumber(movementForm.elements.quantity.value, 0);
+  const senderId = toNumber(movementSenderSelect.value, null);
+
+  if (rule.outgoing && senderId) {
+    const available = getDepartmentBalance(selectedStockDetails, senderId);
+    if (quantity > available) {
+      alert(`У выбранного отправителя доступно ${available} шт. Нельзя провести операцию на ${quantity} шт.`);
+      return false;
+    }
+  }
+
+  if (type === 'ship' && !movementCustomerSelect.value && !movementForm.elements.external_party.value.trim()) {
+    alert('Для отгрузки укажите заказчика или внешнего получателя');
+    return false;
+  }
+
+  return true;
+}
+
 async function createOrderMovement(movementType) {
   if (!selectedOrderId) return;
 
@@ -1856,6 +2010,7 @@ async function selectStockProduct(productId) {
   }
 
   const item = await metricsResponse.json();
+  selectedStockMetric = item;
   selectedStockDetails = await detailsResponse.json();
   emptyStockDetails.classList.add('hidden');
   stockForm.classList.remove('hidden');
@@ -1872,6 +2027,7 @@ async function selectStockProduct(productId) {
   stockReservedValue.textContent = item.active_order_qty;
   stockFreeValue.textContent = item.free_qty;
   renderStockDetails(selectedStockDetails);
+  renderStockWorkflow(item, selectedStockDetails);
   setStockSaveState('Без изменений');
 }
 
@@ -2045,7 +2201,12 @@ stockTableBody.addEventListener('click', (event) => {
 async function acceptTransferFromEvent(event) {
   const button = event.target.closest('.accept-transfer-button');
   if (!button) return;
+  const transfer = pendingTransfers.find((item) => Number(item.id) === Number(button.dataset.transferId));
   const acceptedProductId = toNumber(button.dataset.productId, null);
+
+  if (transfer && !window.confirm(transferConfirmText(transfer))) {
+    return;
+  }
 
   try {
     await saveJson(`/api/inventory/transfers/${button.dataset.transferId}/accept`, 'POST', {});
@@ -2455,10 +2616,12 @@ newMovementButton.addEventListener('click', () => {
   stockMovementPanel.classList.remove('hidden');
   setFormValue(movementForm, 'product_id', selectedStockProductId);
   setFormValue(movementForm, 'movement_date', new Date().toISOString().slice(0, 10));
+  setMovementFieldVisibility();
 });
 cancelMovementButton.addEventListener('click', () => {
   stockMovementPanel.classList.add('hidden');
 });
+movementTypeSelect.addEventListener('change', setMovementFieldVisibility);
 movementForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!selectedStockProductId) {
@@ -2466,12 +2629,15 @@ movementForm.addEventListener('submit', async (event) => {
     return;
   }
 
+  if (!validateMovementBeforeSave()) return;
+
   try {
     await saveJson('/api/inventory/movements', 'POST', movementPayload(movementForm));
     movementForm.reset();
     stockMovementPanel.classList.add('hidden');
     await loadMetrics();
     await selectStockProduct(selectedStockProductId);
+    await loadPendingTransfers();
   } catch (error) {
     alert(error.message);
   }
