@@ -143,6 +143,9 @@ let types = [];
 let departments = [];
 let selectedOrderId = null;
 let orderDetailsSnapshot = null;
+let selectedOrderDetails = null;
+let selectedOrderStockDetails = null;
+let pendingOrderMovements = [];
 let selectedCustomerId = null;
 let selectedProductId = null;
 let selectedStockProductId = null;
@@ -462,6 +465,9 @@ function restoreFormSnapshot(form, snapshot) {
 function clearOrderDetails() {
   selectedOrderId = null;
   orderDetailsSnapshot = null;
+  selectedOrderDetails = null;
+  selectedOrderStockDetails = null;
+  pendingOrderMovements = [];
   orderDetailsCard.classList.add('hidden');
   orderDetailsBackdrop.classList.add('hidden');
   detailsForm.classList.add('hidden');
@@ -1427,10 +1433,11 @@ async function saveJson(url, method, payload) {
 function renderOrderExecution(details, order = null) {
   if (!detailExecutionTableBody || !detailExecutionSummary) return;
 
-  const orderMovements = (details?.movements || []).filter((movement) => {
+  const savedMovements = (details?.movements || []).filter((movement) => {
     if (movement.order_id) return Number(movement.order_id) === Number(order?.id);
     return false;
   });
+  const orderMovements = [...savedMovements, ...pendingOrderMovements];
   const operationLabels = {
     produced: 'Изготовлено',
     defect: 'Забраковано',
@@ -1448,17 +1455,20 @@ function renderOrderExecution(details, order = null) {
     detailExecutionTableBody.innerHTML = '<tr><td colspan="6">Операций по заказу пока нет.</td></tr>';
   } else {
     detailExecutionTableBody.innerHTML = [...orderMovements]
-      .sort((left, right) => String(left.movement_date).localeCompare(String(right.movement_date)) || Number(left.id) - Number(right.id))
-      .map((movement) => `
-        <tr>
-          <td>${movement.movement_type === 'produced' ? movement.quantity : ''}</td>
+      .sort((left, right) => String(left.movement_date).localeCompare(String(right.movement_date)) || String(left.id).localeCompare(String(right.id)))
+      .map((movement) => {
+        const draftLabel = movement.is_draft ? ' (черновик)' : '';
+        return `
+        <tr class="${movement.is_draft ? 'draft-row' : ''}">
+          <td>${movement.movement_type === 'produced' ? escapeHtml(`${movement.quantity}${draftLabel}`) : ''}</td>
           <td>${movement.movement_type === 'produced' ? escapeHtml(formatDate(movement.movement_date)) : ''}</td>
-          <td>${movement.movement_type === 'defect' ? movement.quantity : ''}</td>
+          <td>${movement.movement_type === 'defect' ? escapeHtml(`${movement.quantity}${draftLabel}`) : ''}</td>
           <td>${movement.movement_type === 'defect' ? escapeHtml(formatDate(movement.movement_date)) : ''}</td>
-          <td>${movement.movement_type === 'ship' ? movement.quantity : movement.movement_type === 'transfer' ? escapeHtml(`${movement.quantity} (${operationLabels.transfer})`) : ''}</td>
+          <td>${movement.movement_type === 'ship' ? escapeHtml(`${movement.quantity}${draftLabel}`) : movement.movement_type === 'transfer' ? escapeHtml(`${movement.quantity} (${operationLabels.transfer}${draftLabel})`) : ''}</td>
           <td>${movement.movement_type === 'ship' || movement.movement_type === 'transfer' ? escapeHtml(formatDate(movement.movement_date)) : ''}</td>
         </tr>
-      `)
+      `;
+      })
       .join('');
   }
 
@@ -1467,8 +1477,7 @@ function renderOrderExecution(details, order = null) {
   const defectTotal = sumByType('defect');
   const shippedTotal = sumByType('ship');
   const transferredTotal = sumByType('transfer');
-  const executorBalance = (details?.balances || []).find((balance) => Number(balance.department_id) === Number(order?.department_id));
-  const executorAvailable = toNumber(executorBalance?.quantity);
+  const executorAvailable = getExecutorAvailableWithDrafts(details, order);
 
   detailExecutionSummary.innerHTML = `
     <div><strong>${producedTotal}</strong><small>всего изготовлено</small></div>
@@ -1483,17 +1492,20 @@ function renderOrderExecution(details, order = null) {
 
 async function loadOrderStockDetails(order) {
   if (!order.product_id) {
+    selectedOrderStockDetails = null;
     renderOrderExecution(null, order);
     return null;
   }
 
   const response = await fetch(`/api/inventory/products/${order.product_id}`);
   if (!response.ok) {
+    selectedOrderStockDetails = null;
     renderOrderExecution(null, order);
     return null;
   }
 
   const details = await response.json();
+  selectedOrderStockDetails = details;
   renderOrderExecution(details, order);
   return details;
 }
@@ -1516,6 +1528,24 @@ function getDetailsFormOrderSnapshot() {
 function getExecutorAvailable(details, order) {
   const executorBalance = (details?.balances || []).find((balance) => Number(balance.department_id) === Number(order?.department_id));
   return toNumber(executorBalance?.quantity);
+}
+
+function getPendingExecutorDelta(departmentId) {
+  return pendingOrderMovements.reduce((sum, movement) => {
+    if (Number(movement.receiver_id) === Number(departmentId) && movement.movement_type === 'produced') {
+      return sum + toNumber(movement.quantity);
+    }
+
+    if (Number(movement.sender_id) === Number(departmentId) && ['defect', 'ship', 'transfer'].includes(movement.movement_type)) {
+      return sum - toNumber(movement.quantity);
+    }
+
+    return sum;
+  }, 0);
+}
+
+function getExecutorAvailableWithDrafts(details, order) {
+  return getExecutorAvailable(details, order) + getPendingExecutorDelta(order?.department_id);
 }
 
 async function createOrderMovement(movementType) {
@@ -1541,8 +1571,10 @@ async function createOrderMovement(movementType) {
   const transferReceiverId = toNumber(detailTransferDepartmentSelect.value, null);
   const defectReceiverId = findDepartmentIdByName('изолятор') || findDepartmentIdByName('брак');
   const orderSnapshot = getDetailsFormOrderSnapshot();
-  const stockDetails = movementType === 'produced' ? null : await loadOrderStockDetails(orderSnapshot);
-  const executorAvailable = movementType === 'produced' ? 0 : getExecutorAvailable(stockDetails, orderSnapshot);
+  if (!selectedOrderStockDetails && movementType !== 'produced') {
+    await loadOrderStockDetails(orderSnapshot);
+  }
+  const executorAvailable = movementType === 'produced' ? 0 : getExecutorAvailableWithDrafts(selectedOrderStockDetails, orderSnapshot);
 
   if (movementType === 'produced') {
     const remaining = Math.max(0, toNumber(detailsForm.elements.amount.value) - toNumber(detailsForm.elements.done_qty.value));
@@ -1570,12 +1602,14 @@ async function createOrderMovement(movementType) {
   }
 
   const payload = {
+    id: `draft-${Date.now()}-${pendingOrderMovements.length}`,
     order_id: selectedOrderId,
     product_id: productId,
     movement_type: movementType,
     quantity,
     movement_date: new Date().toISOString().slice(0, 10),
-    comments: `Операция из карточки заказа ${detailOrderNumber.value}`
+    comments: `Операция из карточки заказа ${detailOrderNumber.value}`,
+    is_draft: true
   };
 
   if (movementType === 'produced') {
@@ -1623,23 +1657,31 @@ async function createOrderMovement(movementType) {
     return;
   }
 
-  await saveJson('/api/inventory/movements', 'POST', payload);
-
   if (movementType === 'produced') {
     const amount = toNumber(detailsForm.elements.amount.value);
     const doneQty = toNumber(detailsForm.elements.done_qty.value);
     detailsForm.elements.done_qty.value = String(Math.min(amount, doneQty + quantity));
-    await saveJson(`/api/orders/${selectedOrderId}`, 'PUT', orderPayload(detailsForm));
   }
 
-  await Promise.all([
-    selectOrder(selectedOrderId),
-    loadedTabs.stock ? loadMetrics() : Promise.resolve()
-  ]);
+  pendingOrderMovements.push(payload);
+  renderOrderExecution(selectedOrderStockDetails, getDetailsFormOrderSnapshot());
+  setSaveState('Есть несохраненные изменения', 'dirty');
+}
+
+async function savePendingOrderMovements() {
+  const movements = [...pendingOrderMovements];
+  for (const movement of movements) {
+    const { id, is_draft, pending_transfer, ...payload } = movement;
+    await saveJson('/api/inventory/movements', 'POST', pending_transfer ? { ...payload, pending_transfer } : payload);
+  }
+  pendingOrderMovements = [];
 }
 
 async function selectOrder(orderId) {
   selectedOrderId = Number(orderId);
+  pendingOrderMovements = [];
+  selectedOrderDetails = null;
+  selectedOrderStockDetails = null;
   renderOrders();
 
   const response = await fetch(`/api/orders/${selectedOrderId}`);
@@ -1649,6 +1691,7 @@ async function selectOrder(orderId) {
   }
 
   const order = await response.json();
+  selectedOrderDetails = order;
   orderDetailsBackdrop.classList.remove('hidden');
   orderDetailsCard.classList.remove('hidden');
   detailsForm.classList.remove('hidden');
@@ -2139,6 +2182,8 @@ reloadDetailsButton.addEventListener('click', async (event) => {
   }
 
   if (restoreFormSnapshot(detailsForm, orderDetailsSnapshot)) {
+    pendingOrderMovements = [];
+    renderOrderExecution(selectedOrderStockDetails, getDetailsFormOrderSnapshot());
     setSaveState('Правки отменены', 'saved');
   } else {
     await selectOrder(selectedOrderId);
@@ -2204,6 +2249,7 @@ detailsForm.addEventListener('submit', async (event) => {
 
   try {
     await saveJson(`/api/orders/${id}`, 'PUT', orderPayload(detailsForm));
+    await savePendingOrderMovements();
     await Promise.all([
       loadOrders(ordersPager.page),
       loadedTabs.plan ? loadPlanOrders(planPager.page) : Promise.resolve(),

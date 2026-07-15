@@ -985,6 +985,11 @@ tbody tr[data-stock-product-id]:hover {
   background: #fff7ef;
 }
 
+.draft-row {
+  background: #fffaf3;
+  color: #7a4b20;
+}
+
 .selected-row {
   background: #fff1e5;
   box-shadow: inset 4px 0 0 var(--accent);
