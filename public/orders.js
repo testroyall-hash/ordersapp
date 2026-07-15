@@ -5,6 +5,10 @@ const authDepartmentSelect = document.getElementById('authDepartmentSelect');
 const authError = document.getElementById('authError');
 const authUserNote = document.getElementById('authUserNote');
 const logoutButton = document.getElementById('logoutButton');
+const transferNotice = document.getElementById('transferNotice');
+const transferNoticeTitle = document.getElementById('transferNoticeTitle');
+const transferNoticeText = document.getElementById('transferNoticeText');
+const openTransfersButton = document.getElementById('openTransfersButton');
 const nativeFetch = window.fetch.bind(window);
 const AUTH_STORAGE_KEY = 'orders-app-session';
 
@@ -146,6 +150,7 @@ let orderDetailsSnapshot = null;
 let selectedOrderDetails = null;
 let selectedOrderStockDetails = null;
 let pendingOrderMovements = [];
+let pendingTransfers = [];
 let selectedCustomerId = null;
 let selectedProductId = null;
 let selectedStockProductId = null;
@@ -250,6 +255,7 @@ function updateAccessControls() {
   const canAssignIds = canAssignProductIds();
   const user = authSession?.user;
   authOverlay.classList.toggle('hidden', Boolean(authSession));
+  transferNotice?.classList.toggle('hidden', user?.role !== 'department' || pendingTransfers.length === 0);
   authUserNote.textContent = user
     ? `Вход: ${user.role === 'director' ? 'Администратор' : `Отдел ${user.department_name || user.name}`}`
     : 'План формируется по заказам, а склад и остатки остаются привязаны к изделиям.';
@@ -257,6 +263,20 @@ function updateAccessControls() {
   productForm.querySelectorAll('[data-product-group-select]').forEach((select) => {
     select.disabled = !canAssignIds;
   });
+}
+
+function updateTransferNotice() {
+  const user = authSession?.user;
+  const isDepartment = user?.role === 'department';
+  transferNotice?.classList.toggle('hidden', !isDepartment || pendingTransfers.length === 0);
+  if (!isDepartment || !pendingTransfers.length) return;
+
+  const totalQuantity = pendingTransfers.reduce((sum, transfer) => sum + toNumber(transfer.quantity), 0);
+  const senders = [...new Set(pendingTransfers.map((transfer) => transfer.sender_name).filter(Boolean))].slice(0, 2);
+  transferNoticeTitle.textContent = `${pendingTransfers.length} передач ${totalQuantity} шт`;
+  transferNoticeText.textContent = senders.length
+    ? `Нужно принять продукцию от: ${senders.join(', ')}.`
+    : 'Нужно подтвердить входящую передачу продукции.';
 }
 
 async function loadAuthContext() {
@@ -268,15 +288,20 @@ async function loadAuthContext() {
     .join('');
 }
 
-async function notifyPendingTransfers() {
-  if (authSession?.user?.role !== 'department') return;
+async function loadPendingTransfers() {
+  if (!authSession) return [];
 
-  const response = await fetch(`/api/inventory/transfers/pending?receiver_id=${authSession.user.department_id}`);
-  if (!response.ok) return;
-  const transfers = await response.json();
-  if (transfers.length) {
-    alert(`Для отдела "${authSession.user.department_name}" есть входящие передачи: ${transfers.length}. Откройте склад и подтвердите приемку.`);
+  const params = new URLSearchParams();
+  if (authSession.user?.role === 'department' && authSession.user.department_id) {
+    params.set('receiver_id', authSession.user.department_id);
   }
+
+  const response = await fetch(`/api/inventory/transfers/pending${params.toString() ? `?${params}` : ''}`);
+  if (!response.ok) return [];
+  pendingTransfers = await response.json();
+  updateTransferNotice();
+  renderPendingTransfers(pendingTransfers);
+  return pendingTransfers;
 }
 
 async function startApplication() {
@@ -290,7 +315,7 @@ async function startApplication() {
     fillProductTypeSuggestions();
     setDefaultSelects(orderForm);
     await loadOrders(1);
-    await notifyPendingTransfers();
+    await loadPendingTransfers();
   } catch (error) {
     tableBody.innerHTML = `<tr><td class="empty-state" colspan="9">${escapeHtml(error.message)}</td></tr>`;
   }
@@ -1174,7 +1199,7 @@ function renderStockDetails(details) {
   if (!details) {
     stockBalancesTableBody.innerHTML = '<tr><td colspan="2">Выберите изделие.</td></tr>';
     movementHistoryTableBody.innerHTML = '<tr><td colspan="4">Выберите изделие.</td></tr>';
-    pendingTransfersTableBody.innerHTML = '<tr><td colspan="5">Выберите изделие.</td></tr>';
+    renderPendingTransfers(pendingTransfers);
     return;
   }
 
@@ -1213,13 +1238,18 @@ function renderStockDetails(details) {
       .join('');
   }
 
-  const pendingTransfers = details.pending_transfers || [];
-  if (!pendingTransfers.length) {
+  renderPendingTransfers(details.pending_transfers || pendingTransfers);
+}
+
+function renderPendingTransfers(transfers = []) {
+  if (!pendingTransfersTableBody) return;
+
+  if (!transfers.length) {
     pendingTransfersTableBody.innerHTML = '<tr><td colspan="5">Ожидающих передач нет.</td></tr>';
     return;
   }
 
-  pendingTransfersTableBody.innerHTML = pendingTransfers
+  pendingTransfersTableBody.innerHTML = transfers
     .map((movement) => `
       <tr>
         <td>${escapeHtml(formatDate(movement.movement_date))}</td>
@@ -1967,6 +1997,7 @@ pendingTransfersTableBody.addEventListener('click', async (event) => {
 
   try {
     await saveJson(`/api/inventory/transfers/${button.dataset.transferId}/accept`, 'POST', {});
+    await loadPendingTransfers();
     await loadMetrics();
     if (selectedStockProductId) await selectStockProduct(selectedStockProductId);
     if (selectedOrderId) await selectOrder(selectedOrderId);
@@ -2420,6 +2451,11 @@ logoutButton.addEventListener('click', async () => {
     clearAuthSession();
     window.location.reload();
   }
+});
+openTransfersButton.addEventListener('click', async () => {
+  activateTab('stock');
+  await ensureTabDataLoaded('stock', true).catch((error) => alert(error.message));
+  renderPendingTransfers(pendingTransfers);
 });
 
 async function initializeAuth() {
