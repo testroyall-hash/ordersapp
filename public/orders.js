@@ -108,6 +108,9 @@ const newProductButton = document.getElementById('newProductButton');
 const resetProductFormButton = document.getElementById('resetProductFormButton');
 
 const stockSearchInput = document.getElementById('stockSearchInput');
+const stockPriorityPanel = document.getElementById('stockPriorityPanel');
+const stockPriorityText = document.getElementById('stockPriorityText');
+const stockPriorityList = document.getElementById('stockPriorityList');
 const stockTableBody = document.getElementById('stockTableBody');
 const emptyStockDetails = document.getElementById('emptyStockDetails');
 const stockForm = document.getElementById('stockForm');
@@ -269,6 +272,7 @@ function updateTransferNotice() {
   const user = authSession?.user;
   const isDepartment = user?.role === 'department';
   transferNotice?.classList.toggle('hidden', !isDepartment || pendingTransfers.length === 0);
+  renderStockPriority();
   if (!isDepartment || !pendingTransfers.length) return;
 
   const totalQuantity = pendingTransfers.reduce((sum, transfer) => sum + toNumber(transfer.quantity), 0);
@@ -277,6 +281,38 @@ function updateTransferNotice() {
   transferNoticeText.textContent = senders.length
     ? `Нужно принять продукцию от: ${senders.join(', ')}.`
     : 'Нужно подтвердить входящую передачу продукции.';
+}
+
+function renderStockPriority() {
+  if (!stockPriorityPanel || !stockPriorityList) return;
+
+  stockPriorityPanel.classList.toggle('hidden', pendingTransfers.length === 0);
+  if (!pendingTransfers.length) {
+    stockPriorityText.textContent = 'Нет передач, которые ждут подтверждения.';
+    stockPriorityList.innerHTML = '';
+    return;
+  }
+
+  const totalQuantity = pendingTransfers.reduce((sum, transfer) => sum + toNumber(transfer.quantity), 0);
+  stockPriorityText.textContent = `Ожидает приемки: ${pendingTransfers.length} передач, всего ${totalQuantity} шт.`;
+  stockPriorityList.innerHTML = pendingTransfers
+    .map((transfer) => {
+      const orderNumber = transfer.order_number ? `Заказ ${escapeHtml(formatOrderNumber(transfer.order_number))}` : 'Без привязки к заказу';
+      return `
+        <article class="stock-priority-item">
+          <div>
+            <strong>${escapeHtml(transfer.product_name || 'Изделие')}</strong>
+            <span>${escapeHtml(orderNumber)} · ${escapeHtml(formatDate(transfer.movement_date))}</span>
+            <p>${escapeHtml(transfer.sender_name || 'Отправитель не указан')} → ${escapeHtml(transfer.receiver_name || 'Ваш отдел')}</p>
+          </div>
+          <div class="stock-priority-action">
+            <b>${toNumber(transfer.quantity)} шт</b>
+            <button class="primary-button accept-transfer-button" type="button" data-transfer-id="${transfer.id}">Принять</button>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
 }
 
 async function loadAuthContext() {
@@ -1044,6 +1080,7 @@ async function loadMetrics() {
   loadedTabs.stock = true;
   fillMovementSelects();
   renderStock();
+  await loadPendingTransfers();
   updateTopMetrics();
 }
 
@@ -1991,7 +2028,7 @@ stockTableBody.addEventListener('click', (event) => {
   const row = event.target.closest('tr[data-stock-product-id]');
   if (row) selectStockProduct(row.dataset.stockProductId);
 });
-pendingTransfersTableBody.addEventListener('click', async (event) => {
+async function acceptTransferFromEvent(event) {
   const button = event.target.closest('.accept-transfer-button');
   if (!button) return;
 
@@ -2004,7 +2041,10 @@ pendingTransfersTableBody.addEventListener('click', async (event) => {
   } catch (error) {
     alert(error.message);
   }
-});
+}
+
+pendingTransfersTableBody.addEventListener('click', acceptTransferFromEvent);
+stockPriorityList.addEventListener('click', acceptTransferFromEvent);
 
 orderSearchInput.addEventListener('input', () => {
   orderFilters.search = orderSearchInput.value.trim();
@@ -2456,6 +2496,7 @@ openTransfersButton.addEventListener('click', async () => {
   activateTab('stock');
   await ensureTabDataLoaded('stock', true).catch((error) => alert(error.message));
   renderPendingTransfers(pendingTransfers);
+  stockPriorityPanel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
 async function initializeAuth() {
