@@ -315,13 +315,27 @@ router.get(
 
     const metricAvailable = product.produced_qty - product.defect_qty - product.shipped_qty - product.utilized_qty;
     const movementQty = balances.reduce((sum, row) => sum + row.quantity, 0);
+    const activeOrder = await get(
+      db,
+      `
+        SELECT COALESCE(SUM(amount), 0) AS active_order_qty
+        FROM Orders
+        WHERE product_id = ?
+          AND status_id IN (1, 2, 4, 5)
+      `,
+      [productId]
+    );
+    const activeOrderQty = Number(activeOrder?.active_order_qty || 0);
+    const availableQty = movementQty || metricAvailable;
 
     res.json({
       product: {
         ...product,
         metric_available_qty: metricAvailable,
         movement_qty: movementQty,
-        available_qty: movementQty || metricAvailable
+        active_order_qty: activeOrderQty,
+        available_qty: availableQty,
+        free_qty: availableQty - activeOrderQty
       },
       balances,
       movements: movements.map(mapMovement),

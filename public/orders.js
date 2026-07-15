@@ -2000,18 +2000,15 @@ async function selectStockProduct(productId) {
   selectedStockProductId = Number(productId);
   renderStock();
 
-  const [metricsResponse, detailsResponse] = await Promise.all([
-    fetch(`/api/product-metrics/${selectedStockProductId}`),
-    fetch(`/api/inventory/products/${selectedStockProductId}`)
-  ]);
-  if (!metricsResponse.ok || !detailsResponse.ok) {
+  const detailsResponse = await fetch(`/api/inventory/products/${selectedStockProductId}`);
+  if (!detailsResponse.ok) {
     alert('Не удалось открыть складскую карточку');
     return;
   }
 
-  const item = await metricsResponse.json();
-  selectedStockMetric = item;
   selectedStockDetails = await detailsResponse.json();
+  const item = selectedStockDetails.product;
+  selectedStockMetric = item;
   emptyStockDetails.classList.add('hidden');
   stockForm.classList.remove('hidden');
   setFormValue(movementForm, 'product_id', selectedStockProductId);
